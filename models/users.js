@@ -1,10 +1,12 @@
 module.exports = function(sequelize, DataTypes) {
-    let user = sequelize.define("User", {
+    let user = sequelize.define("user", {
         userID: {
             field: "user_id",
             type: DataTypes.INTEGER,
             unique: true,
-            allowNull: false
+            allowNull: false,
+            primaryKey: true,
+            autoIncrement: true
         },
         emailID: {
             field: "email_id",
@@ -32,5 +34,13 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: false
         }
     });
+    user.associate = function (models) {
+        user.hasMany(models.student, {
+            foreignKey: "user_id"
+        });
+        user.hasMany(models.teacher, {
+            foreignKey: "user_id"
+        })
+    }
     return user;
 }
