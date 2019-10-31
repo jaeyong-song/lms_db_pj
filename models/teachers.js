@@ -16,8 +16,18 @@ module.exports = function(sequelize, DataTypes) {
         }
     });
     teacher.associate = function(models) {
+        // 강의는 대표 선생님 한명 존재
+        teacher.belongsTo(models.lecture, {
+            foreignKey: "tch_id"
+        })
+        teacher.belongsTo(models.subject, {
+            foreignKey: "tch_id"
+        })
         teacher.belongsTo(models.user, {
             foreignKey: "user_id"
+        });
+        teacher.belongsToMany(models.subject, {
+            through: "teacher_subject"
         })
     }
     return teacher;

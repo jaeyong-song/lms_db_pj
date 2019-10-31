@@ -19,6 +19,9 @@ module.exports = function(sequelize, DataTypes) {
         student.belongsTo(models.user, {
             foreignKey: "user_id"
         })
+        student.belongsToMany(models.subject, {
+            through: "student_subject"
+        })
     }
     return student;
 }
