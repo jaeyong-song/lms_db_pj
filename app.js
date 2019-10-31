@@ -8,6 +8,15 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var signRouter = require('./routes/sign');
 
+const models = require("./models/index.js");
+
+models.sequelize.sync().then(() => {
+  console.log("DB connected.")
+}).catch(err => {
+  console.log("DB connection failed.");
+  console.log(err);
+});
+
 var app = express();
 
 // view engine setup
