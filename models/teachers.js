@@ -27,7 +27,8 @@ module.exports = function(sequelize, DataTypes) {
             foreignKey: "user_id"
         });
         teacher.belongsToMany(models.subject, {
-            through: "teacher_subject"
+            through: "teacher_subject",
+            foreignKey: "tch_id"
         })
     }
     return teacher;

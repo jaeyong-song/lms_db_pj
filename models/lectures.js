@@ -34,6 +34,9 @@ module.exports = function(sequelize, DataTypes) {
         lecture.belongsTo(models.subject, {
             foreignKey: "subject_id"
         })
+        lecture.hasMany(models.question, {
+            foreignKey: "lecture_id"
+        })
     }
     return lecture;
 }

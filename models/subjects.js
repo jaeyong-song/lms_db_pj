@@ -49,10 +49,12 @@ module.exports = function(sequelize, DataTypes) {
         });
         // 별도 속성 추가가 없기 때문에 M:N 테이블 자동 생성되도록함.
         subject.belongsToMany(models.student, {
-            through: "student_subject"
+            through: "student_subject",
+            foreignKey: "subject_id"
         })
         subject.belongsToMany(models.teacher, {
-            through: "teacher_subject"
+            through: "teacher_subject",
+            foreignKey: "subject_id"
         })
     }
     return subject;
