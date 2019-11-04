@@ -27,6 +27,9 @@ module.exports = function(sequelize, DataTypes) {
             through: "student_set",
             foreignKey: "stu_id"
         })
+        student.hasMany(models.submission, {
+            foreignKey: "stu_id"
+        })
     }
     return student;
 }
