@@ -77,6 +77,10 @@ module.exports = function(sequelize, DataTypes) {
         question.belongsTo(models.selection, {
             foreignKey: "question_id"
         })
+        question.belongsToMany(models.set, {
+            through: "question_set",
+            foreignKey: "question_id"
+        })
     }
     return question;
 }
