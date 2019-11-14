@@ -7,7 +7,10 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var signRouter = require('./routes/sign');
+var apiRouter = require('./routes/api')
 
+
+// DB Setting (Sequelize)
 const models = require("./models/index.js");
 
 models.sequelize.sync().then(() => {
