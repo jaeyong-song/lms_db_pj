@@ -25,17 +25,29 @@
           <li class="nav-item active">
             <a class="nav-link" href="./subjects">나의 과목</a>
           </li>
+          <% if (user) {%>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              계정(추후에 ejs)
+              <%= user.emailID %>(<%=user.name%>)
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">나의 정보</a>
+              <a class="dropdown-item" href="./users/mypage">나의 정보</a>
               <a class="dropdown-item" href="#">계정설정</a>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">로그아웃</a>
+              <a class="dropdown-item" href="./users/sign_out">로그아웃</a>
             </div>
           </li>
+          <% } else { %>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              계정 관리
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="./users/sign_in">로그인</a>
+              <a class="dropdown-item" href="./users/sign_up">가입</a>
+            </div>
+          </li>
+          <% } %>
           <li class="nav-item">
             <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
           </li>
