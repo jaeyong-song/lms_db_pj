@@ -6,8 +6,10 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var signRouter = require('./routes/sign');
-var apiRouter = require('./routes/api')
+var subjectsRouter = require('./routes/subjects');
+var lecturesRouter = require('./routes/lectures');
+var questionsRouter = require('./routes/questions');
+var apiRouter = require('./routes/api');
 
 
 // DB Setting (Sequelize)
@@ -32,10 +34,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Routers
+// Routers => 이것을 보고 링크 판단
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/sign', signRouter)
+app.use('/subjects', subjectsRouter);
+app.use('/lectures', lecturesRouter);
+app.use('/questions', questionsRouter);
+app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
