@@ -9,16 +9,20 @@ router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
+router.get('/login', function(req, res, next) {
+  let session = req.session;
+});
+
 router.get('/mypage', isLoggedIn, function(req, res) {
   res.render('mypage', {title: "마이페이지", user: req.user});
-})
+});
 
 router.get('/sign_up', isNotLoggedIn, function(req, res) {
   res.render('signup', {
     title: 'LMS DB PJ',
     user: req.user,
     signInError: req.flash('signUpError')});
-})
+});
 
 router.post('/sign_up', isNotLoggedIn, async(req, res, next) => {
   const {id, email, name, password, type} = req.body;
@@ -43,11 +47,11 @@ router.post('/sign_up', isNotLoggedIn, async(req, res, next) => {
     console.error(error);
     return next(error);
   }
-})
+});
 
 router.get('/sign_in', isNotLoggedIn, function(req, res) {
   res.render('signin', {title: '로그인'});
-})
+});
 
 router.post('/sign_in', isNotLoggedIn, (req, res, next) => {
   console.log("body parsing", req.body)
@@ -66,6 +70,7 @@ router.post('/sign_in', isNotLoggedIn, (req, res, next) => {
         return next(loginError);
       }
       console.log("successfully login processing")
+      req.session.email = body.email;
       return res.redirect('/');
     });
   })(req, res, next);

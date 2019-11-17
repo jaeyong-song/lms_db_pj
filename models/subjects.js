@@ -21,7 +21,7 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: false
         },
         endDate: {
-            field: "password",
+            field: "end_date",
             type: DataTypes.DATE,
             unique: false,
             allowNull: false

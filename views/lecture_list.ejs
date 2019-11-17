@@ -50,6 +50,7 @@
     <div class="jumbotron" style="background-color: white;">
       <h1 class="display-4">과목의 강의목록</h1>
       <p class="lead">과목에 배정된 강의의 총 목록입니다.</p>
+      <a href="../lectures/make"><button type="button" class="btn btn-secondary btn-lg btn-block">강의 만들기</button></a>
       <hr class="my-4">
       <div class="list-group">
           <!-- 여기서 링크를 DB에서 받아온 파라미터로 설정해주어야 넘어갈 수 있음 / 여기선 예시로 1로 설정-->
@@ -63,10 +64,9 @@
         </a>
         <!-- 이부분 링크 걸어서 삭제 api 넘겨주도록 해야함-->
         <!-- 만약에 관리자가 아니라면 이 부분 보이지 않도록 해야함-->
-        <div class="btn-group" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-secondary"><a href="../lectures/make">강의 만들기</a></button>
-                <button type="button" class="btn btn-secondary">강의 삭제</button>
-        </div>
+        <!--<div class="btn-group" role="group" aria-label="Basic example">-->
+        <button type="button" class="btn btn-outline-danger">강의 삭제</button>
+        <!--</div>-->
         <a href="#" class="list-group-item list-group-item-action">
           <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1">강의 2</h5>

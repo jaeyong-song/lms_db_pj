@@ -20,7 +20,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <a class="nav-link" href="../">메 인<span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="../">메인<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item active">
             <a class="nav-link" href="../subjects">나의 과목</a>
@@ -48,25 +48,22 @@
     </nav>
 
     <div class="jumbotron" style="background-color: white;">
-      <h1 class="display-4">과목 만들기</h1>
-      <p class="lead">과목 만들기 위한 form 페이지 이 부분 논의해서 라우팅 처리 해야함.
+      <h1 class="display-6">과목 만들기 :D</h1>
+      <p class="lead">새로운 과목을 만들기 위해서는 아래 양식을 채워주셔야합니다!
+        주의!! 플젝 제출 전에 자바스크립트로 전체 양식 제대로 기입 안되면 제출 버튼 클릭 안되도록 해야합니다!
       </p>
-      <form>
+      <form action="./make" method="post" content-type="application/x-www-form-urlencoded">
             <div class="form-group">
-              <label for="exampleInputEmail1">Email address</label>
-              <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-              <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                <label for="subjectName">과목 이름</label>
+                <input type="text" name="name" class="form-control" id="subjectName" aria-describedby="nameHelp" placeholder="과목 이름 입력">
+                <small id="nameHelp" class="form-text text-muted">과목의 이름을 입력해주세요</small>
             </div>
             <div class="form-group">
-              <label for="exampleInputPassword1">Password</label>
-              <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+              <label for="limit">최대정원</label>
+              <input type="number" name="limit" class="form-control" id="limit" placeholder="최대정원 입력">
             </div>
-            <div class="form-group form-check">
-              <input type="checkbox" class="form-check-input" id="exampleCheck1">
-              <label class="form-check-label" for="exampleCheck1">Check me out</label>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </form>
+            <button type="submit" class="btn btn-primary">과목 생성</button>
+       </form>
     </div>
 
     <!-- Optional JavaScript -->
