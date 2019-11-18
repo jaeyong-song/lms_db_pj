@@ -9,9 +9,11 @@ router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
-router.get('/login', function(req, res, next) {
-  let session = req.session;
-});
+
+// 이 부분 아래 sign_in 부분하고 겹치는데... 이유...
+// router.get('/login', function(req, res, next) {
+//   let session = req.session;
+// });
 
 router.get('/mypage', isLoggedIn, function(req, res) {
   res.render('mypage', {title: "마이페이지", user: req.user});
@@ -69,8 +71,7 @@ router.post('/sign_in', isNotLoggedIn, (req, res, next) => {
         console.error(loginError);
         return next(loginError);
       }
-      console.log("successfully login processing")
-      req.session.email = body.email;
+      console.log("successfully login processin")
       return res.redirect('/');
     });
   })(req, res, next);
