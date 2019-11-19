@@ -44,8 +44,8 @@ module.exports = function(sequelize, DataTypes) {
             unique: false,
             allowNull: false
         },
-        score: {
-            field: "score",
+        real_difficulty: {
+            field: "real_difficulty",
             type: DataTypes.DOUBLE,
             unique: false,
             allowNull: false
@@ -55,6 +55,36 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.DATE,
             unique: false,
             allowNull: false
+        },
+        ans1: {
+            field: "ans1",
+            type: DataTypes.STRING,
+            unique: false,
+            allowNull: false
+        },
+        ans2: {
+            field: "ans2",
+            type: DataTypes.STRING,
+            unique: false,
+            allowNull: true
+        },
+        ans3: {
+            field: "ans3",
+            type: DataTypes.STRING,
+            unique: false,
+            allowNull: true
+        },
+        ans4: {
+            field: "ans4",
+            type: DataTypes.STRING,
+            unique: false,
+            allowNull: true
+        },
+        ans5: {
+            field: "ans5",
+            type: DataTypes.STRING,
+            unique: false,
+            allowNull: true
         }
     });
     question.associate = function(models) {
@@ -64,14 +94,10 @@ module.exports = function(sequelize, DataTypes) {
         question.belongsTo(models.user, {
             foreignKey: "user_id"
         })
-        question.belongsToMany(models.keyword, {
-            through: "question_keyword",
-            foreignKey: "question_id"
-        })
         question.hasMany(models.parameter, {
             foreignKey: "question_id"
         })
-        question.hasMany(models.answer, {
+        question.hasMany(models.question_keyword, {
             foreignKey: "question_id"
         })
         question.belongsTo(models.selection, {

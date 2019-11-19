@@ -55,9 +55,6 @@ module.exports = function(sequelize, DataTypes) {
         parameter.belongsTo(models.question, {
             foreignKey: "question_id"
         })
-        parameter.belongsTo(models.answer, {
-            foreignKey: "answer_id"
-        })
     }
     return parameter;
 }

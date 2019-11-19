@@ -20,6 +20,18 @@ module.exports = function(sequelize, DataTypes) {
             unique: false,
             allowNull: false
         },
+        startDate: {
+            field: "start_date",
+            type: DataTypes.DATE,
+            unique: false,
+            allowNull: false
+        },
+        endDate: {
+            field: "end_date",
+            type: DataTypes.DATE,
+            unique: false,
+            allowNull: false
+        },
         tchID: {
             field: "tch_id",
             type: DataTypes.INTEGER,
@@ -33,10 +45,16 @@ module.exports = function(sequelize, DataTypes) {
         });
         lecture.belongsTo(models.subject, {
             foreignKey: "subject_id"
-        })
+        });
         lecture.hasMany(models.question, {
             foreignKey: "lecture_id"
-        })
+        });
+        lecture.hasMany(models.lecture_keyword, {
+            foreignKey: "lecture_id"
+        });
+        lecture.hasMany(models.question_keyword, {
+            foreignKey: "lecture_id"
+        });
     }
     return lecture;
 }

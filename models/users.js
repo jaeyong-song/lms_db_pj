@@ -34,16 +34,19 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: false
         }
     });
-    user.associate = function (models) {
-        user.hasMany(models.student, {
+    user.associate = function(models) {
+        user.hasOne(models.users_subjects, {
             foreignKey: "user_id"
         });
-        user.hasMany(models.teacher, {
+        user.hasOne(models.question, {
             foreignKey: "user_id"
-        })
-        user.hasMany(models.question, {
+        });
+        user.hasOne(models.student, {
             foreignKey: "user_id"
-        })
+        });
+        user.hasOne(models.teacher, {
+            foreignKey: "user_id"
+        });
     }
     return user;
 }
