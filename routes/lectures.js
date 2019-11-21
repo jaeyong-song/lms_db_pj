@@ -2,10 +2,13 @@ var express = require('express');
 var router = express.Router();
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-    // 이부분도 파라미터 받아오도록 수정 필요
-    res.render('lecture_list', { title: 'LMS DB PJ' });
-});
+// router.get('/', function(req, res, next) {
+//     // 이부분도 파라미터 받아오도록 수정 필요
+//     res.render('lecture_list', { title: 'LMS DB PJ' });
+// });
+// subjects router에서 처리하도록 이동
+
+
 router.get('/make', function(req, res, next) {
     res.render('lecture_make', {title: 'LMS DB PJ'});
 });
