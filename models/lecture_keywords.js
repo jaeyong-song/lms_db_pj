@@ -1,5 +1,5 @@
 module.exports = function(sequelize, DataTypes) {
-    let keyword = sequelize.define("keyword", {
+    let lecture_keyword = sequelize.define("lecture_keyword", {
         keywordID: {
             field: "keyword_id",
             type: DataTypes.INTEGER,
@@ -8,8 +8,14 @@ module.exports = function(sequelize, DataTypes) {
             primaryKey: true,
             autoIncrement: true
         },
-        keyword: {
-            field: "keyword",
+        lectureID: {
+            field: "lecture_id",
+            type: DataTypes.INTEGER,
+            unique: false,
+            allowNull: false
+        },
+        lecture_keyword: {
+            field: "lecture_keyword",
             type: DataTypes.STRING,
             unique: true,
             allowNull: false
@@ -21,11 +27,11 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: false
         }
     });
-    keyword.associate = function(models) {
-        keyword.belongsToMany(models.question, {
-            through: "question_keyword",
-            foreignKey: "keyword_id"
-        })
+    lecture_keyword.associate = function(models) {
+        lecture_keyword.belongsToMany(models.lecture, {
+            through: "lecture_keyword_lecture",
+            foreignKey: "lecture_id"
+        });
     }
-    return keyword;
+    return lecture_keyword;
 }

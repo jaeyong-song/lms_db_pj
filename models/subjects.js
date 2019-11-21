@@ -14,18 +14,6 @@ module.exports = function(sequelize, DataTypes) {
             unique: false,
             allowNull: false
         },
-        startDate: {
-            field: "start_date",
-            type: DataTypes.DATE,
-            unique: false,
-            allowNull: false
-        },
-        endDate: {
-            field: "end_date",
-            type: DataTypes.DATE,
-            unique: false,
-            allowNull: false
-        },
         limit: {
             field: "limit",
             type: DataTypes.INTEGER,
@@ -45,6 +33,9 @@ module.exports = function(sequelize, DataTypes) {
             foreignKey: "tch_id"
         });
         subject.hasMany(models.lecture, {
+            foreignKey: "subject_id"
+        });
+        subject.hasMany(models.users_subjects, {
             foreignKey: "subject_id"
         });
         // 별도 속성 추가가 없기 때문에 M:N 테이블 자동 생성되도록함.
