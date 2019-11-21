@@ -40,7 +40,7 @@ module.exports = function(sequelize, DataTypes) {
         }
     });
     lecture.associate = function(models) {
-        lecture.hasOne(models.teacher, {
+        lecture.belongsTo(models.teacher, {
             foreignKey: "tch_id"
         });
         lecture.belongsTo(models.subject, {

@@ -1,37 +1,52 @@
 var express = require('express');
 const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 var router = express.Router();
-const {user, subject} = require('../models');
+const {user, teacher, subject} = require('../models');
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-    res.render('subject', { title: 'LMS DB PJ', user: req.user });
+router.get('/', isLoggedIn, function(req, res, next) {
+    teacher.findOne({
+      where: {
+        userID: req.user.userID
+      }
+    }).then((teacher)=> {
+      subject.findAll({
+        where: {
+          tchID: teacher.dataValues.tchID,
+        }
+      }).then((subjects) => {
+        res.render('subject', { title: 'LMS DB PJ', user: req.user, subjects: subjects });
+      })
+    })
 });
 
-router.get('/make', function(req, res, next) {
+router.get('/make', isLoggedIn, function(req, res, next) {
     res.render('subject_make', { title: 'LMS DB PJ', user: req.user });
 });
 
-/*
-router.post('/make', isLoggedIn, async(req, res, next) => {
-    const {name, startDate, endDate, limit, tchID} = req.body;
+
+router.post('/make', isLoggedIn, function(req, res, next) {
+    const {name, limit} = req.body;
     try {
-      const userType = await user.findOne({where: {emailID: req.session.email}, attributes:['user_id']});
-      let now = Date.now();
-      await subject.create({
-        name: name,
-        startDate: startDate,
-        endDate: endDate,
-        limit: limit,
-        tchID: userType,
-        createdAt: now 
-      });
-      return res.redirect('/');
+      teacher.findOne({
+        where: {
+          userID: req.user.userID
+        }
+      }).then((teacher)=> {
+        let now = Date.now();
+        subject.create({
+          name: name,
+          limit: limit,
+          tchID: teacher.dataValues.tchID,
+          createdAt: now,
+          updatedAt: now
+          });
+          return res.redirect('/subjects');
+        })
     } catch (error) {
       console.error(error);
       return next(error);
     }
   });
-  */
 
 module.exports = router;

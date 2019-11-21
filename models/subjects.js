@@ -29,7 +29,7 @@ module.exports = function(sequelize, DataTypes) {
         }
     });
     subject.associate = function(models) {
-        subject.hasOne(models.teacher, {
+        subject.belongsTo(models.teacher, {
             foreignKey: "tch_id"
         });
         subject.hasMany(models.lecture, {

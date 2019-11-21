@@ -2,7 +2,7 @@ var express = require('express');
 const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 var router = express.Router();
 const passport = require('passport');
-const {user} = require('../models');
+const {user, teacher, student} = require('../models');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -27,6 +27,7 @@ router.get('/sign_up', isNotLoggedIn, function(req, res) {
 });
 
 router.post('/sign_up', isNotLoggedIn, async(req, res, next) => {
+  // [TODO] teacher와 student에 동시에 추가하도록 할 것!
   const {id, email, name, password, type} = req.body;
   try {
     const exUser = await user.findOne({where: {emailID: email}});
@@ -41,9 +42,27 @@ router.post('/sign_up', isNotLoggedIn, async(req, res, next) => {
       name: name,
       type: type,
       password: password,
-      updateAt: now,
+      updatedAt: now,
       createdAt: now 
     });
+    try {
+      if(type == 1) {
+        await teacher.create({
+          userID: id,
+          updatedAt: now,
+          createdAt: now
+        });
+      } else {
+        await student.create({
+          userID: id,
+          updatedAt: now,
+          createdAt: now
+        });
+      }
+    } catch (err) {
+      console.log(err);
+      return next(err);
+    }
     return res.redirect('/');
   } catch (error) {
     console.error(error);
