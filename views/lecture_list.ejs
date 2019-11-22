@@ -26,16 +26,29 @@
             <a class="nav-link" href="../subjects">나의 과목</a>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              계정(추후에 ejs)
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">나의 정보</a>
-              <a class="dropdown-item" href="#">계정설정</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">로그아웃</a>
-            </div>
-          </li>
+            <% if (user) {%>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <%= user.emailID %>(<%=user.name%>)
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="./users/mypage">나의 정보</a>
+                  <a class="dropdown-item" href="#">계정설정</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="./users/sign_out">로그아웃</a>
+                </div>
+              </li>
+              <% } else { %>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  계정 관리
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="./users/sign_in">로그인</a>
+                  <a class="dropdown-item" href="./users/sign_up">가입</a>
+                </div>
+              </li>
+              <% } %>
           <li class="nav-item">
             <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
           </li>
@@ -50,39 +63,33 @@
     <div class="jumbotron" style="background-color: white;">
       <h1 class="display-4">과목의 강의목록</h1>
       <p class="lead">과목에 배정된 강의의 총 목록입니다.</p>
-      <a href="../lectures/make"><button type="button" class="btn btn-secondary btn-lg btn-block">강의 만들기</button></a>
+      <%if (user){
+        if (user.type == 1){%>
+        <a href="../lectures/make/<%=subject.dataValues.subjectID%>"><button type="button" class="btn btn-secondary btn-lg btn-block">강의 만들기</button></a>
+        <%}
+      }%>
       <hr class="my-4">
       <div class="list-group">
-          <!-- 여기서 링크를 DB에서 받아온 파라미터로 설정해주어야 넘어갈 수 있음 / 여기선 예시로 1로 설정-->
-        <a href="./lectures/1" class="list-group-item list-group-item-action active">
-          <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">강의 1: SQL</h5>
-            <small>2019-00-00 생성</small>
-          </div>
-          <p class="mb-1">SQL 기본 문법 학습</p>
-          <small>강의자: 이원석 교수님</small>
-        </a>
-        <!-- 이부분 링크 걸어서 삭제 api 넘겨주도록 해야함-->
-        <!-- 만약에 관리자가 아니라면 이 부분 보이지 않도록 해야함-->
-        <!--<div class="btn-group" role="group" aria-label="Basic example">-->
-        <button type="button" class="btn btn-outline-danger">강의 삭제</button>
-        <!--</div>-->
-        <a href="#" class="list-group-item list-group-item-action">
-          <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">강의 2</h5>
-            <small class="text-muted">3 days ago</small>
-          </div>
-          <p class="mb-1">이 부분을 템플릿으로 바꾸어서 작업해주면 됩니다!</p>
-          <small class="text-muted">링크도 걸어주면 됩니다!!</small>
-        </a>
-        <a href="#" class="list-group-item list-group-item-action">
-          <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">List group item heading</h5>
-            <small class="text-muted">3 days ago</small>
-          </div>
-          <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-          <small class="text-muted">Donec id elit non mi porta.</small>
-        </a>
+        <!-- DB에서 받아온 강의 목록-->
+        <% for(let i = 0; i < lectures.length ; i++) { %>
+          <a href="../lectures/<%= lectures[i].dataValues.lectureID %>" class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1"><%= (i+1) %></h5>
+            </div>
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1"><%= lectures[i].dataValues.name %></h5>
+              <small class="text-muted"><%= lectures[i].dataValues.updatedAt %></small>
+            </div>
+            <p class="mb-1">이 부분을 템플릿으로 바꾸어서 작업해주면 됩니다!</p>
+            <small class="text-muted">링크도 걸어주면 됩니다!! 이부분 모여서 서로 상의해야합니다</small>
+          </a>
+          <!--사용자가 강사가 아니라면 삭제 불가능-->
+          <%if (user){
+              if (user.type == 1){%>
+                <button type="button" class="btn btn-outline-danger">강의 삭제</button>
+              <%} 
+            }
+          }%>
       </div>
     </div>
 

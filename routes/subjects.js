@@ -1,7 +1,7 @@
 var express = require('express');
 const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 var router = express.Router();
-const {user, teacher, subject} = require('../models');
+const {user, teacher, subject, lecture} = require('../models');
 
 /* GET users listing. */
 router.get('/', isLoggedIn, function(req, res, next) {
@@ -51,10 +51,27 @@ router.post('/make', isLoggedIn, function(req, res, next) {
 
 
 router.get('/:id', function(req, res, next) {
-  res.render('lecture_list', {title: 'LMS DB PJ'});
-  // http://jeonghwan-kim.github.io/express-js-2-%EB%9D%BC%EC%9A%B0%ED%8C%85/
-    // 여기 참고해서 파라미터 받아서 DB에서 불러와서 넘겨주어야함.
-})
+  // lecture.findAll({
+  //   where: {
+  //     subjectID: req.params.id,
+  //   }
+  // }).then((lectures)=> {
+  //   res.render('lecture_list', { title: 'LMS DB PJ', user: req.user, lectures: lectures});
+  // })
+  subject.findOne({
+    where: {
+      subjectID: req.params.id,
+    }
+  }).then((subject)=> {
+    lecture.findAll({
+      where: {
+        subjectID: subject.dataValues.subjectID,
+      }
+    }).then((lectures) => {
+      res.render('lecture_list', { title: 'LMS DB PJ', user: req.user, subject: subject, lectures:lectures });
+    })
+  })
+});
 
 
 
