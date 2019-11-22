@@ -12,6 +12,8 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+      <div class="container">
+        
       <a class="navbar-brand" href="../"><%= title %></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -57,38 +59,42 @@
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
       </div>
-    </nav>
-
-    <div class="jumbotron" style="background-color: white;">
-      <h1 class="display-4">과목 목록 보여주는 화면입니다!</h1>
-      <p class="lead">아래의 목록은 나의 과목들입니다!</p>
-      <% if (user) {
-          if (user.type == 1){%>
-            <a href="./subjects/make"><button type="button" class="btn btn-secondary btn-lg btn-block"> 과목 만들기</button></a>
-          <%}
-      }%>
-      <hr class="my-4">
-      <div class="list-group">
-        <% for(let i = 0; i < subjects.length ; i++) { %>
-        <a href="../subjects/<%= subjects[i].dataValues.subjectID %>" class="list-group-item list-group-item-action">
-          <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1"><%= (i+1) %></h5>
-          </div>
-          <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1"><%= subjects[i].dataValues.name %></h5>
-            <small class="text-muted"><%= subjects[i].dataValues.updatedAt %></small>
-          </div>
-          <p class="mb-1">이 부분을 템플릿으로 바꾸어서 작업해주면 됩니다!</p>
-          <small class="text-muted">링크도 걸어주면 됩니다!! 이부분 모여서 서로 상의해야합니다</small>
-        </a>
-        <%if (user){
-            if (user.type == 1){%>
-              <button type="button" class="btn btn-outline-danger">과목 삭제</button>
-            <%} 
-          }
-        } %>
       </div>
+
+    </nav>
+    <div class="container">
+        <div class="jumbotron" style="background-color: white;">
+            <h1 class="display-4">과목 목록 보여주는 화면입니다!</h1>
+            <p class="lead">아래의 목록은 나의 과목들입니다!</p>
+            <% if (user) {
+                if (user.type == 1){%>
+                  <a href="./subjects/make"><button type="button" class="btn btn-secondary btn-lg btn-block"> 과목 만들기</button></a>
+                <%}
+            }%>
+            <hr class="my-4">
+            <div class="list-group">
+              <% for(let i = 0; i < subjects.length ; i++) { %>
+              <a href="../subjects/<%= subjects[i].dataValues.subjectID %>" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1"><%= (i+1) %></h5>
+                </div>
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1"><%= subjects[i].dataValues.name %></h5>
+                  <small class="text-muted"><%= subjects[i].dataValues.updatedAt %></small>
+                </div>
+                <p class="mb-1">이 부분을 템플릿으로 바꾸어서 작업해주면 됩니다!</p>
+                <small class="text-muted">링크도 걸어주면 됩니다!! 이부분 모여서 서로 상의해야합니다</small>
+              </a>
+              <%if (user){
+                  if (user.type == 1){%>
+                    <button type="button" class="btn btn-outline-danger">과목 삭제</button>
+                  <%} 
+                }
+              } %>
+            </div>
+          </div>
     </div>
+    
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

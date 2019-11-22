@@ -12,101 +12,105 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
-      <a class="navbar-brand" href="#"><%= title %></a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-    
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="#">메인<span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item active">
-            <a class="nav-link" href="./subjects">나의 과목</a>
-          </li>
-          <% if (user) {%>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <%= user.emailID %>(<%=user.name%>)
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="./users/mypage">나의 정보</a>
-              <a class="dropdown-item" href="#">계정설정</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="./users/sign_out">로그아웃</a>
-            </div>
-          </li>
-          <% } else { %>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              계정 관리
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="./users/sign_in">로그인</a>
-              <a class="dropdown-item" href="./users/sign_up">가입</a>
-            </div>
-          </li>
-          <% } %>
-          <li class="nav-item">
-            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-          </li>
-        </ul>
-        <form class="form-inline my-2 my-lg-0">
-          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
-      </div>
-    </nav>
-
-    <div class="jumbotron" style="background-color: white;">
-
       <div class="container">
-        <div class="row">
-          <div class="col-sm">
-            <h1 class="display-6">LMS 시스템 메인입니다.</h1>
-      <p class="lead">아래의 목록은 나의 과목들입니다!</p>
-      <a href="./subjects/make"><button type="button" class="btn btn-secondary btn-lg btn-block"> 과목 만들기</button></a>
-      <hr class="my-4">
-      <div class="list-group">
-        <a href="./subjects" class="list-group-item list-group-item-action active">
-          <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">나의 과목 보기</h5>
-            <small>2019-09-00 생성</small>
-          </div>
-          <p class="mb-1">내가 가지고 있는 과목을 확인할 수 있습니다.</p>
-          <small>현재 총 00개의 과목</small>
-        </a>
-        <a href="#" class="list-group-item list-group-item-action">
-          <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">List group item heading</h5>
-            <small class="text-muted">3 days ago</small>
-          </div>
-          <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-          <small class="text-muted">Donec id elit non mi porta.</small>
-        </a>
-      </div>
-          </div>
-          <% if(!user) { %>
-          <div class="col-sm">
-            <form  action="./users/sign_in" method="post" content-type="application/x-www-form-urlencoded">
-              <div class="form-group">
-                <label for="inputEmail">이메일 주소</label>
-                <input type="email" name="email_id" class="form-control" id="inputEmail" aria-describedby="emailHelp" placeholder="이메일 주소를 입력하세요">
-                <small id="emailHelp" class="form-text text-muted">로그인시 이메일 주소가 필요합니다.</small>
-              </div>
-              <div class="form-group">
-                <label for="exampleInputPassword1">암호</label>
-                <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-              </div>
-              <button type="submit" class="btn btn-primary">Submit</button>
+          <a class="navbar-brand" href="#"><%= title %></a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="#">메인<span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item active">
+                <a class="nav-link" href="./subjects">나의 과목</a>
+              </li>
+              <% if (user) {%>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <%= user.emailID %>(<%=user.name%>)
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="./users/mypage">나의 정보</a>
+                  <a class="dropdown-item" href="#">계정설정</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="./users/sign_out">로그아웃</a>
+                </div>
+              </li>
+              <% } else { %>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  계정 관리
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="./users/sign_in">로그인</a>
+                  <a class="dropdown-item" href="./users/sign_up">가입</a>
+                </div>
+              </li>
+              <% } %>
+              <li class="nav-item">
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+              </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+              <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
             </form>
           </div>
-          <% } %>
-        </div>
       </div>
-      
+    </nav>
+    <div class="container">
+        <div class="jumbotron" style="background-color: white;">
+
+            <div class="container">
+              <div class="row">
+                <div class="col-sm">
+                  <h1 class="display-6">LMS 시스템 메인입니다.</h1>
+            <p class="lead">아래의 목록은 나의 과목들입니다!</p>
+            <a href="./subjects/make"><button type="button" class="btn btn-secondary btn-lg btn-block"> 과목 만들기</button></a>
+            <hr class="my-4">
+            <div class="list-group">
+              <a href="./subjects" class="list-group-item list-group-item-action active">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1">나의 과목 보기</h5>
+                  <small>2019-09-00 생성</small>
+                </div>
+                <p class="mb-1">내가 가지고 있는 과목을 확인할 수 있습니다.</p>
+                <small>현재 총 00개의 과목</small>
+              </a>
+              <a href="#" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1">List group item heading</h5>
+                  <small class="text-muted">3 days ago</small>
+                </div>
+                <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                <small class="text-muted">Donec id elit non mi porta.</small>
+              </a>
+            </div>
+                </div>
+                <% if(!user) { %>
+                <div class="col-sm">
+                  <form  action="./users/sign_in" method="post" content-type="application/x-www-form-urlencoded">
+                    <div class="form-group">
+                      <label for="inputEmail">이메일 주소</label>
+                      <input type="email" name="email_id" class="form-control" id="inputEmail" aria-describedby="emailHelp" placeholder="이메일 주소를 입력하세요">
+                      <small id="emailHelp" class="form-text text-muted">로그인시 이메일 주소가 필요합니다.</small>
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleInputPassword1">암호</label>
+                      <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </form>
+                </div>
+                <% } %>
+              </div>
+            </div>
+            
+          </div>
     </div>
+    
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
