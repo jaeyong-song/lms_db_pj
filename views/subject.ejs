@@ -82,12 +82,12 @@
                   <h5 class="mb-1"><%= subjects[i].dataValues.name %></h5>
                   <small class="text-muted"><%= subjects[i].dataValues.updatedAt %></small>
                 </div>
-                <p class="mb-1">이 부분을 템플릿으로 바꾸어서 작업해주면 됩니다!</p>
-                <small class="text-muted">링크도 걸어주면 됩니다!! 이부분 모여서 서로 상의해야합니다</small>
+                <p class="mb-1">과목에 대한 설명입니다.</p>
+                <small class="text-muted">총 수강 인원 --명 / 정원 <%=subjects[i].dataValues.limit%> 명</small>
               </a>
               <%if (user){
                   if (user.type == 1){%>
-                    <button type="button" class="btn btn-outline-danger">과목 삭제</button>
+                    <a href=""></a><button type="button" class="btn btn-outline-danger">과목 삭제</button>
                   <%} 
                 }
               } %>

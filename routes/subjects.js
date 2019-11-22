@@ -51,13 +51,6 @@ router.post('/make', isLoggedIn, function(req, res, next) {
 
 
 router.get('/:id', function(req, res, next) {
-  // lecture.findAll({
-  //   where: {
-  //     subjectID: req.params.id,
-  //   }
-  // }).then((lectures)=> {
-  //   res.render('lecture_list', { title: 'LMS DB PJ', user: req.user, lectures: lectures});
-  // })
   subject.findOne({
     where: {
       subjectID: req.params.id,

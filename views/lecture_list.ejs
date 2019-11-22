@@ -63,7 +63,7 @@
     </nav>
     <div class="container">
         <div class="jumbotron" style="background-color: white;">
-            <h1 class="display-4">과목의 강의목록</h1>
+            <h1 class="display-4"><%=subject.dataValues.name%> 과목의 강의목록</h1>
             <p class="lead">과목에 배정된 강의의 총 목록입니다.</p>
             <%if (user){
               if (user.type == 1){%>
@@ -82,16 +82,20 @@
                     <h5 class="mb-1"><%= lectures[i].dataValues.name %></h5>
                     <small class="text-muted"><%= lectures[i].dataValues.updatedAt %></small>
                   </div>
-                  <p class="mb-1">이 부분을 템플릿으로 바꾸어서 작업해주면 됩니다!</p>
-                  <small class="text-muted">링크도 걸어주면 됩니다!! 이부분 모여서 서로 상의해야합니다</small>
+                  <p class="mb-1">강의에 대한 설명입니다.</p>
+                  <small class="text-muted">강의에 대한 부가 설명입니다.</small>
                 </a>
-                <!--사용자가 강사가 아니라면 삭제 불가능-->
+                <div class="btn-group d-flex justify-content-between" role="group">
+                <!--사용자가 강사가 아니라면 삭제, 문항 보기 불가능-->
+                <a href="../lectures/<%= lectures[i].dataValues.lectureID%>" class="btn btn-outline-primary">강의 보기</a>
                 <%if (user){
                     if (user.type == 1){%>
-                      <button type="button" class="btn btn-outline-danger">강의 삭제</button>
+                      <a href="../questions/list/<%=lectures[i].dataValues.lectureID%>" class="btn btn-outline-primary">문항 리스트 보기</a>
+                      <a href="#" class="btn btn-danger">강의 삭제</a>
                     <%} 
-                  }
-                }%>
+                  }%>
+                </div>
+                <%}%>
             </div>
           </div>
     </div>
