@@ -85,12 +85,18 @@
                 <p class="mb-1">과목에 대한 설명입니다.</p>
                 <small class="text-muted">총 수강 인원 --명 / 정원 <%=subjects[i].dataValues.limit%> 명</small>
               </a>
+              <div class="btn-group d-flex justify-content-between" role="group">
+                  <!--사용자가 강사가 아니라면 삭제, 문항 보기 불가능-->
               <%if (user){
                   if (user.type == 1){%>
-                    <a href=""></a><button type="button" class="btn btn-outline-danger">과목 삭제</button>
-                  <%} 
-                }
-              } %>
+                    <a href="../subjects/<%= subjects[i].dataValues.subjectID%>" class="btn btn-outline-primary">과목 보기</a>  
+                    <a href="../subjects/delete/<%= subjects[i].dataValues.subjectID%>" class="btn btn-danger">과목 삭제</a>
+                  <%} else {%>
+                    <a href="../subjects/<%= subjects[i].dataValues.subjectID%>" class="btn btn-outline-primary">수강 신청</a>  
+                  <%}
+                }%> 
+              </div>
+              <%}%>
             </div>
           </div>
     </div>

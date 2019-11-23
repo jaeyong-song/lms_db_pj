@@ -49,6 +49,41 @@ router.post('/make', isLoggedIn, function(req, res, next) {
   }
 });
 
+//과목 subjectID를 :id로 받음, 데이터베이스에서 해당 과목, 강의, 강의키워드 삭제
+//아직 문항 삭제기능은 없음 
+router.get('/delete/:id', isLoggedIn, function(req,res,next){
+  try {
+      lecture.findAll({
+          where: {
+              subjectID: req.params.id
+          }
+      }).then((lectures)=>{
+          for (var i=0; i<lectures.length; i++){
+            lecture_keyword.destroy({
+              where:{
+                  lectureID: lectures[i].dataValues.lectureID
+              }
+              }).then(()=>{
+                lecture.destroy({
+                    where: {
+                        lectureID: lectures[i].dataValues.lectureID
+                    }
+                })
+              })
+          };
+          }).then(()=>{
+          subject.destroy({
+            where:{
+              subjectID:req.params.id
+            }
+          })
+            return res.redirect('/subjects');
+          })
+  } catch (error) {
+    console.error(error);
+    return next(error);
+  }
+});
 
 router.get('/:id', function(req, res, next) {
   subject.findOne({

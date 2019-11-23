@@ -16,13 +16,13 @@ module.exports = function(sequelize, DataTypes) {
         },
         lectureID: {
             field: "lecture_id",
-            type: DataTypes.INTEGER,
+            type: DataTypes.INTEGER, 
             unique: true,
             allowNull: false
         },
         qType: {
             field: "q_type",
-            type: DataTypes.INTEGER,
+            type: DataTypes.INTEGER, //0=단답형, 1=주관식 
             unique: false,
             allowNull: false
         },
@@ -52,7 +52,7 @@ module.exports = function(sequelize, DataTypes) {
         },
         timeLimit: {
             field: "time_limit",
-            type: DataTypes.DATE,
+            type: DataTypes.INTEGER, //seconds
             unique: false,
             allowNull: false
         },
