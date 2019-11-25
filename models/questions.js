@@ -20,20 +20,26 @@ module.exports = function(sequelize, DataTypes) {
             unique: true,
             allowNull: false
         },
-        qType: {
-            field: "q_type",
-            type: DataTypes.INTEGER, //0=단답형, 1=주관식 
+        type: {
+            field: "type",
+            type: DataTypes.INTEGER, //0=단답형, 1=객관식 
             unique: false,
             allowNull: false
         },
-        ask: {
-            field: "ask",
+        title: {
+            field: "title",
             type: DataTypes.STRING,
             unique: false,
             allowNull: false
         },
-        content: {
-            field: "content",
+        question: {
+            field: "question",
+            type: DataTypes.STRING,
+            unique: false,
+            allowNull: false
+        },
+        answer: {
+            field: "answer",
             type: DataTypes.STRING,
             unique: false,
             allowNull: false
@@ -44,11 +50,11 @@ module.exports = function(sequelize, DataTypes) {
             unique: false,
             allowNull: false
         },
-        real_difficulty: {
+        realDifficulty: {
             field: "real_difficulty",
             type: DataTypes.DOUBLE,
             unique: false,
-            allowNull: false
+            allowNull: true
         },
         timeLimit: {
             field: "time_limit",
@@ -56,36 +62,37 @@ module.exports = function(sequelize, DataTypes) {
             unique: false,
             allowNull: false
         },
-        ans1: {
-            field: "ans1",
-            type: DataTypes.STRING,
-            unique: false,
-            allowNull: false
-        },
-        ans2: {
-            field: "ans2",
+        bogi1: {
+            field: "bogi1",
             type: DataTypes.STRING,
             unique: false,
             allowNull: true
         },
-        ans3: {
-            field: "ans3",
+        bogi2: {
+            field: "bogi2",
             type: DataTypes.STRING,
             unique: false,
             allowNull: true
         },
-        ans4: {
-            field: "ans4",
+        bogi3: {
+            field: "bogi3",
             type: DataTypes.STRING,
             unique: false,
             allowNull: true
         },
-        ans5: {
-            field: "ans5",
+        bogi4: {
+            field: "bogi",
+            type: DataTypes.STRING,
+            unique: false,
+            allowNull: true
+        },
+        bogi5: {
+            field: "bogi5",
             type: DataTypes.STRING,
             unique: false,
             allowNull: true
         }
+
     });
     question.associate = function(models) {
         question.belongsTo(models.lecture, {
@@ -100,9 +107,9 @@ module.exports = function(sequelize, DataTypes) {
         question.hasMany(models.question_keyword, {
             foreignKey: "question_id"
         })
-        question.belongsTo(models.selection, {
-            foreignKey: "question_id"
-        })
+        // question.belongsTo(models.selection, {
+        //     foreignKey: "selection_id"
+        // })
         question.belongsToMany(models.set, {
             through: "question_set",
             foreignKey: "question_id"

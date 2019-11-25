@@ -1,5 +1,11 @@
 module.exports = function(sequelize, DataTypes) {
     let selection = sequelize.define("selection", {
+        selectionID: {
+            field: "selection_id",
+            type: DataTypes.INTEGER,
+            unique: true,
+            allowNull: false,
+        },
         questionID: {
             field: "question_id",
             type: DataTypes.INTEGER,
@@ -38,7 +44,7 @@ module.exports = function(sequelize, DataTypes) {
         }
     })
     selection.associate = function(models) {
-        selection.hasOne(models.question, {
+        selection.belongsTo(models.question, {
             foreignKey: "question_id"
         })
     }

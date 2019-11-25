@@ -83,29 +83,17 @@
                 <input type="datetime-local" name="end_date" class="form-control" id="personalName" aria-describedby="endDateHelp" placeholder="종료 날짜 입력">
                 <small id="endDateHelp" class="form-text text-muted">종료 날짜와 시간을 입력해주세요</small>
               </div>
-              <!--키워드: Dynamically add or remove input field-->
-              
-              <div class="form-inline" id="keywordAdd">
-                  <label for="keyword">키워드</label>
-                  <input type="type" name="keyword" class="form-control" id="keyword" placeholder="키워드 이름 입력">  
-                  <input type="number" name="importance" class="form-control" id="importance" placeholder="중요도 숫자 입력">
-                  <div class="input-group-btn">
-                   <button type="button" class="btn btn-success" onclick="">입력</button>
-                  </div>
-              </div>
-              <!--키워드 다중 입력 해결되지 않음!!-->
-              <!-- <div class="form-group">
+               <!--키워드 다중 입력 기능-->
+               <div class="form-group" id="keywordAdd">
                 <label for="keyword">키워드</label>
-                <form id="keywordAdd">
                   <table class="table table-borderless" id="dynamic_field">
                     <tr>
-                      <td><input type="text" name="keyword" class="form-control" id="keyword" placeholder="키워드 이름 입력"></td>
-                      <td><input type="number" name="importance" class="form-control" id="importance" placeholder="중요도 숫자 입력"></td>
+                      <td><input type="text" name="contents[0][keyword]" class="form-control" id="contents[0][keyword]" placeholder="키워드 이름 입력"></td>
+                      <td><input type="number" name="contents[0][importance]" class="form-control" id="contents[0][importance]" placeholder="중요도 숫자 입력"></td>
                       <td><button type="button" name="add_more" class="btn btn-success" id="add_more">Add more</button></td>
                     </tr>
                   </table>
-                </form>
-              </div> -->
+              </div>
               <button type="submit" class="btn btn-primary">강의 생성</button>
              </form>    
           </div>
@@ -118,19 +106,20 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <!--키워드 추가 입력 기능은 아직 작업중!-->
-    <!-- <script> 
+    <!--키워드 추가 입력 기능-->
+    <script> 
         $(document).ready(function(){
-          var i = 1;
+          var i = 0;
           $('#dynamic_field').on('click', '#add_more', function(){
             i++;
-            $('#dynamic_field').append('<tr id="row'+i+'"><td><input type="text" name="keyword" class="form-control" id="keyword[]" placeholder="키워드 이름 입력"></td><td><input type="number" name="importance" class="form-control" id="importance" placeholder="중요도 숫자 입력"></td><td><button type="button" name="remove" class="btn btn-danger btn_remove" id="'+i+'">Remove</button></td></tr>');
+            $('#dynamic_field').append('<tr id="row'+i+'"><td><input type="text" name="contents['+i+'][keyword]" class="form-control" id="contents['+i+'][keyword]" placeholder="키워드 이름 입력"></td><td><input type="number" name="contents['+i+'][importance]" class="form-control" id="contents['+i+'][importance]" placeholder="중요도 숫자 입력"></td><td><button type="button" name="remove" class="btn btn-danger btn_remove" id="'+i+'">Remove</button></td></tr>');
             $(document).on('click', '.btn_remove', function(){
               var button_id = $(this).attr("id");
               $('#row'+button_id+'').remove();
+
             });
           });
         });
-      </script> -->
+      </script>
   </body>
 </html>

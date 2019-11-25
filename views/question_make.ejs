@@ -72,38 +72,38 @@
             <div class="card-header">
               <ul class="nav nav-tabs card-header-tabs">
                 <!--1인 경우 객관식, 2인 경우 단답형 활성화 -->
-                <% if (id == 1) {%> 
+                <% if (id2 == 1) {%> 
                   <li class="nav-item">
-                    <a class="nav-link active" href="../make/1">객관식</a>
+                    <a class="nav-link active" href="../<%=id1%>/1">객관식</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="../make/2">단답형</a>
+                    <a class="nav-link" href="../<%=id1%>/0">단답형</a>
                   </li>
                 <%} else{%>
                   <li class="nav-item">
-                    <a class="nav-link" href="../make/1">객관식</a>
+                    <a class="nav-link" href="../<%=id1%>/1">객관식</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link active" href="../make/2">단답형</a>
+                    <a class="nav-link active" href="../<%=id1%>/0">단답형</a>
                   </li>
                 <%}%>  
               </ul>
             </div>
             <div class="card-body">
               <form>
-                  <% if (id == 1) {%> 
+                  <% if (id2 == 1) {%> 
                     <div class="form-group">
-                      <label for="askInput">문항 제목(ask)</label>
-                      <textarea class="form-control" id="askInput" placeholder="문제를 입력하세요"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="contentInput">문항 설명(content)</label>
-                        <textarea class="form-control" id="contentInput" placeholder="정답을 입력하세요"></textarea>
+                        <label for="title">제목</label>
+                        <textarea class="form-control" id="title" placeholder="제목을 입력하세요"></textarea>
                       </div>
                     <div class="form-group">
+                      <label for="question">문제</label>
+                      <textarea class="form-control" id="question" placeholder="문제를 입력하세요"></textarea>
+                    </div>
+                    <!--보기 시작-->
+                    <div class="form-group">
                       <label for="contentInput">정답</label>
-                      <!--보기 시작-->
-                      <div class="form-row" id="contentInput1">
+                      <div class="form-row" id="bogiSet1">
                           <div class="form-check">
                               <input class="form-check-input" type="checkbox" id="gridCheck1">
                               <label class="form-check-label" for="gridCheck1">
@@ -111,10 +111,10 @@
                               </label>
                             </div>
                           <div class="col">
-                              <input type="type" name="contentInput1" class="form-control" id="contentInput1" placeholder="보기 1번">  
+                              <input type="type" name="bogi1" class="form-control" id="bogi1" placeholder="보기 1번">  
                           </div>
                        </div>
-                       <div class="form-row" id="contentInput2">
+                       <div class="form-row" id="bogiSet2">
                           <div class="form-check">
                               <input class="form-check-input" type="checkbox" id="gridCheck2">
                               <label class="form-check-label" for="gridCheck2">
@@ -122,10 +122,10 @@
                               </label>
                             </div>
                           <div class="col">
-                              <input type="type" name="contentInput2" class="form-control" id="contentInput2" placeholder="보기 2번">  
+                              <input type="type" name="bogi2" class="form-control" id="bogi2" placeholder="보기 2번">  
                           </div>
                        </div>
-                       <div class="form-row" id="contentInput3">
+                       <div class="form-row" id="bogiSet3">
                           <div class="form-check">
                               <input class="form-check-input" type="checkbox" id="gridCheck3">
                               <label class="form-check-label" for="gridCheck3">
@@ -133,10 +133,10 @@
                               </label>
                             </div>
                           <div class="col">
-                              <input type="type" name="contentInput3" class="form-control" id="contentInput3" placeholder="보기 3번">  
+                              <input type="type" name="bogi3" class="form-control" id="bogi3" placeholder="보기 3번">  
                           </div>
                        </div>
-                       <div class="form-row" id="contentInput4">
+                       <div class="form-row" id="bogiSet4">
                           <div class="form-check">
                               <input class="form-check-input" type="checkbox" id="gridCheck4">
                               <label class="form-check-label" for="gridCheck4">
@@ -144,10 +144,10 @@
                               </label>
                             </div>
                           <div class="col">
-                              <input type="type" name="contentInput2" class="form-control" id="contentInput4" placeholder="보기 4번">  
+                              <input type="type" name="bogi4" class="form-control" id="bogi4" placeholder="보기 4번">  
                           </div>
                        </div>
-                       <div class="form-row" id="contentInput5">
+                       <div class="form-row" id="bogiSet5">
                           <div class="form-check">
                               <input class="form-check-input" type="checkbox" id="gridCheck5">
                               <label class="form-check-label" for="gridCheck2">
@@ -155,58 +155,23 @@
                               </label>
                             </div>
                           <div class="col">
-                              <input type="type" name="contentInput5" class="form-control" id="contentInput5" placeholder="보기 5번">  
+                              <input type="type" name="bogi5" class="form-control" id="bogi5" placeholder="보기 5번">  
                           </div>
                        </div>
                        <!--보기 끝-->
                     </div>
+                    <!--키워드 다중 입력 기능-->
                     <div class="form-group" id="keywordAdd">
                         <label for="keyword">키워드</label>
-                        <div class="form-inline">
-                          <input type="type" name="keyword" class="form-control" id="limit" placeholder="키워드 이름 입력">  
-                          <input type="number" name="importance" class="form-control" id="importance" placeholder="중요도 숫자 입력">
-                          <div class="input-group-btn">
-                          <button type="button" class="btn btn-success" onclick="">입력</button>
-                        </div>
-                        </div>
-                    </div>
-                    <div class="form-group" id="difficultySet">
-                        <label for="difficulty">난이도</label>
-                        <div class="form-inline">
-                          <input type="number" name="difficulty" class="form-control" id="difficulty" placeholder="0~10">
-                          <div class="input-group-btn">
-                              <button type="button" class="btn btn-success" onclick="">입력</button>
-                          </div>
-                        </div>  
-                    </div>
-                    <div class="form-group" id="timelimitSet">
-                        <label for="difficulty">풀이 시간 설정 (초 단위)</label>
-                        <input type="number" name="timelimit" class="form-control" id="timelimit" placeholder="00초">
-                    </div>
-                    <button type="submit" class="btn btn-primary">만들기</button>
-                  <%} else{%>
-                    <div class="form-group">
-                      <label for="askInput">문항 제목(ask)</label>
-                      <textarea class="form-control" id="askInput" placeholder="제목을 입력하세요"></textarea>
-                    </div>
-                    <div class="form-group">
-                      <label for="contentInput">문항 설명(content)</label>
-                      <textarea class="form-control" id="contentInput" placeholder="정답을 입력하세요"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="contentInput">정답(ans1)</label>
-                        <textarea class="form-control" id="contentInput" placeholder="정답을 입력하세요"></textarea>
+                          <table class="table table-borderless" id="dynamic_field">
+                            <tr>
+                              <td><input type="text" name="contents[0][keyword]" class="form-control" id="contents[0][keyword]" placeholder="키워드 이름 입력"></td>
+                              <td><input type="number" name="contents[0][score]" class="form-control" id="contents[0][score]" placeholder="배점 입력"></td>
+                              <td><button type="button" name="add_more" class="btn btn-success" id="add_more">Add more</button></td>
+                            </tr>
+                          </table>
                       </div>
-                      <div class="form-group" id="keywordAdd">
-                          <label for="keyword">키워드</label>
-                          <div class="form-inline">
-                            <input type="type" name="keyword" class="form-control" id="limit" placeholder="키워드 이름 입력">  
-                            <input type="number" name="importance" class="form-control" id="importance" placeholder="중요도 숫자 입력">
-                            <div class="input-group-btn">
-                            <button type="button" class="btn btn-success" onclick="">입력</button>
-                          </div>
-                          </div>
-                      </div>
+                      <!--난이도-->
                       <div class="form-group" id="difficultySet">
                           <label for="difficulty">난이도</label>
                           <div class="form-inline">
@@ -217,9 +182,47 @@
                           </div>  
                       </div>
                       <div class="form-group" id="timelimitSet">
-                          <label for="difficulty">풀이 시간 설정 (초 단위)</label>
+                          <label for="timelimit">풀이 시간 설정 (초 단위)</label>
                           <input type="number" name="timelimit" class="form-control" id="timelimit" placeholder="00초">
                       </div>
+                      <button type="submit" class="btn btn-primary">만들기</button>
+                  <%} else{%>
+                      <div class="form-group">
+                        <label for="title">제목</label>
+                        <textarea class="form-control" id="title" placeholder="제목을 입력하세요"></textarea>
+                      </div>
+                      <div class="form-group">
+                        <label for="question">문제</label>
+                        <textarea class="form-control" id="question" placeholder="문제를 입력하세요"></textarea>
+                      </div>
+                      <div class="form-group">
+                        <label for="answer">정답</label>
+                        <textarea class="form-control" id="answer" placeholder="정답을 입력하세요"></textarea>
+                      </div>
+                      <!--키워드 다중 입력 기능-->
+                      <div class="form-group" id="keywordAdd">
+                          <label for="keyword">키워드</label>
+                            <table class="table table-borderless" id="dynamic_field">
+                              <tr>
+                                <td><input type="text" name="contents[0][keyword]" class="form-control" id="contents[0][keyword]" placeholder="키워드 이름 입력"></td>
+                                <td><input type="number" name="contents[0][score]" class="form-control" id="contents[0][score]" placeholder="배점 입력"></td>
+                                <td><button type="button" name="add_more" class="btn btn-success" id="add_more">Add more</button></td>
+                              </tr>
+                            </table>
+                        </div>
+                        <div class="form-group" id="difficultySet">
+                          <label for="difficulty">난이도</label>
+                          <div class="form-inline">
+                            <input type="number" name="difficulty" class="form-control" id="difficulty" placeholder="0~10">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-success" onclick="">입력</button>
+                            </div>
+                          </div>  
+                        </div>
+                        <div class="form-group" id="timelimitSet">
+                          <label for="timelimit">풀이 시간 설정 (초 단위)</label>
+                          <input type="number" name="timelimit" class="form-control" id="timelimit" placeholder="00초">
+                        </div>
                     <button type="submit" class="btn btn-primary">만들기</button>
                   <%}%>
               </form>
@@ -234,5 +237,20 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <!--키워드 추가 입력 기능-->
+    <script> 
+        $(document).ready(function(){
+          var i = 0;
+          $('#dynamic_field').on('click', '#add_more', function(){
+            i++;
+            $('#dynamic_field').append('<tr id="row'+i+'"><td><input type="text" name="contents['+i+'][keyword]" class="form-control" id="contents['+i+'][keyword]" placeholder="키워드 이름 입력"></td><td><input type="number" name="contents['+i+'][score]" class="form-control" id="contents['+i+'][score]" placeholder="배점 입력"></td><td><button type="button" name="remove" class="btn btn-danger btn_remove" id="'+i+'">Remove</button></td></tr>');
+            $(document).on('click', '.btn_remove', function(){
+              var button_id = $(this).attr("id");
+              $('#row'+button_id+'').remove();
+
+            });
+          });
+        });
+      </script>
   </body>
 </html>

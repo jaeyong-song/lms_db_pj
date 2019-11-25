@@ -53,7 +53,7 @@ router.get('/delete/:id', isLoggedIn, function(req,res,next){
 
 //과목에 강의 추가
 router.post('/make/:id', isLoggedIn, function(req, res, next) {
-    const {name, start_date, end_date, keyword, importance} = req.body;
+    const {name, start_date, end_date} = req.body;
     try {
       teacher.findOne({
         where: {
@@ -70,10 +70,12 @@ router.post('/make/:id', isLoggedIn, function(req, res, next) {
           createdAt: now,
           updatedAt: now
         }).then((lecture)=>{
-          lecture_keyword.create({
-          lectureID: lecture.lectureID,
-          lecture_keyword: keyword,
-          importance: importance
+          req.body.contents.forEach(function(item){
+            lecture_keyword.create({
+            lectureID: lecture.lectureID,
+            lecture_keyword: item.keyword,
+            importance: item.importance
+          });
         })
           var link = '/subjects/'+ req.params.id;
           return res.redirect(link);
