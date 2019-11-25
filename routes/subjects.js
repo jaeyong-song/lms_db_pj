@@ -11,6 +11,7 @@ router.get('/', isLoggedIn, function(req, res, next) {
   })
 });
 
+// 시간 나면 async로 바꾸어야 새로고침 문제 없음
 router.get('/my', isLoggedIn, function(req, res, next) {
   if(req.user.type == 1) {
     teacher.findOne({
@@ -27,7 +28,15 @@ router.get('/my', isLoggedIn, function(req, res, next) {
       })
     })
   } else {
-    res.redirect('../'); // 나중에 수정할 것
+    student.findOne({
+      where: {
+        userID: req.user.userID
+      }
+    }).then((student) => {
+      student.getSubjects().then((subjects) => {
+        res.render('my_subject', { title: 'LMS DB PJ', user: req.user, subjects: subjects });
+      })
+    });
   }
 });
 
@@ -35,7 +44,7 @@ router.get('/make', isLoggedIn, function(req, res, next) {
   res.render('subject_make', { title: 'LMS DB PJ', user: req.user });
 });
 
-
+// 얘도 시간 나면 async로 바꿀 것
 router.post('/make', isLoggedIn, function(req, res, next) {
   const {name, limit} = req.body;
   try {
@@ -52,7 +61,7 @@ router.post('/make', isLoggedIn, function(req, res, next) {
         createdAt: now,
         updatedAt: now
         });
-        return res.redirect('/subjects');
+        return res.redirect('../subjects');
       })
   } catch (error) {
     console.error(error);
@@ -130,6 +139,17 @@ router.get("/join/:id", isLoggedIn, async(req, res, next) => {
   }
 })
 
-
+// 과목 취소
+router.get("/unjoin/:id", isLoggedIn, async(req, res, next) => {
+  try {
+    const stu = await student.findOne({where: {userID: req.user.userID}});
+    const sub = await subject.findOne({where: {subjectID: req.params.id}});
+    await sub.removeStudents(stu.stuID);
+    return res.redirect('../my');
+  } catch(err) {
+    console.log(err);
+    return next(err);
+  }
+})
 
 module.exports = router;

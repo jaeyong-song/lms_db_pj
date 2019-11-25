@@ -13,7 +13,7 @@
   <body>
       <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
           <div class="container">
-              <a class="navbar-brand" href="#"><%= title %></a>
+              <a class="navbar-brand" href="/"><%= title %></a>
               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
@@ -21,13 +21,13 @@
               <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                   <li class="nav-item">
-                    <a class="nav-link" href="./subjects">전체 과목</a>
+                    <a class="nav-link" href="/subjects">전체 과목</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="./subjects/my">나의 과목</a>
+                    <a class="nav-link" href="/subjects/my">나의 과목</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="./tests">나의 시험</a>
+                    <a class="nav-link" href="/tests">나의 시험</a>
                   </li>
                   <% if (user) {%>
                   <li class="nav-item dropdown">
@@ -35,10 +35,10 @@
                       <%=user.name%> 님
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <a class="dropdown-item" href="./users/mypage">나의 정보</a>
+                      <a class="dropdown-item" href="/users/mypage">나의 정보</a>
                       <a class="dropdown-item" href="#">계정설정</a>
                       <div class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="./users/sign_out">로그아웃</a>
+                      <a class="dropdown-item" href="/users/sign_out">로그아웃</a>
                     </div>
                   </li>
                   <% } else { %>
@@ -47,8 +47,8 @@
                       로그인/가입
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <a class="dropdown-item" href="./users/sign_in">로그인</a>
-                      <a class="dropdown-item" href="./users/sign_up">가입</a>
+                      <a class="dropdown-item" href="/users/sign_in">로그인</a>
+                      <a class="dropdown-item" href="/users/sign_up">가입</a>
                     </div>
                   </li>
                   <% } %>
@@ -58,8 +58,8 @@
         </nav>
     <div class="container">
         <div class="jumbotron" style="background-color: white;">
-            <h1 class="display-4">과목 목록 보여주는 화면입니다!</h1>
-            <p class="lead">아래의 목록은 나의 과목들입니다!</p>
+            <h1 class="display-6">현재 수강중인 과목의 목록입니다</h1>
+            <p class="lead">아래 목록을 클릭하여 진행하세요! :D</p>
             <% if (user) {
                 if (user.type == 1){%>
                   <a href="./subjects/make"><button type="button" class="btn btn-secondary btn-lg btn-block"> 과목 만들기</button></a>
@@ -86,7 +86,7 @@
                     <a href="../subjects/<%= subjects[i].dataValues.subjectID%>" class="btn btn-outline-primary">과목 보기</a>  
                     <a href="../subjects/delete/<%= subjects[i].dataValues.subjectID%>" class="btn btn-danger">과목 삭제</a>
                   <%} else {%>
-                    <a href="../subjects/<%= subjects[i].dataValues.subjectID%>" class="btn btn-outline-primary">수강 신청</a>  
+                    <a href="../subjects/unjoin/<%= subjects[i].dataValues.subjectID%>" class="btn btn-outline-primary">수강 취소</a>  
                   <%}
                 }%> 
               </div>
