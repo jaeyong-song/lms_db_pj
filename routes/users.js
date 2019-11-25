@@ -33,7 +33,7 @@ router.post('/sign_up', isNotLoggedIn, async(req, res, next) => {
     const exUser = await user.findOne({where: {emailID: email}});
     if(exUser) {
       req.flash('signInError', '이미 가입되어있습니다');
-      return res.redirect('/sign_in');
+      return res.redirect('../users/sign_in');
     }
     let now = Date.now();
     await user.create({

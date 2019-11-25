@@ -1,10 +1,18 @@
 var express = require('express');
 const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 var router = express.Router();
-const {user, teacher, subject, lecture} = require('../models');
+const {user, teacher, subject, lecture, student, studentSubject} = require('../models');
 
 /* GET users listing. */
+
 router.get('/', isLoggedIn, function(req, res, next) {
+  subject.findAll().then((subjects) => {
+    res.render('subject', { title: 'LMS DB PJ', user: req.user, subjects: subjects });
+  })
+});
+
+router.get('/my', isLoggedIn, function(req, res, next) {
+  if(req.user.type == 1) {
     teacher.findOne({
       where: {
         userID: req.user.userID
@@ -15,9 +23,12 @@ router.get('/', isLoggedIn, function(req, res, next) {
           tchID: teacher.dataValues.tchID,
         }
       }).then((subjects) => {
-        res.render('subject', { title: 'LMS DB PJ', user: req.user, subjects: subjects });
+        res.render('my_subject', { title: 'LMS DB PJ', user: req.user, subjects: subjects });
       })
     })
+  } else {
+    res.redirect('../'); // 나중에 수정할 것
+  }
 });
 
 router.get('/make', isLoggedIn, function(req, res, next) {
@@ -100,6 +111,24 @@ router.get('/:id', function(req, res, next) {
     })
   })
 });
+
+// 과목 신청
+router.get("/join/:id", isLoggedIn, async(req, res, next) => {
+  try {
+    const stu = await student.findOne({where: {userID: req.user.userID}});
+    const sub = await subject.findOne({where: {subjectID: req.params.id}});
+    const arr = await sub.getStudents();
+    // 수강인원 조건
+    if(arr.length >= sub.limit) {
+      return res.status(403).send('수강인원을 초과하였습니다');
+    }
+    await sub.addStudents(stu.stuID);
+    return res.redirect('../my');
+  } catch(err) {
+    console.log(err);
+    return next(err);
+  }
+})
 
 
 

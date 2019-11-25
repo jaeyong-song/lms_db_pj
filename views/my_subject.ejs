@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title><%= title %></title>
+  </head>
+  <body>
+      <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+          <div class="container">
+              <a class="navbar-brand" href="#"><%= title %></a>
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+            
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                  <li class="nav-item">
+                    <a class="nav-link" href="./subjects">전체 과목</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="./subjects/my">나의 과목</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="./tests">나의 시험</a>
+                  </li>
+                  <% if (user) {%>
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <%=user.name%> 님
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <a class="dropdown-item" href="./users/mypage">나의 정보</a>
+                      <a class="dropdown-item" href="#">계정설정</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="./users/sign_out">로그아웃</a>
+                    </div>
+                  </li>
+                  <% } else { %>
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      로그인/가입
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <a class="dropdown-item" href="./users/sign_in">로그인</a>
+                      <a class="dropdown-item" href="./users/sign_up">가입</a>
+                    </div>
+                  </li>
+                  <% } %>
+                </ul>
+              </div>
+          </div>
+        </nav>
+    <div class="container">
+        <div class="jumbotron" style="background-color: white;">
+            <h1 class="display-4">과목 목록 보여주는 화면입니다!</h1>
+            <p class="lead">아래의 목록은 나의 과목들입니다!</p>
+            <% if (user) {
+                if (user.type == 1){%>
+                  <a href="./subjects/make"><button type="button" class="btn btn-secondary btn-lg btn-block"> 과목 만들기</button></a>
+                <%}
+            }%>
+            <hr class="my-4">
+            <div class="list-group">
+              <% for(let i = 0; i < subjects.length ; i++) { %>
+              <a href="../subjects/<%= subjects[i].dataValues.subjectID %>" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1"><%= (i+1) %></h5>
+                </div>
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1"><%= subjects[i].dataValues.name %></h5>
+                  <small class="text-muted"><%= subjects[i].dataValues.updatedAt %></small>
+                </div>
+                <p class="mb-1">과목에 대한 설명입니다.</p>
+                <small class="text-muted">총 수강 인원 --명 / 정원 <%=subjects[i].dataValues.limit%> 명</small>
+              </a>
+              <div class="btn-group d-flex justify-content-between" role="group">
+                  <!--사용자가 강사가 아니라면 삭제, 문항 보기 불가능-->
+              <%if (user){
+                  if (user.type == 1){%>
+                    <a href="../subjects/<%= subjects[i].dataValues.subjectID%>" class="btn btn-outline-primary">과목 보기</a>  
+                    <a href="../subjects/delete/<%= subjects[i].dataValues.subjectID%>" class="btn btn-danger">과목 삭제</a>
+                  <%} else {%>
+                    <a href="../subjects/<%= subjects[i].dataValues.subjectID%>" class="btn btn-outline-primary">수강 신청</a>  
+                  <%}
+                }%> 
+              </div>
+              <%}%>
+            </div>
+          </div>
+    </div>
+    
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
+</html>
