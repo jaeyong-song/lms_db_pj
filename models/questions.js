@@ -81,7 +81,7 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: true
         },
         bogi4: {
-            field: "bogi",
+            field: "bogi4",
             type: DataTypes.STRING,
             unique: false,
             allowNull: true

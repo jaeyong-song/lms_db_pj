@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title><%= title %></title>
+  </head>
+  <body>
+      <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+          <div class="container">
+              <a class="navbar-brand" href="/"><%= title %></a>
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+            
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                  <li class="nav-item">
+                    <a class="nav-link" href="/subjects">전체 과목</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/subjects/my">나의 과목</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/tests">나의 시험</a>
+                  </li>
+                  <% if (user) {%>
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <%=user.name%> 님
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <a class="dropdown-item" href="/users/mypage">나의 정보</a>
+                      <a class="dropdown-item" href="#">계정설정</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="/users/sign_out">로그아웃</a>
+                    </div>
+                  </li>
+                  <% } else { %>
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      로그인/가입
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <a class="dropdown-item" href="/users/sign_in">로그인</a>
+                      <a class="dropdown-item" href="/users/sign_up">가입</a>
+                    </div>
+                  </li>
+                  <% } %>
+                </ul>
+              </div>
+          </div>
+        </nav>
+      <div class="container">
+        <div class="jumbotron" style="background-color: white;">
+          <h1 class="display-6"><%= subject.name %></h1>
+          <p class="lead"><%= lecture.name %></p>
+          <div class="alert alert-warning" role="alert">
+              해당문항 남은 시간: 00/<%=question.timeLimit%>(sec)
+          </div>
+          <hr class="my-4">
+          <!-- 단답형 문제용 템플릿 -->
+          <% if(question.type == 0) { %>
+          <div class="card">
+            <h5 class="card-header">문제 #1</h5>
+            <div class="card-body">
+              <h5 class="card-title"> <%= question.title %></h5>
+              <p class="card-text"><%= question.question %></p>
+              <form action="/tests/<%= question.questionID %>" method="post" content-type="application/json">
+                <div class="form-group">
+                  <label for="answer">답: </label>
+                  <input type="text" class="form-control" name="answer" id="answer"" placeholder="답안">
+                  <input type="hidden" value="0" name="type">
+                </div>
+                <button type="submit" class="btn btn-info">답안제출</button>
+              </form>
+            </div>
+          </div>
+          <% } else if(question.type == 1) { %>
+          <!-- 객관식 문제용 템플릿 -->
+          <div class="card">
+            <h5 class="card-header">문제 #1</h5>
+            <div class="card-body">
+              <h5 class="card-title"><%= question.title %></h5>
+              <p class="card-text"><%= question.question %></p>
+              <form action="/tests/<%= question.questionID %>" method="post" content-type="application/json">
+                <div class="form-group">
+                  <div class="form-check">
+                    <!-- value에 받았을 때 답 번호 넣어주어야함-->
+                    <!-- 선지 제공할 때 섞은 순서로 제공하기 때문 -->
+                    <input class="form-check-input" type="checkbox" name="bogi1" id="defaultCheck1">
+                    <label class="form-check-label" for="defaultCheck1">
+                      <%= question.bogi1 %>
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="bogi2" id="defaultCheck2">
+                    <label class="form-check-label" for="defaultCheck2">
+                      <%= question.bogi2 %>
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="bogi3" id="defaultCheck3">
+                    <label class="form-check-label" for="defaultCheck3">
+                      <%= question.bogi3 %>
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="bogi4" id="defaultCheck4">
+                    <label class="form-check-label" for="defaultCheck4">
+                      <%= question.bogi4 %>
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="bogi5" id="defaultCheck5">
+                    <label class="form-check-label" for="defaultCheck5">
+                      <%= question.bogi5 %>
+                    </label>
+                    </div>
+                </div>
+                <input type="hidden" value="1" name="type">
+                <button type="submit" class="btn btn-info">답안제출</button>
+              </form>
+            </div>
+          </div>
+          <% } %>
+          <!-- 사진있는 문제용 템플릿 -->
+          <div class="card" style="display: none;">
+              <h5 class="card-header">문제 #n (단답형 템플릿)</h5>
+              <img src="" class="card-img-top" alt="">
+              <div class="card-body">
+                <h5 class="card-title">빈칸에 알맞은 말을 찾아서 한 단어로 작성하시오.</h5>
+                <p class="card-text">2NF와 _________________를 동시에 만족하는 정규형을 3NF라고 한다.</p>
+                <form>
+                  <div class="form-group">
+                    <label for="answer">답: </label>
+                    <input type="text" class="form-control" id="answer"" placeholder="답안">
+                  </div>
+                  <button type="submit" class="btn btn-info">답안제출</button>
+                </form>
+              </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="../javascripts/test.js"></script>
+  </body>
+</html>

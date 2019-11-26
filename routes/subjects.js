@@ -5,10 +5,14 @@ const {user, teacher, subject, lecture, student, studentSubject} = require('../m
 
 /* GET users listing. */
 
-router.get('/', isLoggedIn, function(req, res, next) {
-  subject.findAll().then((subjects) => {
-    res.render('subject', { title: 'LMS DB PJ', user: req.user, subjects: subjects });
-  })
+router.get('/', isLoggedIn, async(req, res, next) => {
+  try {
+    const sub = await subject.findAll();
+    return res.render('subject', { title: 'LMS DB PJ', user: req.user, subjects: sub });
+  } catch(err) {
+    console.log(err);
+    return next(err);
+  }
 });
 
 // 시간 나면 async로 바꾸어야 새로고침 문제 없음

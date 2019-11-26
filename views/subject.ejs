@@ -68,7 +68,8 @@
             <hr class="my-4">
             <div class="list-group">
               <% for(let i = 0; i < subjects.length ; i++) { %>
-              <a href="../subjects/<%= subjects[i].dataValues.subjectID %>" class="list-group-item list-group-item-action">
+                <!-- 과목 전체 보기 페이지에서는 내용 볼 수 없어야하므로 javascript:void(0)-->
+              <a href="javascript:void(0);" class="list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1"><%= (i+1) %></h5>
                 </div>
@@ -77,7 +78,7 @@
                   <small class="text-muted"><%= subjects[i].dataValues.updatedAt %></small>
                 </div>
                 <p class="mb-1">과목에 대한 설명입니다.</p>
-                <small class="text-muted">총 수강 인원 --명 / 정원 <%=subjects[i].dataValues.limit%> 명</small>
+                <small class="text-muted">총 수강 인원 --- 이부분 수정 명 / 정원 <%=subjects[i].dataValues.limit%> 명</small>
               </a>
               <div class="btn-group d-flex justify-content-between" role="group">
                   <!--사용자가 강사가 아니라면 삭제, 문항 보기 불가능-->

@@ -88,15 +88,19 @@ router.post('/make/:id', isLoggedIn, function(req, res, next) {
   });
   
 
-router.get('/:id', function(req, res, next) {
-    // http://jeonghwan-kim.github.io/express-js-2-%EB%9D%BC%EC%9A%B0%ED%8C%85/
-    lecture.findOne({
+router.get('/:id', async(req, res, next) => {
+    try {
+      const lec = await lecture.findOne({
         where: {
           lectureID: req.params.id
         }
-      }).then((lecture)=> {
-          res.render('lecture', { title: 'LMS DB PJ', user: req.user, lecture: lecture, id: req.params.id });
-      })
+      });
+      const que = await lec.getQuestions();
+      return res.render('lecture', { title: 'LMS DB PJ', user: req.user, lecture: lec, id: req.params.id, questions: que });
+    } catch(err) {
+      console.log(err);
+      return next(err);
+    }
 });
 
 module.exports = router;
