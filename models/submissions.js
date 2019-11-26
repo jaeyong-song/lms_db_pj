@@ -20,18 +20,6 @@ module.exports = function(sequelize, DataTypes) {
             unique: false,
             allowNull: false
         },
-        answerID: {
-            field: "answer_id",
-            type: DataTypes.INTEGER,
-            unique: false,
-            allowNull: false
-        },
-        parameterID: {
-            field: "parameter_id",
-            type: DataTypes.INTEGER,
-            unique: false,
-            allowNull: true
-        },
         score: {
             field: "score",
             type: DataTypes.DOUBLE,
@@ -44,9 +32,8 @@ module.exports = function(sequelize, DataTypes) {
         submission.belongsTo(models.student, {
             foreignKey: "stu_id"
         })
-        submission.hasMany(models.submitted_answer, {
-            as: "answers",
-            foreignKey: "submission_id"
+        submission.belongsTo(models.question, {
+            foreignKey: "question_id"
         })
     }
     return submission;

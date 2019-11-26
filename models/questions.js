@@ -101,6 +101,9 @@ module.exports = function(sequelize, DataTypes) {
         question.belongsTo(models.user, {
             foreignKey: "user_id"
         })
+        question.hasMany(models.submission, {
+            foreignKey: "question_id"
+        })
         question.hasMany(models.parameter, {
             foreignKey: "question_id"
         })
