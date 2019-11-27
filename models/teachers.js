@@ -23,6 +23,9 @@ module.exports = function(sequelize, DataTypes) {
             through: "teacher_subject",
             foreignKey: "tch_id"
         })
+        teacher.hasMany(models.bank, {
+            foreignKey: "tch_id"
+        })
     }
     return teacher;
 }

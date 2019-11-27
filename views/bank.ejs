@@ -9,6 +9,18 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <title><%= title %></title>
+    <style>
+        .modal-content {
+          padding-bottom: 40px;
+          border:none;}
+        .ans {
+        padding-bottom: 20px;
+        border:none;
+        }
+        .modal-footer{
+          padding-bottom: 0px;
+        }
+    </style>
   </head>
   <body>
       <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
@@ -65,42 +77,39 @@
               </div>
           </div>
         </nav>
+
     <div class="container">
-        <div class="jumbotron" style="background-color: white;">
-            <h1 class="display-4">LMS 시스템 메인입니다.</h1>
-            <p class="lead">아래의 목록은 나의 과목들입니다!</p>
-            <button type="button" class="btn btn-secondary btn-lg btn-block"><a href='./subjects/make' style="color: white;">과목 만들기</a></button>
-            <hr class="my-4">
-            <div class="list-group">
-              <a href="./lectures" class="list-group-item list-group-item-action active">
-                <div class="d-flex w-100 justify-content-between">
-                  <h5 class="mb-1">Database</h5>
-                  <small>2019-09-00 생성</small>
-                </div>
-                <p class="mb-1">2019-2 데이터베이스 수업</p>
-                <small>현재 총 00개의 강의</small>
-              </a>
-              <a href="#" class="list-group-item list-group-item-action">
-                <div class="d-flex w-100 justify-content-between">
-                  <h5 class="mb-1">과목 2</h5>
-                  <small class="text-muted">3 days ago</small>
-                </div>
-                <p class="mb-1">이 부분을 템플릿으로 바꾸어서 작업해주면 됩니다!</p>
-                <small class="text-muted">링크도 걸어주면 됩니다!! 이부분 모여서 서로 상의해야합니다</small>
-              </a>
-              <a href="#" class="list-group-item list-group-item-action">
-                <div class="d-flex w-100 justify-content-between">
-                  <h5 class="mb-1">List group item heading</h5>
-                  <small class="text-muted">3 days ago</small>
-                </div>
-                <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-                <small class="text-muted">Donec id elit non mi porta.</small>
-              </a>
+        <div class="jumbotron jumbotron-fluid" style="background-color: white;">
+            <div class="container">
+                <h1 class="display-6"> 나의 문제은행 리스트입니다. </h1>
+                <p class="lead">문제은행을 보거나 삭제할 수 있습니다^^</p>
             </div>
-          </div>
+            <a href="banks/make/" style="color: white;" ><button type="button" class="btn btn-outline-primary btn-lg btn-block">문제은행 만들기</button></a>
+        </div>
+
+        <!-- 이 아래에 테이블로 문항 리스트 불러오기--> 
+        <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">번호</th>
+                <th scope="col">은행 이름</th>
+                <th scope="col">보기</th>
+                <th scope="col">삭제</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for(let i = 0; i < banks.length ; i++) {%>
+              <tr>
+                <th scope="row"><%=(i+1)%></th>
+                <td><%=banks[i].dataValues.name%></td>
+                <td><a href='banks/list/<%=banks[i].bankID%>'><button type="button" class="btn btn-sm btn-outline-primary btn-block">보기</button></a></td>
+                <td><a href="#" class="btn btn-sm btn-danger btn-block">삭제</a></td>
+              </tr>
+              <%}%>
+            </tbody>
+          </table>
     </div>
-
-
+    
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

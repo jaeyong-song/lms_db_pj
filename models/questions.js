@@ -11,13 +11,13 @@ module.exports = function(sequelize, DataTypes) {
         userID: {
             field: "user_id",
             type: DataTypes.INTEGER,
-            unique: true,
+            unique: false,
             allowNull: false
         },
         lectureID: {
             field: "lecture_id",
             type: DataTypes.INTEGER, 
-            unique: true,
+            unique: false,
             allowNull: false
         },
         type: {

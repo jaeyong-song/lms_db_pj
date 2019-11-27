@@ -47,7 +47,8 @@ module.exports = function(sequelize, DataTypes) {
             foreignKey: "subject_id"
         });
         lecture.hasMany(models.question, {
-            foreignKey: "lecture_id"
+            foreignKey: "lecture_id",
+            onDelete: 'cascade'
         });
         lecture.hasMany(models.lecture_keyword, {
             foreignKey: "lecture_id"
