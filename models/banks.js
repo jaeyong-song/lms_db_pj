@@ -22,6 +22,9 @@ module.exports = function(sequelize, DataTypes) {
         }
     });
     bank.associate = function(models) {
+        bank.belongsTo(models.teacher, {
+            foreignKey: "tch_id"
+        })
         bank.hasMany(models.bank_question, {
             foreignKey: "bank_id"
         });

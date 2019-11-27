@@ -41,10 +41,16 @@
                   <li class="nav-item">
                     <a class="nav-link" href="/tests">나의 시험</a>
                   </li>
-                  <% if (user) {%>
-                    <li class="nav-item">
-                      <a class="nav-link" href="/banks/make">문제은행</a>
-                    </li>
+                  <% if(user) { %>
+                  <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        문제은행
+                      </a>
+                      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/banks">은행보기</a>
+                        <a class="dropdown-item" href="/banks/make">은행만들기</a>
+                      </div>
+                  </li>
                   <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <%=user.name%> 님
@@ -80,8 +86,35 @@
             </div>
         </div>
 
+        <!-- 이 아래에 테이블로 문제은행 바구니 --> 
+        <form class="form-inline" action="/banks/make" method="post" content-type="application/json">
+          <p class="lead">문제은행 바구니</p>  
+          <div class="form-group mx-sm-3 mb-2">
+            <label for="name" class="sr-only">문제은행 이름</label>
+            <input type="text" name="name" class="form-control" id="name" placeholder="은행 이름" required>
+            <input type="text" name="id_list" readonly class="form-control-plaintext" id="outputlist" style="display: none;">
+          </div>
+          <button type="submit" class="btn btn-outline-primary mb-2">은행 등록</button>
+        </form>
+        <table class="table table-hover" id="library">
+          <thead>
+            <tr>
+              <th scope="col">번호</th>
+              <th scope="col">문항 유형</th>
+              <th scope="col">문항 제목</th>
+              <th scope="col">난이도</th>
+              <th scope="col">문항 확인</th>
+              <th scope="col">문제은행 해제</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+
+        <hr>
+        <p class="lead">전체 문제 리스트</p>
         <!-- 이 아래에 테이블로 문항 리스트 불러오기--> 
-        <table class="table table-hover">
+        <table class="table table-hover" id="alllist">
             <thead>
               <tr>
                 <th scope="col">번호</th>
@@ -90,7 +123,6 @@
                 <th scope="col">난이도</th>
                 <th scope="col">문항 확인</th>
                 <th scope="col">문제은행 등록</th>
-                <th scope="col">삭제</th>
               </tr>
             </thead>
             <tbody>
@@ -109,11 +141,12 @@
                   </button>
                 </td>
                 <td><a href="#" class="btn btn-sm btn-success btn-block" id="<%=questions[i].questionID%>">등록</a></td>
-                <td><a href="#" class="btn btn-sm btn-danger btn-block">삭제</a></td>
               </tr>
               <%}%>
             </tbody>
           </table>
+          <hr>
+
     </div>
 
     <!-- Modal 확인은 팝업창으로 가능-->
@@ -164,6 +197,6 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script src="../javascripts/bank.js"></script>
+    <script src="../javascripts/bank_make.js"></script>
   </body>
 </html>
