@@ -1,7 +1,7 @@
 var express = require('express');
 const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 var router = express.Router();
-const {user, teacher, subject, lecture, question} = require('../models');
+const {user, teacher, subject, lecture, question, question_keyword} = require('../models');
 
 // /* GET users listing. */
 // router.get('/make', function(req, res, next) {
@@ -38,18 +38,18 @@ router.get('/list/:id', isLoggedIn, function(req, res, next) {
 //문제 만들기 아직 진행중입니다!
 router.post('/make/:id1/:id2', isLoggedIn, function(req, res, next){
   //id1 은 lectureID, id2는 단답(0), 객관(1)을 의미함
-  const {title, question, difficulty, timelimit} = req.body;
+  const {q_title, q_content, answer,difficulty, timelimit} = req.body;
   const b = req.body;
     try {
       let now = Date.now();
-      if (b.req.params.id2 == 0) { //단답
-        questions.create({
+      if (req.params.id2 == 0) { //단답
+        question.create({
           userID: req.user.userID,
           lectureID: req.params.id1,
           type: 0,
-          title: title,
-          question: question,
-          answer: b.answer,
+          title:  q_title,
+          question: q_content,
+          answer: answer,
           difficulty: difficulty,
           realDifficulty: null,
           timeLimit: timelimit,
@@ -62,53 +62,54 @@ router.post('/make/:id1/:id2', isLoggedIn, function(req, res, next){
           updatedAt: now
         }).then((question)=>{
           b.contents.forEach(function(item){
-          question_keywords.create({
-          questionID: question.lectureID,
+          question_keyword.create({
+          questionID: question.questionID,
+          lectureID: question.lectureID,
           question_keyword: item.keyword,
           score: item.score
           });
         })
       })
       } else { //객관
-        var answer = "";
-        if (b.gridCheck1 == 1){
-          if (answer != ""){
-            answer = answer.concat(",");
-            answer = answer.concat("1");
+        var answerN = "";
+        console.log(b.gridCheck1);
+        if (b.gridCheck1){
+          if (answerN != ""){
+            answerN = answerN.concat(",");
+          }
+          answerN = answerN.concat("1");
+        }
+        if (b.gridCheck2){
+          if (answerN != ""){
+            answerN = answerN.concat(",");
+          }
+          answerN = answerN.concat("2");
+        }
+        if (b.gridCheck3){
+          if (answerN != ""){
+            answerN = answerN.concat(",");
+          }
+          answerN = answerN.concat("3");
+        }
+        if (b.gridCheck4){
+          if (answerN != ""){
+            answerN = answerN.concat(",");
+            answerN = answerN.concat("4");
           }
         }
-        if (b.gridCheck2 == 2){
-          if (answer != ""){
-            answer = answer.concat(",");
-            answer = answer.concat("2");
+        if (b.gridCheck5){
+          if (answerN != ""){
+            answerN = answerN.concat(",");
           }
+          answerN = answerN.concat("5");
         }
-        if (b.gridCheck3 == 3){
-          if (answer != ""){
-            answer = answer.concat(",");
-            answer = answer.concat("3");
-          }
-        }
-        if (b.gridCheck4 == 4){
-          if (answer != ""){
-            answer = answer.concat(",");
-            answer = answer.concat("4");
-          }
-        }
-        if (b.gridCheck5 == 5){
-          if (answer != ""){
-            answer = answer.concat(",");
-            answer = answer.concat("5");
-          }
-        }
-        console.log(answer);
-        questions.create({
+        question.create({
           userID: req.user.userID,
           lectureID: req.params.id1,
           type: 1,
-          title: title,
-          question: question,
-          answer: answer,
+          title: q_title,
+          question: q_content,
+          answer: answerN,
           difficulty: difficulty,
           realDifficulty: null,
           timeLimit: timelimit,
@@ -121,15 +122,16 @@ router.post('/make/:id1/:id2', isLoggedIn, function(req, res, next){
           updatedAt: now
         }).then((question)=>{
           b.contents.forEach(function(item){
-          question_keywords.create({
-          questionID: question.lectureID,
+          question_keyword.create({
+          questionID: question.questionID,
+          lectureID: question.lectureID,
           question_keyword: item.keyword,
           score: item.score
           });
         })
       })
       }
-      var link = '/lectures/'+ req.params.id;
+      var link = '/questions/list/'+ req.params.id1;
       return res.redirect(link);
     } catch (error) {
       console.error(error);

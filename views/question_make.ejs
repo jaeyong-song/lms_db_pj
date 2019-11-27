@@ -20,7 +20,7 @@
       <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
           <div class="container">
               <a class="navbar-brand" href="/"><%= title %></a>
-              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <button class="navbar-togglefr" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
             
@@ -90,22 +90,23 @@
               </ul>
             </div>
             <div class="card-body">
-              <form>
+              
+              <form action="./<%=id2%>" method="post" content-type="application/json">
                   <% if (id2 == 1) {%> 
                     <div class="form-group">
-                        <label for="title">제목</label>
-                        <textarea class="form-control" id="title" placeholder="제목을 입력하세요"></textarea>
+                        <label for="q_title">제목</label>
+                        <textarea class="form-control" name="q_title" id="q_title" placeholder="제목을 입력하세요"></textarea>
                       </div>
                     <div class="form-group">
-                      <label for="question">문제</label>
-                      <textarea class="form-control" id="question" placeholder="문제를 입력하세요"></textarea>
+                      <label for="q_content">문제</label>
+                      <textarea class="form-control" name="q_content" id="q_content" placeholder="문제를 입력하세요"></textarea>
                     </div>
                     <!--보기 시작-->
                     <div class="form-group">
                       <label for="contentInput">정답</label>
                       <div class="form-row" id="bogiSet1">
                           <div class="form-check">
-                              <input class="form-check-input" type="checkbox" id="gridCheck1">
+                              <input class="form-check-input" type="checkbox" name="gridCheck1" id="gridCheck1">
                               <label class="form-check-label" for="gridCheck1">
                                 1번    
                               </label>
@@ -116,7 +117,7 @@
                        </div>
                        <div class="form-row" id="bogiSet2">
                           <div class="form-check">
-                              <input class="form-check-input" type="checkbox" id="gridCheck2">
+                              <input class="form-check-input" type="checkbox" name="gridCheck2" id="gridCheck2">
                               <label class="form-check-label" for="gridCheck2">
                                 2번    
                               </label>
@@ -127,7 +128,7 @@
                        </div>
                        <div class="form-row" id="bogiSet3">
                           <div class="form-check">
-                              <input class="form-check-input" type="checkbox" id="gridCheck3">
+                              <input class="form-check-input" type="checkbox" name="gridCheck3" id="gridCheck3">
                               <label class="form-check-label" for="gridCheck3">
                                 3번    
                               </label>
@@ -138,7 +139,7 @@
                        </div>
                        <div class="form-row" id="bogiSet4">
                           <div class="form-check">
-                              <input class="form-check-input" type="checkbox" id="gridCheck4">
+                              <input class="form-check-input" type="checkbox" name="gridCheck4" id="gridCheck4">
                               <label class="form-check-label" for="gridCheck4">
                                 4번    
                               </label>
@@ -149,8 +150,8 @@
                        </div>
                        <div class="form-row" id="bogiSet5">
                           <div class="form-check">
-                              <input class="form-check-input" type="checkbox" id="gridCheck5">
-                              <label class="form-check-label" for="gridCheck2">
+                              <input class="form-check-input" type="checkbox" name="gridCheck5" id="gridCheck5">
+                              <label class="form-check-label" for="gridCheck5">
                                 5번    
                               </label>
                             </div>
@@ -188,16 +189,16 @@
                       <button type="submit" class="btn btn-primary">만들기</button>
                   <%} else{%>
                       <div class="form-group">
-                        <label for="title">제목</label>
-                        <textarea class="form-control" id="title" placeholder="제목을 입력하세요"></textarea>
+                        <label for="q_title">제목</label>
+                        <textarea class="form-control" name="q_title" id="q_title" placeholder="제목을 입력하세요"></textarea>
                       </div>
                       <div class="form-group">
-                        <label for="question">문제</label>
-                        <textarea class="form-control" id="question" placeholder="문제를 입력하세요"></textarea>
+                        <label for="q_content">문제</label>
+                        <textarea class="form-control" name="q_content" id="q_content" placeholder="문제를 입력하세요"></textarea>
                       </div>
                       <div class="form-group">
                         <label for="answer">정답</label>
-                        <textarea class="form-control" id="answer" placeholder="정답을 입력하세요"></textarea>
+                        <textarea class="form-control" name="answer" id="answer" placeholder="정답을 입력하세요"></textarea>
                       </div>
                       <!--키워드 다중 입력 기능-->
                       <div class="form-group" id="keywordAdd">
