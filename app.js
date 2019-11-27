@@ -15,6 +15,7 @@ var lecturesRouter = require('./routes/lectures');
 var questionsRouter = require('./routes/questions');
 var testsRouter = require('./routes/tests');
 var apiRouter = require('./routes/api');
+var bankRouter = require('./routes/bank');
 
 
 // DB Setting (Sequelize)
@@ -68,6 +69,7 @@ app.use('/lectures', lecturesRouter);
 app.use('/questions', questionsRouter);
 app.use('/tests', testsRouter);
 app.use('/api', apiRouter);
+app.use('/banks', bankRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

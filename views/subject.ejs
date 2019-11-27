@@ -11,51 +11,54 @@
     <title><%= title %></title>
   </head>
   <body>
-      <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
-          <div class="container">
-              <a class="navbar-brand" href="/"><%= title %></a>
-              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-              </button>
-            
-              <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                  <li class="nav-item">
-                    <a class="nav-link" href="/subjects">전체 과목</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/subjects/my">나의 과목</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/tests">나의 시험</a>
-                  </li>
-                  <% if (user) {%>
-                  <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <%=user.name%> 님
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <a class="dropdown-item" href="/users/mypage">나의 정보</a>
-                      <a class="dropdown-item" href="#">계정설정</a>
-                      <div class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="/users/sign_out">로그아웃</a>
-                    </div>
-                  </li>
-                  <% } else { %>
-                  <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      로그인/가입
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <a class="dropdown-item" href="/users/sign_in">로그인</a>
-                      <a class="dropdown-item" href="/users/sign_up">가입</a>
-                    </div>
-                  </li>
-                  <% } %>
-                </ul>
-              </div>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+      <div class="container">
+          <a class="navbar-brand" href="/"><%= title %></a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="/subjects">전체 과목</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/subjects/my">나의 과목</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/tests">나의 시험</a>
+              </li>
+              <% if(user) { %>
+              <li class="nav-item">
+                <a class="nav-link" href="/banks/make">문제은행</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <%=user.name%> 님
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="/users/mypage">나의 정보</a>
+                  <a class="dropdown-item" href="#">계정설정</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="/users/sign_out">로그아웃</a>
+                </div>
+              </li>
+              <% } else { %>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  로그인/가입
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="/users/sign_in">로그인</a>
+                  <a class="dropdown-item" href="/users/sign_up">가입</a>
+                </div>
+              </li>
+              <% } %>
+            </ul>
           </div>
-        </nav>
+      </div>
+    </nav>
     <div class="container">
         <div class="jumbotron" style="background-color: white;">
             <h1 class="display-4">과목 목록 보여주는 화면입니다!</h1>

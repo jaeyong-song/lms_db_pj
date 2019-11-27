@@ -57,6 +57,7 @@ router.post('/:id', isLoggedIn, async(req, res, next) => {
                     }
                 })
             })
+            let subAns = inputArr.join("?");
             let percentile = (2*match - actualInputLength)/answerLength;
             percentile = percentile >= 0 ? percentile : 0;
             // 배점에 곱할 상수로 percentile 계산
@@ -70,6 +71,7 @@ router.post('/:id', isLoggedIn, async(req, res, next) => {
                 questionID: que.questionID,
                 stuID: stu.stuID,
                 score: score,
+                subAnswer: subAns,
                 createdAt: now,
                 updatedAt: now
             });

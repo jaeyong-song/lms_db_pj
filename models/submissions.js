@@ -25,6 +25,12 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.DOUBLE,
             unique: false,
             allowNull: false
+        },
+        subAnswer: {
+            field: "sub_answer",
+            type: DataTypes.STRING,
+            unique: false,
+            allowNull: false
         }
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
     })
