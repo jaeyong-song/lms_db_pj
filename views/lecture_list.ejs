@@ -9,6 +9,12 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <title><%= title %></title>
+    <style>
+    #deleteForm {
+      display:flex;
+      justify-content:space-between;
+    }
+    </style>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
@@ -78,18 +84,23 @@
                   </div>
                   <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1"><%= lectures[i].dataValues.name %></h5>
-                    <small class="text-muted"><%= lectures[i].dataValues.updatedAt %></small>
+                    <small class="text-muted"><%= lectures[i].dataValues.updatedAt%></small>
                   </div>
                   <p class="mb-1">강의에 대한 설명입니다.</p>
-                  <small class="text-muted">강의에 대한 부가 설명입니다.</small>
+                  <small class="text-muted">시작 시간: <%=(lectures[i].dataValues.startDate).toString().split('G')[0]%>
+                    <br>종료 시간: <%=(lectures[i].dataValues.endDate).toString().split('G')[0]%></small>
                 </a>
                 <div class="btn-group d-flex justify-content-between" role="group">
                 <!--사용자가 강사가 아니라면 삭제, 문항 보기 불가능-->
-                <a href="../lectures/<%= lectures[i].dataValues.lectureID%>" class="btn btn-outline-primary">강의 보기</a>
+                <a href="../lectures/<%= lectures[i].dataValues.lectureID%>" role="button" class="btn btn-outline-primary flex-fill">강의 보기</a>
                 <%if (user){
                     if (user.type == 1){%>
-                      <a href="../questions/list/<%=lectures[i].dataValues.lectureID%>" class="btn btn-outline-primary">문항 리스트 보기</a>
-                      <a href="../lectures/delete/<%=lectures[i].dataValues.lectureID%>" class="btn btn-danger">강의 삭제</a>
+                      <a href="../questions/list/<%=lectures[i].dataValues.lectureID%>" role="button" class="btn btn-outline-primary flex-fill">문항 리스트 보기</a>
+                      <form id="deleteForm" class="flex-fill" action="/lectures/delete" method="POST" >
+                        <input type="hidden" id="delete" name="delete" value= <%=lectures[i].dataValues.lectureID%>>
+                        <input type="hidden" id="backSubjectID" name="backSubjectID" value= <%=lectures[i].dataValues.subjectID%>>
+                        <button type="submit" class="btn btn-sm btn-danger btn-block">강의 삭제</button>
+                      </form>
                     <%} 
                   }%>
                 </div>

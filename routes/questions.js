@@ -139,5 +139,28 @@ router.post('/make/:id1/:id2', isLoggedIn, function(req, res, next){
     }
 });
 
+//문항 삭제
+//키워드 삭제 반영되지 않음
+router.post('/delete', isLoggedIn, function(req, res, next){
+  const id = req.body.delete;
+  try{
+    question_keyword.destroy({
+      where: {
+        questionID: id
+      }
+    }).then(()=>{
+      question.destroy({
+        where: {
+          questionID: id
+        }
+      })
+    })
+    var link = '/questions/list/'+ req.body.backLectureID;
+    return res.redirect(link);
+  }catch (err){
+    console.error(err);
+    return next(err);
+  }
+});
 
 module.exports = router;

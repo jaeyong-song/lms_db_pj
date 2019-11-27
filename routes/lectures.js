@@ -1,7 +1,7 @@
 var express = require('express');
 const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 var router = express.Router();
-const {user, teacher, subject, lecture, lecture_keyword} = require('../models');
+const {user, teacher, subject, lecture, lecture_keyword, question, question_keyword} = require('../models');
 
 /* GET users listing. */
 // router.get('/', function(req, res, next) {
@@ -22,29 +22,36 @@ router.get('/make/:id', isLoggedIn, function(req,res,next){
 
 //강의 lectureID를 :id로 받음, 강의와 키워드를 데이터베이스에서 삭제
 //아직 문항 삭제기능은 없음
-router.get('/delete/:id', isLoggedIn, function(req,res,next){
+router.post('/delete/', isLoggedIn, function(req,res,next){
     try {
-        lecture.findOne({
-            where: {
-                lectureID: req.params.id
+        const lecID = req.body.delete;
+        const subID = req.body.backSubjectID;
+        question_keyword.destroy({
+          where:{
+            lectureID: lecID
+          }
+        }).then(()=>{
+          question.destroy({
+            where:{
+              lectureID: lecID
             }
-        }).then((thisLecture)=>{
-            var thisSubjectId = thisLecture.subjectID;
-            lecture_keyword.destroy({
-                where:{
-                    lectureID: req.params.id
-                }
-            }).then(()=>{
-                lecture.destroy({
-                    where: {
-                        lectureID: req.params.id
-                    }
-            }).then(()=>{
-            var link = '/subjects/'+ thisSubjectId;
-            return res.redirect(link);
-            })
+          })
+        }).then(()=>{
+          lecture_keyword.destroy({
+            where:{
+              lectureID: lecID
+            }
+          })
+        }).then(()=>{
+          lecture.destroy({
+            where: {
+              lectureID: lecID
+            }
+          })
+        }).then(()=>{
+        var link = '/subjects/'+ subID;
+        return res.redirect(link);
         })
-    })
     } catch (error) {
       console.error(error);
       return next(error);

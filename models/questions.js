@@ -109,7 +109,7 @@ module.exports = function(sequelize, DataTypes) {
         })
         question.hasMany(models.question_keyword, {
             foreignKey: "question_id"
-        })
+        },  {onDelete: 'cascade', hooks:true})
         // question.belongsTo(models.selection, {
         //     foreignKey: "selection_id"
         // })

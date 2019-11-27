@@ -90,7 +90,7 @@
                 <th scope="col">문항 제목</th>
                 <th scope="col">난이도</th>
                 <th scope="col">문항 확인</th>
-                <th scope="col">문제은행 등록</th>
+                <th scope="col">강의에 보이기</th>
                 <th scope="col">삭제</th>
               </tr>
             </thead>
@@ -109,8 +109,14 @@
                     확인
                   </button>
                 </td>
-                <td><a href="#" class="btn btn-sm btn-success btn-block">등록</a></td>
-                <td><a href="#" class="btn btn-sm btn-danger btn-block">삭제</a></td>
+                <td><a href="#" class="btn btn-sm btn-success btn-block">보이기</a></td>
+                <td>
+                <form action="/questions/delete" method="POST" >
+                  <input type="hidden" id="delete" name="delete" value= <%=questions[i].dataValues.questionID%>>
+                  <input type="hidden" id="backLectureID" name="backLectureID" value= <%=questions[i].dataValues.lectureID%>>
+                  <button type="submit" class="btn btn-sm btn-danger btn-block">삭제</button>
+                </form>
+              </td>
               </tr>
               <%}%>
             </tbody>
