@@ -1,7 +1,7 @@
 var express = require('express');
 const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 var router = express.Router();
-const {user, teacher, subject, lecture, lecture_keyword} = require('../models');
+const {user, teacher, subject, lecture, lecture_keyword, student} = require('../models');
 
 /* GET users listing. */
 // router.get('/', function(req, res, next) {
@@ -96,7 +96,24 @@ router.get('/:id', async(req, res, next) => {
         }
       });
       const que = await lec.getQuestions();
-      return res.render('lecture', { title: 'LMS DB PJ', user: req.user, lecture: lec, id: req.params.id, questions: que });
+      if(req.user.type == 0) {
+        const stu = await student.findOne({where:{userID: req.user.userID}});
+        let isSolved = [];
+        for(let i = 0; i < que.length; i++) {
+          if(await que[i].getSubmissions({where:{stuID: stu.stuID}})) {
+            isSolved.push(true);
+          } else {
+            isSolved.push(false);
+          }
+        }
+        return res.render('lecture', { title: 'LMS DB PJ', user: req.user, lecture: lec, id: req.params.id, questions: que, isSolved: isSolved });
+      } else {
+        let isSolved = [];
+        for(let i = 0; i <que.length; i++) {
+          isSolved.push(false);
+        }
+        return res.render('lecture', { title: 'LMS DB PJ', user: req.user, lecture: lec, id: req.params.id, questions: que, isSolved: isSolved });
+      }
     } catch(err) {
       console.log(err);
       return next(err);

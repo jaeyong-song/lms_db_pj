@@ -63,7 +63,11 @@ router.post('/:id', isLoggedIn, async(req, res, next) => {
             // 배점에 곱할 상수로 percentile 계산
             // [TODO]이부분에서 배점을 구해야함
             // 우선은 10점으로 배점 가정하고 구현
-            let totScore = 10;
+            let totScore = 0;
+            const key = await que.getQuestion_keywords();
+            for(let i = 0; i < key.length; i++) {
+                totScore += key[i].dataValues.score;
+            }
             let score = totScore*percentile;
             let now = Date.now();
             await submission.create({
@@ -78,10 +82,15 @@ router.post('/:id', isLoggedIn, async(req, res, next) => {
             // 끝나면 자동으로 돌아감
         } else if(type == 0) {
             let standardizedAns = que.dataValues.answer.toLowerCase();
+            let userAns = req.body.answer.toLowerCase();
             // [TODO] 배점 계산
-            let totScore = 10;
+            let totScore = 0;
+            const key = await que.getQuestion_keywords();
+            for(let i = 0; i < key.length; i++) {
+                totScore += key[i].dataValues.score;
+            }
             let score = 0;
-            if(req.body.answer == standardizedAns) {
+            if(userAns == standardizedAns) {
                 score = totScore;
             }
             let now = Date.now();
@@ -89,6 +98,7 @@ router.post('/:id', isLoggedIn, async(req, res, next) => {
                 userID: req.user.userID,
                 questionID: que.questionID,
                 stuID: stu.stuID,
+                subAnswer: userAns,
                 score: score,
                 createdAt: now,
                 updatedAt: now

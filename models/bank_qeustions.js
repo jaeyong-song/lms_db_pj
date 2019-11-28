@@ -8,14 +8,8 @@ module.exports = function(sequelize, DataTypes) {
             primaryKey: true,
             autoIncrement: true
         },
-        bankID: {
-            field: "bank_id",
-            type: DataTypes.INTEGER,
-            unique: false,
-            allowNull: false,
-        },
-        userID: {
-            field: "user_id",
+        tchID: {
+            field: "tch_id",
             type: DataTypes.INTEGER,
             unique: false,
             allowNull: false
@@ -101,8 +95,8 @@ module.exports = function(sequelize, DataTypes) {
 
     });
     bankQuestion.associate = function(models) {
-        bankQuestion.belongsTo(models.bank, {
-            foreignKey: "bank_id"
+        bankQuestion.belongsTo(models.teacher, {
+            foreignKey: "tch_id"
         });
     }
     return bankQuestion;
