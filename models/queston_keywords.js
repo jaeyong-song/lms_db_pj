@@ -26,14 +26,14 @@ module.exports = function(sequelize, DataTypes) {
         }
     });
     question_keyword.associate = function(models) {
-        question_keyword.belongsToMany(models.question, {
-            through: "question_keyword_question",
-            foreignKey: "question_keyword"
-        })
-        question_keyword.belongsToMany(models.lecture, {
-            through: "question_keyword_lecture",
-            foreignKey: "lecture_id"
-        })
+        // question_keyword.belongsToMany(models.question, {
+        //     through: "question_keyword_question",
+        //     foreignKey: "question_keyword"
+        // })
+        // question_keyword.belongsToMany(models.lecture, {
+        //     through: "question_keyword_lecture",
+        //     foreignKey: "lecture_id"
+        // })
     }
     return question_keyword;
 }

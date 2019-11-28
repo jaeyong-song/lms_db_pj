@@ -1,6 +1,6 @@
 module.exports = function(sequelize, DataTypes) {
-    let bankQuestion = sequelize.define("bank_question", {
-        bankQuestionID: {
+    let bank_question = sequelize.define("bank_question", {
+        bank_questionID: {
             field: "bank_question_id",
             type: DataTypes.INTEGER,
             unique: true,
@@ -97,7 +97,10 @@ module.exports = function(sequelize, DataTypes) {
     bankQuestion.associate = function(models) {
         bankQuestion.belongsTo(models.teacher, {
             foreignKey: "tch_id"
-        });
+        })
+        bank_question.hasMany(models.bank_question_keyword, {
+            foreignKey: "bank_question_id"
+       })
     }
-    return bankQuestion;
+    return bank_question;
 }
