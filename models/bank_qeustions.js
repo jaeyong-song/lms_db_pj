@@ -6,7 +6,7 @@ module.exports = function(sequelize, DataTypes) {
             unique: true,
             allowNull: false,
             primaryKey: true,
-            autoIncrement: true
+            // 주의! auto increment 하면 나중에 그냥 문제와 id 충돌 가능
         },
         tchID: {
             field: "tch_id",
@@ -99,7 +99,8 @@ module.exports = function(sequelize, DataTypes) {
             foreignKey: "tch_id"
         })
         bank_question.hasMany(models.bank_question_keyword, {
-            foreignKey: "bank_question_id"
+            foreignKey: "bank_question_id",
+            onDelete: 'cascade'
        })
     }
     return bank_question;

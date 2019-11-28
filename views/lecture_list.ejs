@@ -130,12 +130,12 @@
                         <h5 class="mb-1"><%= lectures[i].dataValues.name %></h5>
                         <small class="text-muted"><%= lectures[i].dataValues.updatedAt%></small>
                       </div>
-                      <p class="mb-1"> 종료된 강의입니다.</p>
+                      <p class="mb-1"> 종료되었거나 시작 전인 강의입니다.</p>
                       <small class="text-muted">시작 시간: <%=(lectures[i].dataValues.startDate).toString().split('G')[0]%>
                         <br>종료 시간: <%=(lectures[i].dataValues.endDate).toString().split('G')[0]%></small>
                     </a>
                     <div class="btn-group d-flex justify-content-between" role="group">
-                      <a href="../lectures/<%= lectures[i].dataValues.lectureID%>" role="button" class="btn btn-outline-primary flex-fill disabled">종료된 강의입니다.</a>
+                      <a href="../lectures/<%= lectures[i].dataValues.lectureID%>" role="button" class="btn btn-outline-primary flex-fill disabled">종료되었거나 시작 전인 강의입니다.</a>
                     </div>
                     <%}
                   }

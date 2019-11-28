@@ -1,7 +1,7 @@
 var express = require('express');
 const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 var router = express.Router();
-const {question, bank, teacher, bank_question} = require('../models');
+const {question, bank, teacher, bank_question, bank_question_keyword} = require('../models');
 
 router.get('/', isLoggedIn, async(req, res, next) => {
     try {
@@ -46,6 +46,7 @@ router.post('/make', isLoggedIn, async(req, res, next) => {
             // 이름 변경
             for(let i = 0; i < wannaDel.length; i++) {
                 await bank_question.destroy({where:{bankQuestionID: wannaDel[i]}}); // 원래 문제은행에 있던 녀석들은 삭제 완료
+                // cascade로 알아서 키워드 삭제
             }
             // 전체 문제에서 온 녀석들은 새로 추가
             console.log(qIDs);
@@ -53,6 +54,7 @@ router.post('/make', isLoggedIn, async(req, res, next) => {
             for(let i = 0; i < qIDs.length; i++) {
                 const que = await question.findOne({where: {questionID: qIDs[i]}});
                 await bank_question.create({
+                    bankQuestionID: qIDs[i],
                     tchID: tch.tchID,
                     lectureID: que.lectureID,
                     type: que.type,
@@ -70,7 +72,15 @@ router.post('/make', isLoggedIn, async(req, res, next) => {
                     createdAt: now,
                     updatedAt: now
                 })
-                // [TODO] 키워드 넣는 것 해야함
+                const keywords = await que.getQuestion_keywords();
+                for(let j = 0; j < keywords.length; j++) {
+                    await bank_question_keyword.create({
+                        bankQuestionID: qIDs[i],
+                        bank_question_keyword: keywords[j].dataValues.question_keyword,
+                        lectureID: keywords[j].dataValues.lectureID,
+                        score: keywords[j].dataValues.score
+                    });
+                }
             }
             return res.redirect('/banks');
         } else {

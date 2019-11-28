@@ -51,10 +51,12 @@ module.exports = function(sequelize, DataTypes) {
             onDelete: 'cascade'
         });
         lecture.hasMany(models.lecture_keyword, {
-            foreignKey: "lecture_id"
+            foreignKey: "lecture_id",
+            onDelete: 'cascade'
         });
         lecture.hasMany(models.question_keyword, {
-            foreignKey: "lecture_id"
+            foreignKey: "lecture_id",
+            onDelete: 'cascade'
         });
     }
     return lecture;
