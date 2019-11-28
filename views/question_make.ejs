@@ -164,12 +164,18 @@
                        </div>
                        <!--보기 끝-->
                     </div>
-                    <!--키워드 다중 입력 기능-->
+                    <!--키워드 강의 키워드 중 선택해 다중 입력 기능-->
                     <div class="form-group" id="keywordAdd">
                         <label for="keyword">키워드</label>
                           <table class="table table-borderless" id="dynamic_field">
                             <tr>
-                              <td><input type="text" name="contents[0][keyword]" class="form-control" id="contents[0][keyword]" placeholder="키워드 이름 입력"></td>
+                              <td><select name="contents[0][keyword]" id="contents[0][keyword]" class="form-control">
+                                <option selected>키워드 선택</option>
+                                <%for (let i = 0; i < lecture_keywords.length; i++) {%>
+                                  <option value="<%=lecture_keywords[i].dataValues.lecture_keyword%>"><%=lecture_keywords[i].dataValues.lecture_keyword%></option>
+                                <%}%>
+                              </select>
+                              </td>
                               <td><input type="number" name="contents[0][score]" class="form-control" id="contents[0][score]" placeholder="배점 입력"></td>
                               <td><button type="button" name="add_more" class="btn btn-success" id="add_more">Add more</button></td>
                             </tr>
@@ -203,17 +209,24 @@
                         <label for="answer">정답</label>
                         <textarea class="form-control" name="answer" id="answer" placeholder="정답을 입력하세요"></textarea>
                       </div>
-                      <!--키워드 다중 입력 기능-->
+                      <!--키워드 강의 키워드 중 선택해 다중 입력 기능-->
                       <div class="form-group" id="keywordAdd">
-                          <label for="keyword">키워드</label>
-                            <table class="table table-borderless" id="dynamic_field">
-                              <tr>
-                                <td><input type="text" name="contents[0][keyword]" class="form-control" id="contents[0][keyword]" placeholder="키워드 이름 입력"></td>
-                                <td><input type="number" name="contents[0][score]" class="form-control" id="contents[0][score]" placeholder="배점 입력"></td>
-                                <td><button type="button" name="add_more" class="btn btn-success" id="add_more">Add more</button></td>
-                              </tr>
-                            </table>
-                        </div>
+                        <label for="keyword">키워드</label>
+                          <table class="table table-borderless" id="dynamic_field">
+                            <tr>
+                              <td><select name="contents[0][keyword]" id="contents[0][keyword]" class="form-control">
+                                <option selected>키워드 선택</option>
+                                <%for (let i = 0; i < lecture_keywords.length; i++) {%>
+                                  <option value="<%=lecture_keywords[i].dataValues.lecture_keyword%>"><%=lecture_keywords[i].dataValues.lecture_keyword%></option>
+                                <%}%>
+                              </select>
+                              </td>
+                              <td><input type="number" name="contents[0][score]" class="form-control" id="contents[0][score]" placeholder="배점 입력"></td>
+                              <td><button type="button" name="add_more" class="btn btn-success" id="add_more">Add more</button></td>
+                            </tr>
+                          </table>
+                      </div>
+                        <!--난이도-->
                         <div class="form-group" id="difficultySet">
                           <label for="difficulty">난이도</label>
                           <div class="form-inline">
@@ -247,7 +260,7 @@
           var i = 0;
           $('#dynamic_field').on('click', '#add_more', function(){
             i++;
-            $('#dynamic_field').append('<tr id="row'+i+'"><td><input type="text" name="contents['+i+'][keyword]" class="form-control" id="contents['+i+'][keyword]" placeholder="키워드 이름 입력"></td><td><input type="number" name="contents['+i+'][score]" class="form-control" id="contents['+i+'][score]" placeholder="배점 입력"></td><td><button type="button" name="remove" class="btn btn-danger btn_remove" id="'+i+'">Remove</button></td></tr>');
+            $('#dynamic_field').append('<tr><td><select name="contents['+i+'][keyword]" id="contents['+i+'][keyword]" class="form-control"><option selected>키워드 이름 입력</option><%for (let j = 0; j < lecture_keywords.length; j++) {%><option value="<%=lecture_keywords[j].dataValues.lecture_keyword%>"><%=lecture_keywords[j].dataValues.lecture_keyword%></option><%}%></select></td><td><input type="number" name="contents['+i+'][score]" class="form-control" id="contents['+i+'][score]" placeholder="배점 입력"></td><td><button type="button" name="add_more" class="btn btn-success" id="add_more">Add more</button></td></tr>');
             $(document).on('click', '.btn_remove', function(){
               var button_id = $(this).attr("id");
               $('#row'+button_id+'').remove();

@@ -9,6 +9,12 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <title><%= title %></title>
+    <style>
+      #deleteForm {
+        display:flex;
+        justify-content:space-between;
+      }
+      </style>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
@@ -88,7 +94,11 @@
               <%if (user){
                   if (user.type == 1){%>
                     <a href="../subjects/<%= subjects[i].dataValues.subjectID%>" class="btn btn-outline-primary">과목 보기</a>  
-                    <a href="../subjects/delete/<%= subjects[i].dataValues.subjectID%>" class="btn btn-danger">과목 삭제</a>
+                    <form id="deleteForm" class="flex-fill" action="/subjects/delete" method="POST" >
+                    <input type="hidden" id="delete" name="delete" value= <%=subjects[i].dataValues.subjectID%>>
+                    <button type="submit" class="btn btn-sm btn-danger btn-block">강의 삭제</button>
+                    </form>
+                    <!-- <a href="../subjects/delete/<%= subjects[i].dataValues.subjectID%>" class="btn btn-danger">과목 삭제</a> -->
                   <%} else {%>
                     <a href="../subjects/join/<%= subjects[i].dataValues.subjectID%>" class="btn btn-outline-primary">수강 신청</a>  
                   <%}

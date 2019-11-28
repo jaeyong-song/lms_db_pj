@@ -1,7 +1,7 @@
 var express = require('express');
 const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 var router = express.Router();
-const {user, teacher, subject, lecture, question, question_keyword} = require('../models');
+const {user, teacher, subject, lecture, lecture_keyword, question, question_keyword} = require('../models');
 
 // /* GET users listing. */
 // router.get('/make', function(req, res, next) {
@@ -14,8 +14,13 @@ const {user, teacher, subject, lecture, question, question_keyword} = require('.
 // });
 
 /* GET users listing. */
-router.get('/make/:id1/:id2', isLoggedIn, function(req, res, next) {
-  res.render('question_make', {title: 'LMS DB PJ', user:req.user, id1:req.params.id1, id2:req.params.id2});
+router.get('/make/:id1/:id2', isLoggedIn, async(req, res, next)=>{
+  const lec_keywords = await lecture_keyword.findAll({
+    where: {
+      lectureID: req.params.id1
+    }
+  });
+  res.render('question_make', {title: 'LMS DB PJ', user:req.user, id1:req.params.id1, id2:req.params.id2, lecture_keywords:lec_keywords});
 });
 
 router.get('/list/:id', isLoggedIn, function(req, res, next) {

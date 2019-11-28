@@ -17,7 +17,7 @@ module.exports = function(sequelize, DataTypes) {
         lecture_keyword: {
             field: "lecture_keyword",
             type: DataTypes.STRING,
-            unique: true,
+            unique: false,
             allowNull: false
         },
         importance: {

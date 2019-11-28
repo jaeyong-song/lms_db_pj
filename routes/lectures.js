@@ -1,7 +1,7 @@
 var express = require('express');
 const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 var router = express.Router();
-const {user, teacher, subject, lecture, lecture_keyword, question, question_keyword} = require('../models');
+const {user, teacher, student, subject, lecture, lecture_keyword, question, question_keyword} = require('../models');
 
 /* GET users listing. */
 // router.get('/', function(req, res, next) {
@@ -21,7 +21,6 @@ router.get('/make/:id', isLoggedIn, function(req,res,next){
 });
 
 //강의 lectureID를 :id로 받음, 강의와 키워드를 데이터베이스에서 삭제
-//아직 문항 삭제기능은 없음
 router.post('/delete/', isLoggedIn, function(req,res,next){
     try {
         const lecID = req.body.delete;
