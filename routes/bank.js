@@ -100,7 +100,7 @@ router.post('/make', isLoggedIn, async(req, res, next) => {
         }
     } catch(err) {
         console.log(err);
-        return next(err)
+        return res.status(403).send("이미 같은 내용의 문항이 있는데 중복하여 넣으려 하였습니다. 롤백됩니다. <h3><a href=\"/banks\">돌아가기</a></h3>");
     }
 })
 
