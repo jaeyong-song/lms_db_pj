@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title><%= title %></title>
+    <style>
+        label{margin-right:10px;}
+        .form-control {margin-right:10px;}
+        .form-row {margin-bottom:20px;}
+        .form-inline {margin-bottom:20px;}
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+      <div class="container">
+          <a class="navbar-brand" href="/"><%= title %></a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="/subjects">전체 과목</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/subjects/my">나의 과목</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/tests">나의 시험</a>
+              </li>
+              <% if(user) { %>
+              <li class="nav-item">
+                <a class="nav-link" href="/banks">문제 은행</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <%=user.name%> 님
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="/users/mypage">나의 정보</a>
+                  <a class="dropdown-item" href="#">계정설정</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="/users/sign_out">로그아웃</a>
+                </div>
+              </li>
+              <% } else { %>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  로그인/가입
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="/users/sign_in">로그인</a>
+                  <a class="dropdown-item" href="/users/sign_up">가입</a>
+                </div>
+              </li>
+              <% } %>
+            </ul>
+          </div>
+      </div>
+    </nav>
+    <div class="container">
+        <div class="jumbotron jumbotron-fluid" style="background-color: white;" >
+            <div class="container">
+              <h1 class="display-6">강의에 문제은행 추출 문항을 추가합니다</h1>
+              <p class="lead">원하는 조건을 입력해주세요 :D</p>
+              <form action='/questions/make/banks/<%=id%>' method="post" enctype="application/json">
+                <div class="form-group">
+                  <label for="qnum">문항 수</label>
+                  <input type="number" name="qnum" class="form-control" id="qnum" placeholder="문항 수" required>
+                </div>
+                <div class="form-group">
+                    <label for="difficulty">평균 난이도</label>
+                    <input type="range" name="avgDiff" min="0" max="10" value="5" step="0.05" class="form-control" id="difficulty"  required placeholder="평균 난이도" oninput="document.getElementById('diff_num').innerHTML=this.value;">
+                    <span id="diff_num">5</span>
+                  </div>
+                <div class="form-group">
+                  <label for="keywords">키워드 선택</label>
+                  <select multiple name="keywords" class="form-control" id="keywords" required>
+                    <% for(let i = 0; i < lecture_keywords.length; i++) { %>
+                        <option><%=lecture_keywords[i].DISTINCT%></option>
+                    <% } %>
+                  </select>
+                </div>
+                <div class="form-group">
+                    <label for="score">총 배점</label>
+                    <input type="number" name="totScore" class="form-control" id="score" placeholder="총 배점"  required>
+                  </div>
+                  <button type="submit" class="btn btn-outline-primary">여러 세트 추출해보기</button>
+              </form>
+            </div>
+          </div>
+    </div>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
+</html>

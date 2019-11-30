@@ -1,7 +1,8 @@
 var express = require('express');
+const Sequelize = require('sequelize');
 const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 var router = express.Router();
-const {user, teacher, subject, lecture, lecture_keyword, question, question_keyword, parameter} = require('../models');
+const {bank_question, bank_question_keyword, user, teacher, subject, lecture, lecture_keyword, question, question_keyword, parameter} = require('../models');
 const multer = require('multer');
 const XLSX = require('xlsx');
 const upload = multer({
@@ -20,6 +21,130 @@ const upload = multer({
 // });
 
 /* GET users listing. */
+
+router.get('/make/banks/:id', isLoggedIn, async(req, res, next) => {
+  const lec_keywords = await bank_question_keyword.aggregate('bank_question_keyword', 'DISTINCT', {plain:false})
+  console.log(lec_keywords);
+  return res.render('question_make_bank', {title: 'LMS DB PJ', user:req.user, id:req.params.id, lecture_keywords:lec_keywords})
+})
+
+router.post('/make/banks/:id', isLoggedIn, async(req, res, next) => {
+  const {qnum, avgDiff, keywords, totScore} = req.body; // keywords는 배열
+  let result1, result2, result3;
+  for(let i = 0; i < 30; i++) {
+    let ex = await bank_question.findAll({
+      attributes: ['bank_question_id', 'difficulty'],
+      include: [{
+        model: bank_question_keyword,
+        where: {
+          bank_question_keyword: keywords
+        }
+      }],
+      order: Sequelize.literal('RAND()'),
+      limit: parseInt(qnum)
+    });
+    let diffSum = 0;
+    let tmpScoreSum = 0;
+    for(let j = 0; j < ex.length; j++) {
+      let exKey = await bank_question_keyword.findAll({
+        attributes: [[Sequelize.fn('sum', Sequelize.col('score')), 'sum']],
+        where:{bankQuestionID: ex[j].dataValues.bank_question_id}
+      });
+      tmpScoreSum += exKey[0].dataValues.sum;
+      diffSum += ex[j].dataValues.difficulty;
+    }
+    if((avgDiff -2) < diffSum/ex.length < (avgDiff +2)
+        || (totScore - 10) < tmpScoreSum < (totScore + 10)) {
+        result1 = ex;
+        console.log("avgDiff: " + diffSum/ex.length);
+        console.log("totalScore: " + tmpScoreSum);
+    }
+    if((avgDiff -2) < diffSum/ex.length < (avgDiff +2)
+        && (totScore - 10) < tmpScoreSum < (totScore + 10)) {
+        result1 = ex;
+        console.log("avgDiff: " + diffSum/ex.length);
+        console.log("totalScore: " + tmpScoreSum);
+        break;
+    }
+  }
+  for(let i = 0; i < 30; i++) {
+    let ex = await bank_question.findAll({
+      attributes: ['bank_question_id', 'difficulty'],
+      include: [{
+        model: bank_question_keyword,
+        where: {
+          bank_question_keyword: keywords
+        }
+      }],
+      order: Sequelize.literal('RAND()'),
+      limit: parseInt(qnum)
+    });
+    let diffSum = 0;
+    let tmpScoreSum = 0;
+    for(let j = 0; j < ex.length; j++) {
+      let exKey = await bank_question_keyword.findAll({
+        attributes: [[Sequelize.fn('sum', Sequelize.col('score')), 'sum']],
+        where:{bankQuestionID: ex[j].dataValues.bank_question_id}
+      });
+      tmpScoreSum += exKey[0].dataValues.sum;
+      diffSum += ex[j].dataValues.difficulty;
+    }
+    if((avgDiff -2) < diffSum/ex.length < (avgDiff +2)
+        || (totScore - 10) < tmpScoreSum < (totScore + 10)) {
+        result2 = ex;
+        console.log("avgDiff: " + diffSum/ex.length);
+        console.log("totalScore: " + tmpScoreSum);
+    }
+    if((avgDiff -2) < diffSum/ex.length < (avgDiff +2)
+        && (totScore - 10) < tmpScoreSum < (totScore + 10)) {
+        result2 = ex;
+        console.log("avgDiff: " + diffSum/ex.length);
+        console.log("totalScore: " + tmpScoreSum);
+        break;
+    }
+  }
+  for(let i = 0; i < 30; i++) {
+    let ex = await bank_question.findAll({
+      attributes: ['bank_question_id', 'difficulty'],
+      include: [{
+        model: bank_question_keyword,
+        where: {
+          bank_question_keyword: keywords
+        }
+      }],
+      order: Sequelize.literal('RAND()'),
+      limit: parseInt(qnum)
+    });
+    let diffSum = 0;
+    let tmpScoreSum = 0;
+    for(let j = 0; j < ex.length; j++) {
+      let exKey = await bank_question_keyword.findAll({
+        attributes: [[Sequelize.fn('sum', Sequelize.col('score')), 'sum']],
+        where:{bankQuestionID: ex[j].dataValues.bank_question_id}
+      });
+      tmpScoreSum += exKey[0].dataValues.sum;
+      diffSum += ex[j].dataValues.difficulty;
+    }
+    if((avgDiff -2) < diffSum/ex.length < (avgDiff +2)
+        || (totScore - 10) < tmpScoreSum < (totScore + 10)) {
+        result3 = ex;
+        console.log("avgDiff: " + diffSum/ex.length);
+        console.log("totalScore: " + tmpScoreSum);
+    }
+    if((avgDiff -2) < diffSum/ex.length < (avgDiff +2)
+        && (totScore - 10) < tmpScoreSum < (totScore + 10)) {
+        result3 = ex;
+        console.log("avgDiff: " + diffSum/ex.length);
+        console.log("totalScore: " + tmpScoreSum);
+        break;
+    }
+  }
+  console.log(result1);
+  console.log(result2);
+  console.log(result3);
+  return res.redirect('back');
+})
+
 router.get('/make/:id1/:id2', isLoggedIn, async(req, res, next)=>{
   const lec_keywords = await lecture_keyword.findAll({
     where: {

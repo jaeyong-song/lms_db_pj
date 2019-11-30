@@ -78,7 +78,9 @@
                 <h1 class="display-6"><%=lecture.dataValues.name%> 문항 리스트입니다</h1>
                 <p class="lead">문항을 추가, 삭제할 수 있습니다.</p>
             </div>
-            <a href="../make/<%=lecture.dataValues.lectureID%>/1" style="color: white;" ><button type="button" class="btn btn-primary btn-lg btn-block">문항 만들기</button></a>
+            <a href="../make/<%=lecture.dataValues.lectureID%>/1" style="color: white;" ><button type="button" class="btn btn-outline-primary btn-lg btn-block">문항 만들기</button></a>
+            <p></p>
+            <a href="../make/banks/<%=lecture.dataValues.lectureID%>" style="color: white;" ><button type="button" class="btn btn-outline-primary btn-lg btn-block">은행에서 추출하기</button></a>
         </div>
 
         <!-- 이 아래에 테이블로 문항 리스트 불러오기--> 
