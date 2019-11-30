@@ -22,7 +22,7 @@ module.exports = function(sequelize, DataTypes) {
         },
         type: {
             field: "type",
-            type: DataTypes.INTEGER, //0=단답형, 1=객관식 
+            type: DataTypes.INTEGER, //0=단답형, 1=객관식, 2=파라미터
             unique: false,
             allowNull: false
         },
@@ -105,18 +105,11 @@ module.exports = function(sequelize, DataTypes) {
             foreignKey: "question_id"
         })
         question.hasMany(models.parameter, {
-            foreignKey: "question_id"
-        })
+            foreignKey: "question_id",
+        }, {onDelete: 'cascade', hooks: true})
         question.hasMany(models.question_keyword, {
             foreignKey: "question_id"
         },  {onDelete: 'cascade', hooks:true})
-        // question.belongsTo(models.selection, {
-        //     foreignKey: "selection_id"
-        // })
-        question.belongsToMany(models.set, {
-            through: "question_set",
-            foreignKey: "question_id"
-        })
     }
     return question;
 }

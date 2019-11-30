@@ -1,7 +1,7 @@
 var express = require('express');
 const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 var router = express.Router();
-const {question, bank, teacher, bank_question, bank_question_keyword} = require('../models');
+const {question, bank, teacher, bank_question, bank_question_keyword, bank_parameter} = require('../models');
 
 router.get('/', isLoggedIn, async(req, res, next) => {
     try {
@@ -80,6 +80,18 @@ router.post('/make', isLoggedIn, async(req, res, next) => {
                         lectureID: keywords[j].dataValues.lectureID,
                         score: keywords[j].dataValues.score
                     });
+                }
+                const parameters = await que.getParameters();
+                for(let j = 0; j < parameters.length; j++) {
+                    await bank_parameter.create({
+                        bankQuestionID: qIDs[i],
+                        answer: parameters[j].dataValues.answer,
+                        p1: parameters[j].dataValues.p1,
+                        p2: parameters[j].dataValues.p2,
+                        p3: parameters[j].dataValues.p3,
+                        p4: parameters[j].dataValues.p4,
+                        p5: parameters[j].dataValues.p5,
+                    })
                 }
             }
             return res.redirect('/banks');

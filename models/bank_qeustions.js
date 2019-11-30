@@ -102,6 +102,10 @@ module.exports = function(sequelize, DataTypes) {
             foreignKey: "bank_question_id",
             onDelete: 'cascade'
        })
+       bank_question.hasMany(models.bank_parameter, {
+           foreignKey: "bank_question_id",
+           onDelete: 'cascade'
+       })
     }
     return bank_question;
 }

@@ -74,7 +74,7 @@
           <div class="card text-left">
             <div class="card-header">
               <ul class="nav nav-tabs card-header-tabs">
-                <!--1인 경우 객관식, 2인 경우 단답형 활성화 -->
+                <!--1인 경우 객관식, 0인 경우 단답형 활성화, 2인 경우 파라미터형 활성화 -->
                 <% if (id2 == 1) {%> 
                   <li class="nav-item">
                     <a class="nav-link active" href="../<%=id1%>/1">객관식</a>
@@ -82,27 +82,43 @@
                   <li class="nav-item">
                     <a class="nav-link" href="../<%=id1%>/0">단답형</a>
                   </li>
-                <%} else{%>
+                  <li class="nav-item">
+                    <a class="nav-link" href="../<%=id1%>/2">단답형(파라미터)</a>
+                  </li>
+                <%} else if(id2 == 0){%>
                   <li class="nav-item">
                     <a class="nav-link" href="../<%=id1%>/1">객관식</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link active" href="../<%=id1%>/0">단답형</a>
                   </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="../<%=id1%>/2">단답형(파라미터)</a>
+                  </li>
+                <% }else{%>
+                  <li class="nav-item">
+                    <a class="nav-link" href="../<%=id1%>/1">객관식</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="../<%=id1%>/0">단답형</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link active" href="../<%=id1%>/2">단답형(파라미터)</a>
+                  </li>
                 <%}%>  
               </ul>
             </div>
             <div class="card-body">
               
-              <form action="./<%=id2%>" method="post" content-type="application/json">
+              <form action="./<%=id2%>" method="post" enctype="multipart/form-data">
                   <% if (id2 == 1) {%> 
                     <div class="form-group">
                         <label for="q_title">제목</label>
-                        <textarea class="form-control" name="q_title" id="q_title" placeholder="제목을 입력하세요"></textarea>
+                        <textarea class="form-control" name="q_title" id="q_title" placeholder="제목을 입력하세요" required></textarea>
                       </div>
                     <div class="form-group">
                       <label for="q_content">문제</label>
-                      <textarea class="form-control" name="q_content" id="q_content" placeholder="문제를 입력하세요"></textarea>
+                      <textarea class="form-control" name="q_content" id="q_content" placeholder="문제를 입력하세요" required></textarea>
                     </div>
                     <!--보기 시작-->
                     <div class="form-group">
@@ -176,7 +192,7 @@
                                 <%}%>
                               </select>
                               </td>
-                              <td><input type="number" name="contents[0][score]" class="form-control" id="contents[0][score]" placeholder="배점 입력"></td>
+                              <td><input type="number" name="contents[0][score]" class="form-control" id="contents[0][score]" placeholder="배점 입력" required></td>
                               <td><button type="button" name="add_more" class="btn btn-success" id="add_more">Add more</button></td>
                             </tr>
                           </table>
@@ -185,7 +201,7 @@
                       <div class="form-group" id="difficultySet">
                           <label for="difficulty">난이도</label>
                           <div class="form-inline">
-                            <input type="number" name="difficulty" class="form-control" id="difficulty" placeholder="0~10">
+                            <input type="number" name="difficulty" class="form-control" id="difficulty" placeholder="0~10" required>
                             <div class="input-group-btn">
                                 <button type="button" class="btn btn-success" onclick="">입력</button>
                             </div>
@@ -193,21 +209,21 @@
                       </div>
                       <div class="form-group" id="timelimitSet">
                           <label for="timelimit">풀이 시간 설정 (초 단위)</label>
-                          <input type="number" name="timelimit" class="form-control" id="timelimit" placeholder="00초">
+                          <input type="number" name="timelimit" class="form-control" id="timelimit" placeholder="00초" required>
                       </div>
                       <button type="submit" class="btn btn-primary">만들기</button>
-                  <%} else{%>
+                  <%} else if(id2 == 0){%>
                       <div class="form-group">
                         <label for="q_title">제목</label>
-                        <textarea class="form-control" name="q_title" id="q_title" placeholder="제목을 입력하세요"></textarea>
+                        <textarea class="form-control" name="q_title" id="q_title" placeholder="제목을 입력하세요" required></textarea>
                       </div>
                       <div class="form-group">
                         <label for="q_content">문제</label>
-                        <textarea class="form-control" name="q_content" id="q_content" placeholder="문제를 입력하세요"></textarea>
+                        <textarea class="form-control" name="q_content" id="q_content" placeholder="문제를 입력하세요" required></textarea>
                       </div>
                       <div class="form-group">
                         <label for="answer">정답</label>
-                        <textarea class="form-control" name="answer" id="answer" placeholder="정답을 입력하세요"></textarea>
+                        <textarea class="form-control" name="answer" id="answer" placeholder="정답을 입력하세요"required></textarea>
                       </div>
                       <!--키워드 강의 키워드 중 선택해 다중 입력 기능-->
                       <div class="form-group" id="keywordAdd">
@@ -221,7 +237,7 @@
                                 <%}%>
                               </select>
                               </td>
-                              <td><input type="number" name="contents[0][score]" class="form-control" id="contents[0][score]" placeholder="배점 입력"></td>
+                              <td><input type="number" name="contents[0][score]" class="form-control" id="contents[0][score]" placeholder="배점 입력" required></td>
                               <td><button type="button" name="add_more" class="btn btn-success" id="add_more">Add more</button></td>
                             </tr>
                           </table>
@@ -230,7 +246,7 @@
                         <div class="form-group" id="difficultySet">
                           <label for="difficulty">난이도</label>
                           <div class="form-inline">
-                            <input type="number" name="difficulty" class="form-control" id="difficulty" placeholder="0~10">
+                            <input type="number" name="difficulty" class="form-control" id="difficulty" placeholder="0~10" required>
                             <div class="input-group-btn">
                                 <button type="button" class="btn btn-success" onclick="">입력</button>
                             </div>
@@ -238,10 +254,65 @@
                         </div>
                         <div class="form-group" id="timelimitSet">
                           <label for="timelimit">풀이 시간 설정 (초 단위)</label>
-                          <input type="number" name="timelimit" class="form-control" id="timelimit" placeholder="00초">
+                          <input type="number" name="timelimit" class="form-control" id="timelimit" placeholder="00초"  required>
                         </div>
                     <button type="submit" class="btn btn-primary">만들기</button>
-                  <%}%>
+                  <%} else {%>
+                    <div class="form-group">
+                      <label for="q_title">제목</label>
+                      <textarea class="form-control" name="q_title" id="q_title" placeholder="제목을 입력하세요" required></textarea>
+                    </div>
+                    <div class="form-group">
+                      <label for="q_content">문제 (파라미터가 들어갈 공간은 "{params}"로 채워주세요:D)</label>
+                      <textarea class="form-control" name="q_content" id="q_content" placeholder="문제를 입력하세요" required></textarea>
+                    </div>
+                    <div class="form-group">
+                      <label for="answer">정답</label>
+                      <textarea class="form-control" name="answer" id="answer" value="0" placeholder="파라미터형 문항은 정답이 필요없지만, 기본 정답을 원하시면 입력해주세요"></textarea>
+                    </div>
+                    <!--파라미터 파일 업로드-->
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupFileAddon01">업로드</span>
+                      </div>
+                      <div class="custom-file">
+                        <input type="file" name="params" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" required>
+                        <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                      </div>
+                    </div>
+                    <!--키워드 강의 키워드 중 선택해 다중 입력 기능-->
+                    <div class="form-group" id="keywordAdd">
+                      <label for="keyword">키워드</label>
+                        <table class="table table-borderless" id="dynamic_field">
+                          <tr>
+                            <td><select name="contents[0][keyword]" id="contents[0][keyword]" class="form-control">
+                              <option selected>키워드 선택</option>
+                              <%for (let i = 0; i < lecture_keywords.length; i++) {%>
+                                <option value="<%=lecture_keywords[i].dataValues.lecture_keyword%>"><%=lecture_keywords[i].dataValues.lecture_keyword%></option>
+                              <%}%>
+                            </select>
+                            </td>
+                            <td><input type="number" name="contents[0][score]" class="form-control" id="contents[0][score]" placeholder="배점 입력" required></td>
+                            <td><button type="button" name="add_more" class="btn btn-success" id="add_more">Add more</button></td>
+                          </tr>
+                        </table>
+                    </div>
+                      <!--난이도-->
+                      <div class="form-group" id="difficultySet">
+                        <label for="difficulty">난이도</label>
+                        <div class="form-inline">
+                          <input type="number" name="difficulty" class="form-control" id="difficulty" placeholder="0~10" required>
+                          <div class="input-group-btn">
+                              <button type="button" class="btn btn-success" onclick="">입력</button>
+                          </div>
+                        </div>  
+                      </div>
+                      <div class="form-group" id="timelimitSet">
+                        <label for="timelimit">풀이 시간 설정 (초 단위)</label>
+                        <input type="number" name="timelimit" class="form-control" id="timelimit" placeholder="00초" required>
+                      </div>
+                  <button type="submit" class="btn btn-primary">만들기</button>
+                <%}%>
               </form>
             </div>
           </div>

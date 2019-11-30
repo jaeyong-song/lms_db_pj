@@ -106,7 +106,8 @@ router.get('/:id', async(req, res, next) => {
         const stu = await student.findOne({where:{userID: req.user.userID}});
         let isSolved = [];
         for(let i = 0; i < que.length; i++) {
-          if(await que[i].getSubmissions({where:{stuID: stu.stuID}})) {
+          let result = await que[i].getSubmissions({where: {stuID: stu.stuID}});
+          if(result.length >= 1) {
             isSolved.push(true);
           } else {
             isSolved.push(false);

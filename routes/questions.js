@@ -1,7 +1,13 @@
 var express = require('express');
 const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 var router = express.Router();
-const {user, teacher, subject, lecture, lecture_keyword, question, question_keyword} = require('../models');
+const {user, teacher, subject, lecture, lecture_keyword, question, question_keyword, parameter} = require('../models');
+const multer = require('multer');
+const XLSX = require('xlsx');
+const upload = multer({
+  dest: 'uploads/'
+});
+
 
 // /* GET users listing. */
 // router.get('/make', function(req, res, next) {
@@ -40,11 +46,19 @@ router.get('/list/:id', isLoggedIn, function(req, res, next) {
     //res.render('question_list', {title: 'LMS DB PJ'});
 });
 
+// 파라미터 파일 저장
+// router.post('/parameter/:id', upload.single('params'), function(req, res, next) {
+//   // id 는 lectureID를 받아올 것
+//   console.log(req.file);
+//   res.send('uploaded: ' + req.params.id);
+// });
+
 //문제 만들기 아직 진행중입니다!
-router.post('/make/:id1/:id2', isLoggedIn, function(req, res, next){
+router.post('/make/:id1/:id2', upload.single('params'), isLoggedIn, function(req, res, next){
   //id1 은 lectureID, id2는 단답(0), 객관(1)을 의미함
   const {q_title, q_content, answer,difficulty, timelimit} = req.body;
   const b = req.body;
+  console.log(req.body);
     try {
       let now = Date.now();
       if (req.params.id2 == 0) { //단답
@@ -75,7 +89,7 @@ router.post('/make/:id1/:id2', isLoggedIn, function(req, res, next){
           });
         })
       })
-      } else { //객관
+      } else if(req.params.id2 == 1) { //객관
         var answerN = "";
         console.log(b.gridCheck1);
         if (b.gridCheck1){
@@ -135,6 +149,57 @@ router.post('/make/:id1/:id2', isLoggedIn, function(req, res, next){
           });
         })
       })
+      } else if(req.params.id2 == 2) { // 파라미터있는 경우
+        question.create({
+          userID: req.user.userID,
+          lectureID: req.params.id1,
+          type: 2,
+          title:  q_title,
+          question: q_content,
+          answer: answer,
+          difficulty: difficulty,
+          realDifficulty: null,
+          timeLimit: timelimit,
+          bogi1: null,
+          bogi2: null,
+          bogi3: null,
+          bogi4: null,
+          bogi5: null,
+          createdAt: now,
+          updatedAt: now
+        }).then((question)=>{
+          const qid = question.questionID;
+          b.contents.forEach(function(item){
+            question_keyword.create({
+            questionID: qid,
+            lectureID: question.lectureID,
+            question_keyword: item.keyword,
+            score: item.score
+            });
+          })
+          let data = {};
+          let paraXlsx = XLSX.readFile(__dirname + "\\..\\" + req.file.path);
+          let sheetnames = Object.keys(paraXlsx.Sheets);
+          let i = sheetnames.length;
+          while (i--) {
+            let sheetname = sheetnames[i];
+            data[sheetname] = XLSX.utils.sheet_to_json(paraXlsx.Sheets[sheetname]);
+          }
+          let paraSheet = data["Sheet1"];
+          for(let i = 0; i < paraSheet.length; i++) {
+            let dataSet = paraSheet[i];
+            parameter.create({
+              questionID: qid,
+              answer: dataSet["answer"],
+              p1: dataSet["pr1"],
+              p2: dataSet["pr2"],
+              p3: dataSet["pr3"],
+              p4: dataSet["pr4"],
+              p5: dataSet["pr5"]
+            })
+          }
+          console.log(data);
+        })
       }
       var link = '/questions/list/'+ req.params.id1;
       return res.redirect(link);

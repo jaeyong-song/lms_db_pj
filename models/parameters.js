@@ -14,11 +14,11 @@ module.exports = function(sequelize, DataTypes) {
             unique: false,
             allowNull: false,
         },
-        answerID: {
-            field: "answer_id",
-            type: DataTypes.INTEGER,
+        answer: {
+            field: "answer",
+            type: DataTypes.STRING,
             unique: false,
-            allowNull: false,
+            allowNull: false
         },
         p1: {
             field: "p1",

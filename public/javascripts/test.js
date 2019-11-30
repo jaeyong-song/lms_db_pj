@@ -1,23 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // new Ajaxer((data) => {
-    //     new Timer(data);
-    //     new Test(data);
-    //     new Question(data);
-    // })
-});
+    parameterTemplating();
+})
 
-Ajaxer.prototype = {
-
-}
-
-Timer.prototype = {
-
-}
-
-Test.prototype = {
-
-}
-
-Question.prototype = {
-
+function parameterTemplating() {
+    let iptArea = document.getElementById("question_template");
+    let areaHtml = iptArea.innerHTML;
+    let parameterTxt = document.getElementById("parameters").innerText;
+    let parameterArr = parameterTxt.split(",");
+    let bindTemplate = Handlebars.compile(areaHtml);
+    iptArea.innerHTML = bindTemplate(parameterArr).replace("{params}", parameterArr[0])
+                                                    .replace("{params}", parameterArr[1])
+                                                    .replace("{params}", parameterArr[2]
+                                                    .replace("{params}", parameterArr[3])
+                                                    .replace("{params}", parameterArr[4]));
 }

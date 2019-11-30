@@ -15,13 +15,28 @@ router.get('/free/:id', isLoggedIn, async(req, res, next) => {
         const que = await question.findByPk(req.params.id);
         const lec = await que.getLecture();
         const sub = await lec.getSubject();
-        return res.render('free_test', {
-            title: 'LMS DB PJ', 
-            user: req.user, 
-            question: que.dataValues,
-            lecture: lec.dataValues,
-            subject: sub.dataValues
-        });
+        if(que.dataValues.type == 2) { // 파라미터형 문항의 경우
+            const pars = await que.getParameters();
+            let randomN = Math.floor(Math.random()*pars.length);
+            let par = pars[randomN];
+            console.log(par);
+            return res.render('free_test', {
+                title: 'LMS DB PJ', 
+                user: req.user, 
+                question: que.dataValues,
+                lecture: lec.dataValues,
+                subject: sub.dataValues,
+                parameter: par.dataValues
+            });
+        } else {
+            return res.render('free_test', {
+                title: 'LMS DB PJ', 
+                user: req.user, 
+                question: que.dataValues,
+                lecture: lec.dataValues,
+                subject: sub.dataValues
+            });
+        }
     } catch(err) {
         console.log(err);
         return next(err);
@@ -104,6 +119,31 @@ router.post('/:id', isLoggedIn, async(req, res, next) => {
                 updatedAt: now
             });
             // 끝나면 자동으로 돌아감
+        } else if(type == 2) { //파라미터 있는 문항의 경우
+            let para = await que.getParameters({where:{ parameterID: req.body.parameterID}});
+            let standardizedAns = para[0].dataValues.answer.toLowerCase();
+            let userAns = req.body.answer.toLowerCase();
+            // [TODO] 배점 계산
+            let totScore = 0;
+            const key = await que.getQuestion_keywords();
+            for(let i = 0; i < key.length; i++) {
+                totScore += key[i].dataValues.score;
+            }
+            let score = 0;
+            if(userAns == standardizedAns) {
+                score = totScore;
+            }
+            let now = Date.now();
+            await submission.create({
+                userID: req.user.userID,
+                questionID: que.questionID,
+                stuID: stu.stuID,
+                subAnswer: userAns,
+                score: score,
+                createdAt: now,
+                updatedAt: now
+            });
+            //끝나면 자동으로 돌아감
         }
         // 문제 유형에 따라서 별도로 처리해야하고,
         // 제출과 동시에 채점이 이루어져야함
