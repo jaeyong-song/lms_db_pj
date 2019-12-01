@@ -53,9 +53,9 @@ router.get('/list/:id', isLoggedIn, function(req, res, next) {
 //   res.send('uploaded: ' + req.params.id);
 // });
 
-//문제 만들기 아직 진행중입니다!
+
 router.post('/make/:id1/:id2', upload.single('params'), isLoggedIn, function(req, res, next){
-  //id1 은 lectureID, id2는 단답(0), 객관(1)을 의미함
+  //id1 은 lectureID, id2는 단답(0), 객관(1), 파라미터 단답(2)을 의미함
   const {q_title, q_content, answer,difficulty, timelimit} = req.body;
   const b = req.body;
   console.log(req.body);
@@ -178,7 +178,7 @@ router.post('/make/:id1/:id2', upload.single('params'), isLoggedIn, function(req
             });
           })
           let data = {};
-          let paraXlsx = XLSX.readFile(__dirname + "\\..\\" + req.file.path);
+          let paraXlsx = XLSX.readFile(__dirname + "\/..\/" + req.file.path);
           let sheetnames = Object.keys(paraXlsx.Sheets);
           let i = sheetnames.length;
           while (i--) {
@@ -210,7 +210,6 @@ router.post('/make/:id1/:id2', upload.single('params'), isLoggedIn, function(req
 });
 
 //문항 삭제
-//키워드 삭제 반영되지 않음
 router.post('/delete', isLoggedIn, function(req, res, next){
   const id = req.body.delete;
   try{

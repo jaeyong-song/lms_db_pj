@@ -69,7 +69,7 @@
       
     <div class="jumbotron" style="background-color: white;">
         <h1 class="display-4">문항 만들기</h1>
-        <p class="lead">문항 만들기 위한 form 페이지 이 부분 논의해서 라우팅 처리 해야함.
+        <p class="lead">객관식, 단답형, 파라미터를 넣은 개별 단답 문항을 만들 수 있습니다. 
         </p>
           <div class="card text-left">
             <div class="card-header">
@@ -202,9 +202,6 @@
                           <label for="difficulty">난이도</label>
                           <div class="form-inline">
                             <input type="number" name="difficulty" class="form-control" id="difficulty" placeholder="0~10" required>
-                            <div class="input-group-btn">
-                                <button type="button" class="btn btn-success" onclick="">입력</button>
-                            </div>
                           </div>  
                       </div>
                       <div class="form-group" id="timelimitSet">
@@ -247,9 +244,6 @@
                           <label for="difficulty">난이도</label>
                           <div class="form-inline">
                             <input type="number" name="difficulty" class="form-control" id="difficulty" placeholder="0~10" required>
-                            <div class="input-group-btn">
-                                <button type="button" class="btn btn-success" onclick="">입력</button>
-                            </div>
                           </div>  
                         </div>
                         <div class="form-group" id="timelimitSet">
@@ -277,7 +271,7 @@
                       </div>
                       <div class="custom-file">
                         <input type="file" name="params" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" required>
-                        <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                        <label class="custom-file-label" for="inputGroupFile01" id="inputGroupFile01_name">Choose file</label>
                       </div>
                     </div>
                     <!--키워드 강의 키워드 중 선택해 다중 입력 기능-->
@@ -302,9 +296,6 @@
                         <label for="difficulty">난이도</label>
                         <div class="form-inline">
                           <input type="number" name="difficulty" class="form-control" id="difficulty" placeholder="0~10" required>
-                          <div class="input-group-btn">
-                              <button type="button" class="btn btn-success" onclick="">입력</button>
-                          </div>
                         </div>  
                       </div>
                       <div class="form-group" id="timelimitSet">
@@ -331,7 +322,7 @@
           var i = 0;
           $('#dynamic_field').on('click', '#add_more', function(){
             i++;
-            $('#dynamic_field').append('<tr><td><select name="contents['+i+'][keyword]" id="contents['+i+'][keyword]" class="form-control"><option selected>키워드 이름 입력</option><%for (let j = 0; j < lecture_keywords.length; j++) {%><option value="<%=lecture_keywords[j].dataValues.lecture_keyword%>"><%=lecture_keywords[j].dataValues.lecture_keyword%></option><%}%></select></td><td><input type="number" name="contents['+i+'][score]" class="form-control" id="contents['+i+'][score]" placeholder="배점 입력"></td><td><button type="button" name="add_more" class="btn btn-success" id="add_more">Add more</button></td></tr>');
+            $('#dynamic_field').append('<tr><td><select name="contents['+i+'][keyword]" id="contents['+i+'][keyword]" class="form-control"><option selected>키워드 선택</option><%for (let j = 0; j < lecture_keywords.length; j++) {%><option value="<%=lecture_keywords[j].dataValues.lecture_keyword%>"><%=lecture_keywords[j].dataValues.lecture_keyword%></option><%}%></select></td><td><input type="number" name="contents['+i+'][score]" class="form-control" id="contents['+i+'][score]" placeholder="배점 입력"></td><td><button type="button" name="add_more" class="btn btn-danger btn_remove" id="add_more">Remove</button></td></tr>');
             $(document).on('click', '.btn_remove', function(){
               var button_id = $(this).attr("id");
               $('#row'+button_id+'').remove();
@@ -339,6 +330,12 @@
             });
           });
         });
+      </script>
+      <!--파일 업로드 한 경우 이름 보여주기-->
+      <script>
+      $("#inputGroupFile01").change(function(){
+      $("#inputGroupFile01_name").text(this.files[0].name);
+      });
       </script>
   </body>
 </html>
