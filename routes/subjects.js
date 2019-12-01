@@ -15,32 +15,16 @@ router.get('/', isLoggedIn, async(req, res, next) => {
   }
 });
 
-// 시간 나면 async로 바꾸어야 새로고침 문제 없음
-router.get('/my', isLoggedIn, function(req, res, next) {
+
+router.get('/my', isLoggedIn, async(req, res, next)=>{
   if(req.user.type == 1) {
-    teacher.findOne({
-      where: {
-        userID: req.user.userID
-      }
-    }).then((teacher)=> {
-      subject.findAll({
-        where: {
-          tchID: teacher.dataValues.tchID,
-        }
-      }).then((subjects) => {
-        res.render('my_subject', { title: 'LMS DB PJ', user: req.user, subjects: subjects });
-      })
-    })
+    const tea = await teacher.findOne({where: {userID: req.user.userID}})
+    const subs = await subject.findAll({where: {tchID: tea.dataValues.tchID}})
+    res.render('my_subject', { title: 'LMS DB PJ', user: req.user, subjects: subs });
   } else {
-    student.findOne({
-      where: {
-        userID: req.user.userID
-      }
-    }).then((student) => {
-      student.getSubjects().then((subjects) => {
-        res.render('my_subject', { title: 'LMS DB PJ', user: req.user, subjects: subjects });
-      })
-    });
+    const stu = await student.findOne({where: {userID: req.user.userID}})
+    const subs = await stu.getSubjects();
+    res.render('my_subject', { title: 'LMS DB PJ', user: req.user, subjects: subs });
   }
 });
 
@@ -48,25 +32,20 @@ router.get('/make', isLoggedIn, function(req, res, next) {
   res.render('subject_make', { title: 'LMS DB PJ', user: req.user });
 });
 
-// 얘도 시간 나면 async로 바꿀 것
-router.post('/make', isLoggedIn, function(req, res, next) {
+
+router.post('/make', isLoggedIn, async(req, res, next)=>{
   const {name, limit} = req.body;
   try {
-    teacher.findOne({
-      where: {
-        userID: req.user.userID
-      }
-    }).then((teacher)=> {
-      let now = Date.now();
-      subject.create({
+    const tea = await teacher.findOne({where: {userID: req.user.userID}})
+    let now = Date.now();
+    await subject.create({
         name: name,
         limit: limit,
-        tchID: teacher.dataValues.tchID,
+        tchID: tea.dataValues.tchID,
         createdAt: now,
         updatedAt: now
         });
         return res.redirect('../subjects');
-      })
   } catch (error) {
     console.error(error);
     return next(error);
@@ -94,20 +73,15 @@ router.post('/delete/', isLoggedIn, async(req,res,next)=>{
   }
 });
 
-router.get('/:id', function(req, res, next) {
-  subject.findOne({
-    where: {
-      subjectID: req.params.id,
-    }
-  }).then((subject)=> {
-    lecture.findAll({
-      where: {
-        subjectID: subject.dataValues.subjectID,
-      }
-    }).then((lectures) => {
-      res.render('lecture_list', { title: 'LMS DB PJ', user: req.user, subject: subject, lectures:lectures });
-    })
-  })
+router.get('/:id', async(req, res, next)=>{
+ try{
+  const sub = await subject.findOne({where: {subjectID: req.params.id}});
+  const lecs = await lecture.findAll({where: {subjectID: sub.dataValues.subjectID}})
+  res.render('lecture_list', { title: 'LMS DB PJ', user: req.user, subject: sub, lectures:lecs });
+ } catch(err) {
+  console.log(err);
+  return next(err);
+}
 });
 
 // 과목 신청

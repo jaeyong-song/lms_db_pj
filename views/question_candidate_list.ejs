@@ -38,13 +38,12 @@
               <li class="nav-item">
                 <a class="nav-link" href="/subjects/my">나의 과목</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/tests">나의 시험</a>
-              </li>
-              <% if(user) { %>
-              <li class="nav-item">
-                <a class="nav-link" href="/banks">문제 은행</a>
-              </li>
+              <% if(user) {
+                if (user.type == 1){%>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/banks">문제 은행</a>
+                  </li>
+                <%}%>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <%=user.name%> 님
@@ -72,6 +71,7 @@
       </div>
     </nav>
 
+    <!--문제 은행에서 주어진 조건에 따라 문항 세트 불러오기-->
     <div class="container">
         <div class="jumbotron jumbotron-fluid" style="background-color: white;">
             <div class="container">

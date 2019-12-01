@@ -32,13 +32,12 @@
               <li class="nav-item">
                 <a class="nav-link" href="/subjects/my">나의 과목</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/tests">나의 시험</a>
-              </li>
-              <% if(user) { %>
-              <li class="nav-item">
-                <a class="nav-link" href="/banks">문제 은행</a>
-              </li>
+              <% if(user) { 
+                if (user.type == 1){%>
+                <li class="nav-item">
+                  <a class="nav-link" href="/banks">문제 은행</a>
+                </li>
+              <%}%>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <%=user.name%> 님
@@ -317,19 +316,20 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <!--키워드 추가 입력 기능-->
-    <script> 
+    <script>
+        var i = 1;
         $(document).ready(function(){
-          var i = 0;
           $('#dynamic_field').on('click', '#add_more', function(){
-            i++;
-            $('#dynamic_field').append('<tr><td><select name="contents['+i+'][keyword]" id="contents['+i+'][keyword]" class="form-control"><option selected>키워드 선택</option><%for (let j = 0; j < lecture_keywords.length; j++) {%><option value="<%=lecture_keywords[j].dataValues.lecture_keyword%>"><%=lecture_keywords[j].dataValues.lecture_keyword%></option><%}%></select></td><td><input type="number" name="contents['+i+'][score]" class="form-control" id="contents['+i+'][score]" placeholder="배점 입력"></td><td><button type="button" name="add_more" class="btn btn-danger btn_remove" id="add_more">Remove</button></td></tr>');
-            $(document).on('click', '.btn_remove', function(){
+            if (i<4){
+              i++;
+              $('#dynamic_field').append('<tr><td><select name="contents['+i+'][keyword]" id="contents['+i+'][keyword]" class="form-control"><option selected>키워드 선택</option><%for (let j = 0; j < lecture_keywords.length; j++) {%><option value="<%=lecture_keywords[j].dataValues.lecture_keyword%>"><%=lecture_keywords[j].dataValues.lecture_keyword%></option><%}%></select></td><td><input type="number" name="contents['+i+'][score]" class="form-control" id="contents['+i+'][score]" placeholder="배점 입력"></td><td><button type="button" name="add_more" class="btn btn-danger btn_remove" id="add_more">Remove</button></td></tr>');
+              $(document).on('click', '.btn_remove', function(){
               var button_id = $(this).attr("id");
               $('#row'+button_id+'').remove();
-
             });
-          });
+            }
         });
+      });
       </script>
       <!--파일 업로드 한 경우 이름 보여주기-->
       <script>

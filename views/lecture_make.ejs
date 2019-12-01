@@ -32,13 +32,12 @@
               <li class="nav-item">
                 <a class="nav-link" href="/subjects/my">나의 과목</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/tests">나의 시험</a>
-              </li>
-              <% if(user) { %>
-              <li class="nav-item">
-                <a class="nav-link" href="/banks">문제 은행</a>
-              </li>
+              <% if(user) { 
+                if (user.type == 1){%>
+                <li class="nav-item">
+                  <a class="nav-link" href="/banks">문제 은행</a>
+                </li>
+              <%}%>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <%=user.name%> 님
@@ -68,7 +67,7 @@
     <div class="container">
         <div class="jumbotron" style="background-color: white;">
             <h1 class="display-4">강의 만들기</h1>
-            <p class="lead">강의 만들기 위한 form 페이지 이 부분 논의해서 라우팅 처리 해야함.
+            <p class="lead">강의를 만드는 페이지입니다.
             </p>
             <form action="./<%=id%>" method="post" content-type="application/x-www-form-urlencoded">
               <div class="form-group">
@@ -111,16 +110,17 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <!--키워드 추가 입력 기능-->
     <script> 
+        var i = 1;
         $(document).ready(function(){
-          var i = 0;
           $('#dynamic_field').on('click', '#add_more', function(){
-            i++;
-            $('#dynamic_field').append('<tr id="row'+i+'"><td><input type="text" name="contents['+i+'][keyword]" class="form-control" id="contents['+i+'][keyword]" placeholder="키워드 이름 입력"></td><td><input type="number" name="contents['+i+'][importance]" class="form-control" id="contents['+i+'][importance]" placeholder="중요도 숫자 입력"></td><td><button type="button" name="remove" class="btn btn-danger btn_remove" id="'+i+'">Remove</button></td></tr>');
-            $(document).on('click', '.btn_remove', function(){
+            if (i<10){
+              i++;
+              $('#dynamic_field').append('<tr id="row'+i+'"><td><input type="text" name="contents['+i+'][keyword]" class="form-control" id="contents['+i+'][keyword]" placeholder="키워드 이름 입력"></td><td><input type="number" name="contents['+i+'][importance]" class="form-control" id="contents['+i+'][importance]" placeholder="중요도 숫자 입력"></td><td><button type="button" name="remove" class="btn btn-danger btn_remove" id="'+i+'">Remove</button></td></tr>');
+              $(document).on('click', '.btn_remove', function(){
               var button_id = $(this).attr("id");
               $('#row'+button_id+'').remove();
-
-            });
+              });
+            }
           });
         });
       </script>

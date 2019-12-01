@@ -26,13 +26,12 @@
               <li class="nav-item">
                 <a class="nav-link" href="/subjects/my">나의 과목</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/tests">나의 시험</a>
-              </li>
-              <% if(user) { %>
-              <li class="nav-item">
-                <a class="nav-link" href="/banks">문제 은행</a>
-              </li>
+              <% if(user) { 
+                if (user.type == 1){%>
+                <li class="nav-item">
+                  <a class="nav-link" href="/banks">문제 은행</a>
+                </li>
+              <%}%>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <%=user.name%> 님
@@ -85,12 +84,6 @@
                   <h5 class="mb-1">나의 과목 보기</h5>
                 </div>
                 <p class="mb-1">나의 과목으로 이동합니다.</p>
-              </a>
-              <a href="./tests" class="list-group-item list-group-item-action">
-                <div class="d-flex w-100 justify-content-between">
-                  <h5 class="mb-1">나의 시험 보기</h5>
-                </div>
-                <p class="mb-1">나의 시험으로 이동합니다.</p>
               </a>
             </div>
             <%}%>

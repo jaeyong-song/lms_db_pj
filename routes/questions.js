@@ -2,7 +2,7 @@ var express = require('express');
 const Sequelize = require('sequelize');
 const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 var router = express.Router();
-const {bank_question, bank_question_keyword, user, teacher, subject, lecture, lecture_keyword, question, question_keyword, parameter} = require('../models');
+const {user, student, bank_question, bank_question_keyword, lecture, lecture_keyword, question, question_keyword, parameter, submission} = require('../models');
 const multer = require('multer');
 const XLSX = require('xlsx');
 const upload = multer({
@@ -28,6 +28,7 @@ router.get('/make/banks/:id', isLoggedIn, async(req, res, next) => {
   return res.render('question_make_bank', {title: 'LMS DB PJ', user:req.user, id:req.params.id, lecture_keywords:lec_keywords})
 })
 
+//문제은행 세트에서 선택한 문제들 새로 강의에 저장
 router.post('/make/banks/add', isLoggedIn, async(req, res, next) => {
   const bankQuestionIDs = req.body.bankQuestionIDs.split(",");
   const lectureID = req.body.lectureID
@@ -47,7 +48,7 @@ router.post('/make/banks/add', isLoggedIn, async(req, res, next) => {
       question: bankQ.dataValues.question,
       answer: bankQ.dataValues.answer,
       difficulty: bankQ.dataValues.difficulty,
-      realDifficulty: bankQ.dataValues.realDifficulty,
+      realDifficulty: null, //풀지 않은 새로운 문항으로 생성
       timeLimit: bankQ.dataValues.timeLimit,
       bogi1: bankQ.dataValues.bogi1,
       bogi2: bankQ.dataValues.bogi2,
@@ -89,6 +90,7 @@ router.post('/make/banks/add', isLoggedIn, async(req, res, next) => {
   return res.redirect('/questions/list/'+lectureID);
 })
 
+//문항 세트 제작해 보여줌
 router.post('/make/banks/:id', isLoggedIn, async(req, res, next) => {
   const {qnum, avgDiff, keywords, totScore} = req.body; // keywords는 배열
   let result1, result2, result3;
@@ -260,31 +262,73 @@ router.get('/make/:id1/:id2', isLoggedIn, async(req, res, next)=>{
   res.render('question_make', {title: 'LMS DB PJ', user:req.user, id1:req.params.id1, id2:req.params.id2, lecture_keywords:lec_keywords});
 });
 
-router.get('/list/:id', isLoggedIn, function(req, res, next) {
-    lecture.findOne({
-        where: {
-          lectureID: req.params.id,
-        }
-      }).then((lecture)=> {
-        question.findAll({
-          where: {
-            lectureID: lecture.dataValues.lectureID,
-          }
-        }).then((questions) => {
-          res.render('question_list', { title: 'LMS DB PJ', user:req.user, subject: subject, lecture:lecture, questions: questions});
-        })
-      })
-    //res.render('question_list', {title: 'LMS DB PJ'});
+//강의별 문항 리스트 가져오기
+router.get('/list/:id', isLoggedIn, async(req, res, next)=>{
+    try{
+      const lec = await lecture.findOne({where: {lectureID: req.params.id}});
+      const ques = await question.findAll({where: {lectureID: lec.dataValues.lectureID}});
+      res.render('question_list', { title: 'LMS DB PJ', user:req.user, lecture:lec, questions: ques});
+    } catch (error) {
+      console.error(error);
+      return next(error);
+    }   
 });
 
-// 파라미터 파일 저장
-// router.post('/parameter/:id', upload.single('params'), function(req, res, next) {
-//   // id 는 lectureID를 받아올 것
-//   console.log(req.file);
-//   res.send('uploaded: ' + req.params.id);
-// });
+//문항별 학생 풀이 확인
+router.post('/solution', isLoggedIn, async(req,res,next)=>{
+  const lec = await lecture.findOne({where:{lectureID:req.body.lecID}});
+  const key = await question_keyword.findAll({where:{questionID:req.body.queID}});
+  //학생당 가장 마지막에 제출한 정답만 가져옴
+  //const que_subs = await submission.findAll({where:{questionID:req.body.queID}});
+  const subsID = await submission.findAll({
+    where:{questionID:req.body.queID},
+    attributes: [Sequelize.fn("max", Sequelize.col("submission_id"))],
+    group: ["stu_id"],
+    raw:true
+    });
+  var ID = [];
+  for(var a in subsID)
+    {
+        var val = Object.values(subsID[a]);
+        ID.push(val);
+    }
+  console.log(ID);
+  const subs = await submission.findAll({where:{submissionID:{[Sequelize.Op.in]: ID}}, include:[{model:student, attributes:['stuID', 'userID']}]})
+  //const subs = await submission.findAll({where:{questionID:req.body.queID}, include:[{model:student, attributes:['stuID', 'userID']}]});
+  
+  let avg = 0;
+  let totScore = 0;
+  //해당 문제의 총점
+  for(let i = 0; i < key.length; i++) {
+    totScore += key[i].dataValues.score;
+  }
+  //학생이 푼 기록이 있는 경우
+  if (subs.length != 0){ 
+    let sum = 0;
+    for (let i=0;i < subs.length; i++){
+      sum=sum+subs[i].dataValues.score;
+    }
+    avg = sum/(subs.length);
+    //실질난이도(10점 만점) 계산: (평균점수/전체점수)*10 
+    let real_dif = (1-(avg/totScore))*10;
+    //실질 난이도 업데이트
+    await question.update(
+      {realDifficulty: real_dif},
+      {where:{questionID:req.body.queID}}
+    );
+  } else { //학생이 푼 기록이 없는 경우
+    avg = 0;
+    await question.update(
+      {realDifficulty: null},
+      {where:{questionID:req.body.queID}}
+    );
+  }
+  const que = await question.findOne({where:{questionID:req.body.queID}});
+  res.render('question_solution', {title: 'LMS DB PJ', user:req.user, lecture: lec, question: que, total_score: totScore, average: avg, submissions:subs});
+});
 
 
+//문항 만들기
 router.post('/make/:id1/:id2', upload.single('params'), isLoggedIn, function(req, res, next){
   //id1 은 lectureID, id2는 단답(0), 객관(1), 파라미터 단답(2)을 의미함
   const {q_title, q_content, answer,difficulty, timelimit} = req.body;
@@ -441,22 +485,13 @@ router.post('/make/:id1/:id2', upload.single('params'), isLoggedIn, function(req
 });
 
 //문항 삭제
-router.post('/delete', isLoggedIn, function(req, res, next){
+router.post('/delete', isLoggedIn, async(req, res, next)=>{
   const id = req.body.delete;
   try{
-    question_keyword.destroy({
-      where: {
-        questionID: id
-      }
-    }).then(()=>{
-      question.destroy({
-        where: {
-          questionID: id
-        }
-      })
-    })
-    var link = '/questions/list/'+ req.body.backLectureID;
-    return res.redirect(link);
+  await question_keyword.destroy({where: {questionID: id}});
+  await question.destroy({where: {questionID: id}})
+  var link = '/questions/list/'+ req.body.lecID;
+  return res.redirect(link);
   }catch (err){
     console.error(err);
     return next(err);

@@ -9,6 +9,22 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <title><%= title %></title>
+    <style>
+        .modal-content {
+          padding-bottom: 40px;
+          border:none;}
+        .ans {
+        padding-bottom: 20px;
+        border:none;
+        }
+        .modal-footer{
+          padding-bottom: 0px;
+        }
+        .que_list{
+          padding-top:60px;
+          padding-bottom:40px;
+        }
+    </style>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
@@ -26,13 +42,12 @@
               <li class="nav-item">
                 <a class="nav-link" href="/subjects/my">나의 과목</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/tests">나의 시험</a>
-              </li>
-              <% if(user) { %>
-              <li class="nav-item">
-                <a class="nav-link" href="/banks">문제 은행</a>
-              </li>
+              <% if(user) {
+                if (user.type == 1){%>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/banks">문제 은행</a>
+                  </li>
+                <%}%>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <%=user.name%> 님
@@ -64,11 +79,14 @@
         <div class="jumbotron jumbotron-fluid" style="background-color: white;">
             <div class="container">
                 <h1 class="display-4"><%=lecture.dataValues.name%></h1>
-                <p class="lead">여기에 버튼 추가해서 기능 추가 예정</p>
+                <p class="lead">학생들에게 보여지는 강의 문제 리스트입니다.</p>
             </div>
             <%if (user){
               if (user.type == 1) {%>
-                <a href="../questions/list/<%=id%>" style="color: white;" ><button type="button" class="btn btn-primary btn-lg btn-block">내 문항 리스트 보기(강사만)</button></a>
+                <div class="btn-group d-flex" role="group">
+                  <a href="../questions/list/<%=id%>" role="button" class="btn btn-outline-primary btn-lg">내 문항 추가 및 삭제</a>
+                  <!-- <a href="../banks/" role="button" class="btn btn-outline-primary btn-lg">문제 은행 보기</a> -->
+                </div>
               <%}
             }%>         
         </div>
@@ -82,8 +100,7 @@
                 <th scope="col">난이도</th>
                 <% if(user.type == 1) { %>
                 <th scope="col">문항 확인</th>
-                <th scope="col">문제은행 등록</th>
-                <th scope="col">삭제</th>
+                <!-- <th scope="col">삭제</th> -->
                 <% } else { %>
                 <th scope="col">문제풀기</th>
                 <% } %>
@@ -107,8 +124,7 @@
                     확인
                   </button>
                 </td>
-                <td><a href="#" class="btn btn-sm btn-success btn-block">등록</a></td>
-                <td><a href="#" class="btn btn-sm btn-danger btn-block">삭제</a></td>
+                <!-- <td><a href="#" class="btn btn-sm btn-danger btn-block">삭제</a></td> -->
                 <% } else { %>
                   <% if(isSolved[i] == false) { %>
                     <td><a href="/tests/free/<%=questions[i].dataValues.questionID%>" class="btn btn-sm btn-warning btn-block">풀기</a></td>
