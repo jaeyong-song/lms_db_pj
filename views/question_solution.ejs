@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title><%= title %></title>
+    <style>
+        .que_body {
+          padding-top: 40px;
+          padding-bottom: 30px;
+          border:none;}
+        .solution_title{
+          padding-bottom: 40px;
+        }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+      <div class="container">
+          <a class="navbar-brand" href="/"><%= title %></a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="/subjects/my">나의 과목</a>
+              </li>
+              <% if(user) { 
+                if (user.type == 1){%>
+                    <li class="nav-item">
+                      <a class="nav-link" href="/banks">문제 은행</a>
+                    </li>
+                  <%}%>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <%=user.name%> 님
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="/users/mypage">나의 정보</a>
+                  <a class="dropdown-item" href="#">계정설정</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="/users/sign_out">로그아웃</a>
+                </div>
+              </li>
+              <% } else { %>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  로그인/가입
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="/users/sign_in">로그인</a>
+                  <a class="dropdown-item" href="/users/sign_up">가입</a>
+                </div>
+              </li>
+              <% } %>
+            </ul>
+          </div>
+      </div>
+    </nav>
+
+    <div class="container">
+        <div class="jumbotron jumbotron-fluid" style="background-color: white;">
+            <div class="container">
+                <% if (question.dataValues.type == 1) {%>
+                    <h1 class="display-6"><%=lecture.dataValues.name%> <br> [객관식] <%=question.dataValues.title%> <br> 학생 문제 풀이 결과입니다.</h1>
+                <% } else if (question.dataValues.type == 2) {%>
+                    <h1 class="display-6"><%=lecture.dataValues.name%> <br> [단답형(파라미터)] <%=question.dataValues.title%> <br> 학생 문제 풀이 결과입니다.</h1>
+                <%} else {%>
+                    <h1 class="display-6"><%=lecture.dataValues.name%> <br> [단답형] <%=question.dataValues.title%> <br> 학생 문제 풀이 결과입니다.</h1>
+                <%}%>
+                <p class="lead">학생별 결과, 점수와 전체 평균 점수 확인이 가능힙니다.</p>
+            </div>
+            <a href="/questions/list/<%=lecture.dataValues.lectureID%>" style="color: white;" ><button type="button" class="btn btn-outline-primary btn-lg btn-block">문항 리스트로 돌아가기</button></a>
+        
+        <!--현재 확인하는 문항-->
+        <div class="que_body">
+          <hr class="my-4">
+            <h5 class="title"><%=question.dataValues.title%></h5><br>
+            <!--전체 점수 계산-->
+            <div class = "content"><%=question.dataValues.question%></div><br>
+              <% if ((question.dataValues.type == 0)||(question.dataValues.type == 2)) {%>
+              <div class="ans">정답: <%=question.dataValues.answer%></div>  
+              <%} else {%>
+               <div class="ans">
+                  1. <%=question.dataValues.bogi1%>
+               </div>  
+               <div class="ans">
+                  2. <%=question.dataValues.bogi2%>
+               </div> 
+               <div class="ans">
+                  3. <%=question.dataValues.bogi3%>
+               </div> 
+               <div class="ans">
+                  4. <%=question.dataValues.bogi4%>
+               </div> 
+               <div class="ans">
+                  5. <%=question.dataValues.bogi5%>
+               </div> 
+               <div class="ans"><br>정답: <%=question.dataValues.answer%></div>
+              <%}%>
+                <hr class="my-4">
+            </div>
+
+        <!-- 이 아래에 테이블로 문항 리스트 불러오기--> 
+        <div class="solution_content">
+        <div class="solution_title">
+            <h5 class="title">풀이 결과</h5><br>
+            <div>평균: <p class="text-primary"><%=average%>점/<%=total_score%>점</p>
+                실질 난이도 (0일수록 쉽고, 10일수록 어려움): 
+                <p class="text-danger">
+                    <%if (question.dataValues.realDifficulty != null){%> 
+                        <%=question.dataValues.realDifficulty%>/10
+                    <%}else{%> 결과가 없습니다 <%}%>
+                </p></div>
+        </div>
+        <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">번호</th>
+                <th scope="col">학번</th>
+                <% if (question.dataValues.type == 2){%>
+                  <th scope="col">파라미터</th>
+                <%}%>
+                <th scope="col">제출 답</th>
+                <th scope="col">점수</th>
+              </tr>
+            </thead>
+            <tbody>
+              <%
+              function replaceAll(str, searchStr, replaceStr) {
+                return str.split(searchStr).join(replaceStr);
+                } 
+              for(let i = 0; i < submissions.length ; i++) {%>
+              <tr>
+                <td scope="row"><%=(i+1)%></td>
+                <td><%=submissions[i].dataValues.student.userID%></td>
+                <% if (question.dataValues.type == 2){%>
+                  <td scope="col">파라미터필요!</td>
+                <%}%>
+                <!--정답 보여주는 형식 맞추기-->
+                <% 
+                let show_answer = "";
+                if (question.dataValues.type == 1){
+                    let ori_answer = submissions[i].dataValues.subAnswer;
+                    ori_answer = replaceAll(ori_answer,"?","");
+                    let nums = ori_answer.split("");
+                    for (let l=0;l< nums.length; l++){
+                        if (show_answer != ""){
+                            show_answer = show_answer.concat(",");
+                        }
+                        show_answer = show_answer.concat(nums[l]);
+                    }
+                } else { show_answer = submissions[i].dataValues.subAnswer;}%>
+                <td><%=show_answer%></td>
+                <td><%=submissions[i].dataValues.score%>/<%=total_score%></td>
+              </tr>
+              <%}%>
+            </tbody>
+          </table>
+        </div>
+        </div>
+    </div>
+    
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
+</html>

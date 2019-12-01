@@ -27,9 +27,6 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
               <li class="nav-item">
-                <a class="nav-link" href="/subjects">전체 과목</a>
-              </li>
-              <li class="nav-item">
                 <a class="nav-link" href="/subjects/my">나의 과목</a>
               </li>
               <% if(user) { 
@@ -120,7 +117,7 @@
                       <textarea class="form-control" name="q_content" id="q_content" placeholder="문제를 입력하세요" required></textarea>
                     </div>
                     <!--보기 시작-->
-                    <div class="form-group">
+                    <div class="form-group required">
                       <label for="contentInput">정답</label>
                       <div class="form-row" id="bogiSet1">
                           <div class="form-check">
@@ -130,7 +127,7 @@
                               </label>
                             </div>
                           <div class="col">
-                              <input type="type" name="bogi1" class="form-control" id="bogi1" placeholder="보기 1번">  
+                              <input type="type" name="bogi1" class="form-control" id="bogi1" placeholder="보기 1번" required>  
                           </div>
                        </div>
                        <div class="form-row" id="bogiSet2">
@@ -141,7 +138,7 @@
                               </label>
                             </div>
                           <div class="col">
-                              <input type="type" name="bogi2" class="form-control" id="bogi2" placeholder="보기 2번">  
+                              <input type="type" name="bogi2" class="form-control" id="bogi2" placeholder="보기 2번" required>  
                           </div>
                        </div>
                        <div class="form-row" id="bogiSet3">
@@ -152,7 +149,7 @@
                               </label>
                             </div>
                           <div class="col">
-                              <input type="type" name="bogi3" class="form-control" id="bogi3" placeholder="보기 3번">  
+                              <input type="type" name="bogi3" class="form-control" id="bogi3" placeholder="보기 3번" required>  
                           </div>
                        </div>
                        <div class="form-row" id="bogiSet4">
@@ -163,7 +160,7 @@
                               </label>
                             </div>
                           <div class="col">
-                              <input type="type" name="bogi4" class="form-control" id="bogi4" placeholder="보기 4번">  
+                              <input type="type" name="bogi4" class="form-control" id="bogi4" placeholder="보기 4번" required>  
                           </div>
                        </div>
                        <div class="form-row" id="bogiSet5">
@@ -174,7 +171,7 @@
                               </label>
                             </div>
                           <div class="col">
-                              <input type="type" name="bogi5" class="form-control" id="bogi5" placeholder="보기 5번">  
+                              <input type="type" name="bogi5" class="form-control" id="bogi5" placeholder="보기 5번" required>  
                           </div>
                        </div>
                        <!--보기 끝-->
@@ -184,7 +181,7 @@
                         <label for="keyword">키워드</label>
                           <table class="table table-borderless" id="dynamic_field">
                             <tr>
-                              <td><select name="contents[0][keyword]" id="contents[0][keyword]" class="form-control">
+                              <td><select name="contents[0][keyword]" id="contents[0][keyword]" class="form-control" required>
                                 <option selected>키워드 선택</option>
                                 <%for (let i = 0; i < lecture_keywords.length; i++) {%>
                                   <option value="<%=lecture_keywords[i].dataValues.lecture_keyword%>"><%=lecture_keywords[i].dataValues.lecture_keyword%></option>
@@ -226,7 +223,7 @@
                         <label for="keyword">키워드</label>
                           <table class="table table-borderless" id="dynamic_field">
                             <tr>
-                              <td><select name="contents[0][keyword]" id="contents[0][keyword]" class="form-control">
+                              <td><select name="contents[0][keyword]" id="contents[0][keyword]" class="form-control" required>
                                 <option selected>키워드 선택</option>
                                 <%for (let i = 0; i < lecture_keywords.length; i++) {%>
                                   <option value="<%=lecture_keywords[i].dataValues.lecture_keyword%>"><%=lecture_keywords[i].dataValues.lecture_keyword%></option>
@@ -278,7 +275,7 @@
                       <label for="keyword">키워드</label>
                         <table class="table table-borderless" id="dynamic_field">
                           <tr>
-                            <td><select name="contents[0][keyword]" id="contents[0][keyword]" class="form-control">
+                            <td><select name="contents[0][keyword]" id="contents[0][keyword]" class="form-control" required>
                               <option selected>키워드 선택</option>
                               <%for (let i = 0; i < lecture_keywords.length; i++) {%>
                                 <option value="<%=lecture_keywords[i].dataValues.lecture_keyword%>"><%=lecture_keywords[i].dataValues.lecture_keyword%></option>

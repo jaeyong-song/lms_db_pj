@@ -27,9 +27,6 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
               <li class="nav-item">
-                <a class="nav-link" href="/subjects">전체 과목</a>
-              </li>
-              <li class="nav-item">
                 <a class="nav-link" href="/subjects/my">나의 과목</a>
               </li>
               <% if(user) { 
@@ -72,17 +69,17 @@
             <form action="./<%=id%>" method="post" content-type="application/x-www-form-urlencoded">
               <div class="form-group">
                 <label for="lectureName">강의 이름</label>
-                <input type="text" name="name" class="form-control" id="lectureName" aria-describedby="nameHelp" placeholder="과목 이름 입력">
+                <input type="text" name="name" class="form-control" id="lectureName" aria-describedby="nameHelp" placeholder="강의 이름 입력" required>
                 <small id="nameHelp" class="form-text text-muted">강의 이름을 입력해주세요</small>
               </div>
               <div class="form-group">
                 <label for="startDate">시작일</label>
-               <input type="datetime-local" name="start_date" class="form-control" id="exampleInputEmail1" aria-describedby="startDateHelp" placeholder="시작 날짜 입력">
+               <input type="datetime-local" name="start_date" class="form-control" id="exampleInputEmail1" aria-describedby="startDateHelp" placeholder="시작 날짜 입력" required>
                 <small id="startDateHelp" class="form-text text-muted">시작 날짜와 시간을 입력해주세요</small>
               </div>
               <div class="form-group">
                 <label for="endDate">종료일</label>
-                <input type="datetime-local" name="end_date" class="form-control" id="personalName" aria-describedby="endDateHelp" placeholder="종료 날짜 입력">
+                <input type="datetime-local" name="end_date" class="form-control" id="personalName" aria-describedby="endDateHelp" placeholder="종료 날짜 입력" required>
                 <small id="endDateHelp" class="form-text text-muted">종료 날짜와 시간을 입력해주세요</small>
               </div>
                <!--키워드 다중 입력 기능-->
@@ -90,8 +87,8 @@
                 <label for="keyword">키워드</label>
                   <table class="table table-borderless" id="dynamic_field">
                     <tr>
-                      <td><input type="text" name="contents[0][keyword]" class="form-control" id="contents[0][keyword]" placeholder="키워드 이름 입력"></td>
-                      <td><input type="number" name="contents[0][importance]" class="form-control" id="contents[0][importance]" placeholder="중요도 숫자 입력"></td>
+                      <td><input type="text" name="contents[0][keyword]" class="form-control" id="contents[0][keyword]" placeholder="키워드 이름 입력" required></td>
+                      <td><input type="number" name="contents[0][importance]" class="form-control" id="contents[0][importance]" placeholder="중요도 숫자 입력" required></td>
                       <td><button type="button" name="add_more" class="btn btn-success" id="add_more">Add more</button></td>
                     </tr>
                   </table>
