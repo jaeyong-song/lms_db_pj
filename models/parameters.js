@@ -53,7 +53,8 @@ module.exports = function(sequelize, DataTypes) {
     })
     parameter.associate = function(models) {
         parameter.belongsTo(models.question, {
-            foreignKey: "question_id"
+            foreignKey: "question_id",
+            onDelete: 'cascade'
         })
     }
     return parameter;
