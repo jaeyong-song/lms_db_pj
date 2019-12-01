@@ -28,12 +28,79 @@ router.get('/make/banks/:id', isLoggedIn, async(req, res, next) => {
   return res.render('question_make_bank', {title: 'LMS DB PJ', user:req.user, id:req.params.id, lecture_keywords:lec_keywords})
 })
 
+router.post('/make/banks/add', isLoggedIn, async(req, res, next) => {
+  const bankQuestionIDs = req.body.bankQuestionIDs.split(",");
+  const lectureID = req.body.lectureID
+  let spaceIdx = bankQuestionIDs.indexOf('');
+  if(spaceIdx != -1) {
+    bankQuestionIDs.splice(spaceIdx, 1);
+  }
+  for(let i = 0; i < bankQuestionIDs.length; i++) {
+    let bankQ = await bank_question.findByPk(bankQuestionIDs[i]);
+    let bankQKey = await bankQ.getBank_question_keywords();
+    let now = Date.now();
+    let newQ = await question.create({
+      userID: req.user.userID,
+      lectureID: lectureID,
+      type: bankQ.dataValues.type,
+      title: bankQ.dataValues.title,
+      question: bankQ.dataValues.question,
+      answer: bankQ.dataValues.answer,
+      difficulty: bankQ.dataValues.difficulty,
+      realDifficulty: bankQ.dataValues.realDifficulty,
+      timeLimit: bankQ.dataValues.timeLimit,
+      bogi1: bankQ.dataValues.bogi1,
+      bogi2: bankQ.dataValues.bogi2,
+      bogi3: bankQ.dataValues.bogi3,
+      bogi4: bankQ.dataValues.bogi4,
+      bogi5: bankQ.dataValues.bogi5,
+      createdAt: now,
+      updatedAt: now
+    })
+    let newQID = newQ.dataValues.questionID;
+    for(let j = 0; j < bankQKey.length; j++) {
+      await question_keyword.create({
+        questionID: newQID,
+        question_keyword: bankQKey[j].dataValues.bank_question_keyword,
+        lectureID: lectureID,
+        score: bankQKey[j].dataValues.score,
+        updatedAt: now,
+        createdAt: now
+      })
+    }
+    if(bankQ.dataValues.type == 2) { // 파라미터형 문항
+      let bankQPar = await bankQ.getBank_parameters();
+      console.log(bankQPar);
+      for(let j = 0; j < bankQPar.length; j++) {
+        await parameter.create({
+          questionID: newQID,
+          answer: bankQPar[j].dataValues.answer,
+          p1: bankQPar[j].dataValues.p1,
+          p2: bankQPar[j].dataValues.p2,
+          p3: bankQPar[j].dataValues.p3,
+          p4: bankQPar[j].dataValues.p4,
+          p5: bankQPar[j].dataValues.p5,
+          createdAt: now,
+          updatedAt: now
+        })
+      }
+    }
+  }
+  return res.redirect('/questions/list/'+lectureID);
+})
+
 router.post('/make/banks/:id', isLoggedIn, async(req, res, next) => {
   const {qnum, avgDiff, keywords, totScore} = req.body; // keywords는 배열
   let result1, result2, result3;
+  let diff, diff1, diff2;
+  let tot, tot1, tot2;
+  let minDiff = parseInt(avgDiff) - 2;
+  let maxDiff = parseInt(avgDiff) + 2;
+  let minScore = parseInt(totScore) - 10;
+  let maxScore = parseInt(totScore) + 10;
   for(let i = 0; i < 30; i++) {
     let ex = await bank_question.findAll({
-      attributes: ['bank_question_id', 'difficulty'],
+      attributes: ['bank_question_id', 'real_difficulty','difficulty', 'lecture_id', "type", "title", "question", "real_difficulty", "bogi1", "bogi2", "bogi3", "bogi4", "bogi5"],
       include: [{
         model: bank_question_keyword,
         where: {
@@ -43,6 +110,7 @@ router.post('/make/banks/:id', isLoggedIn, async(req, res, next) => {
       order: Sequelize.literal('RAND()'),
       limit: parseInt(qnum)
     });
+    
     let diffSum = 0;
     let tmpScoreSum = 0;
     for(let j = 0; j < ex.length; j++) {
@@ -51,17 +119,27 @@ router.post('/make/banks/:id', isLoggedIn, async(req, res, next) => {
         where:{bankQuestionID: ex[j].dataValues.bank_question_id}
       });
       tmpScoreSum += exKey[0].dataValues.sum;
-      diffSum += ex[j].dataValues.difficulty;
+      diffSum += ex[j].dataValues.real_difficulty;
     }
-    if((avgDiff -2) < diffSum/ex.length < (avgDiff +2)
-        || (totScore - 10) < tmpScoreSum < (totScore + 10)) {
+    // 첫번째에는 무조건 한번 저장해야 null 문제 발생하지 않음
+    if(i == 0) {
+      result1 = ex;
+      diff = diffSum/ex.length;
+      tot = tmpScoreSum;
+    }
+    if( ((minDiff < diffSum/ex.length) && (diffSum/ex.length < maxDiff))
+        || ((minScore < tmpScoreSum) && (tmpScoreSum < maxScore)) ) {
         result1 = ex;
+        diff = diffSum/ex.length;
+        tot = tmpScoreSum;
         console.log("avgDiff: " + diffSum/ex.length);
         console.log("totalScore: " + tmpScoreSum);
     }
-    if((avgDiff -2) < diffSum/ex.length < (avgDiff +2)
-        && (totScore - 10) < tmpScoreSum < (totScore + 10)) {
+    if( ((minDiff < diffSum/ex.length) && (diffSum/ex.length < maxDiff))
+        && ((minScore < tmpScoreSum) && (tmpScoreSum < maxScore)) ) {
         result1 = ex;
+        diff = diffSum/ex.length;
+        tot = tmpScoreSum;
         console.log("avgDiff: " + diffSum/ex.length);
         console.log("totalScore: " + tmpScoreSum);
         break;
@@ -69,7 +147,7 @@ router.post('/make/banks/:id', isLoggedIn, async(req, res, next) => {
   }
   for(let i = 0; i < 30; i++) {
     let ex = await bank_question.findAll({
-      attributes: ['bank_question_id', 'difficulty'],
+      attributes: ['bank_question_id', 'real_difficulty' ,'difficulty', 'lecture_id', "type", "title", "question", "real_difficulty", "bogi1", "bogi2", "bogi3", "bogi4", "bogi5"],
       include: [{
         model: bank_question_keyword,
         where: {
@@ -87,17 +165,26 @@ router.post('/make/banks/:id', isLoggedIn, async(req, res, next) => {
         where:{bankQuestionID: ex[j].dataValues.bank_question_id}
       });
       tmpScoreSum += exKey[0].dataValues.sum;
-      diffSum += ex[j].dataValues.difficulty;
+      diffSum += ex[j].dataValues.real_difficulty;
     }
-    if((avgDiff -2) < diffSum/ex.length < (avgDiff +2)
-        || (totScore - 10) < tmpScoreSum < (totScore + 10)) {
+    if(i==0) {
+      result2 = ex;
+      diff1 = diffSum/ex.length;
+      tot1 = tmpScoreSum;
+    }
+    if( ((minDiff < diffSum/ex.length) && (diffSum/ex.length < maxDiff))
+        || ((minScore < tmpScoreSum) && (tmpScoreSum < maxScore)) ) {
         result2 = ex;
+        diff1 = diffSum/ex.length;
+        tot1 = tmpScoreSum;
         console.log("avgDiff: " + diffSum/ex.length);
         console.log("totalScore: " + tmpScoreSum);
     }
-    if((avgDiff -2) < diffSum/ex.length < (avgDiff +2)
-        && (totScore - 10) < tmpScoreSum < (totScore + 10)) {
+    if( ((minDiff < diffSum/ex.length) && (diffSum/ex.length < maxDiff))
+        && ((minScore < tmpScoreSum) && (tmpScoreSum < maxScore)) ) {
         result2 = ex;
+        diff1 = diffSum/ex.length;
+        tot1 = tmpScoreSum;
         console.log("avgDiff: " + diffSum/ex.length);
         console.log("totalScore: " + tmpScoreSum);
         break;
@@ -105,7 +192,7 @@ router.post('/make/banks/:id', isLoggedIn, async(req, res, next) => {
   }
   for(let i = 0; i < 30; i++) {
     let ex = await bank_question.findAll({
-      attributes: ['bank_question_id', 'difficulty'],
+      attributes: ['bank_question_id', 'real_difficulty', 'difficulty', 'lecture_id', "type", "title", "question", "real_difficulty", "bogi1", "bogi2", "bogi3", "bogi4", "bogi5"],
       include: [{
         model: bank_question_keyword,
         where: {
@@ -123,26 +210,45 @@ router.post('/make/banks/:id', isLoggedIn, async(req, res, next) => {
         where:{bankQuestionID: ex[j].dataValues.bank_question_id}
       });
       tmpScoreSum += exKey[0].dataValues.sum;
-      diffSum += ex[j].dataValues.difficulty;
+      diffSum += ex[j].dataValues.real_difficulty;
     }
-    if((avgDiff -2) < diffSum/ex.length < (avgDiff +2)
-        || (totScore - 10) < tmpScoreSum < (totScore + 10)) {
+    if(i==0) {
+      result3 = ex;
+      diff2 = diffSum/ex.length;
+      tot2 = tmpScoreSum;
+    }
+    if( ((minDiff < diffSum/ex.length) && (diffSum/ex.length < maxDiff))
+        || ((minScore < tmpScoreSum) && (tmpScoreSum < maxScore)) ) {
         result3 = ex;
+        diff2 = diffSum/ex.length;
+        tot2 = tmpScoreSum;
         console.log("avgDiff: " + diffSum/ex.length);
         console.log("totalScore: " + tmpScoreSum);
     }
-    if((avgDiff -2) < diffSum/ex.length < (avgDiff +2)
-        && (totScore - 10) < tmpScoreSum < (totScore + 10)) {
+    if( ((minDiff < diffSum/ex.length) && (diffSum/ex.length < maxDiff))
+        && ((minScore < tmpScoreSum) && (tmpScoreSum < maxScore)) ) {
         result3 = ex;
+        diff2 = diffSum/ex.length;
+        tot2 = tmpScoreSum;
         console.log("avgDiff: " + diffSum/ex.length);
         console.log("totalScore: " + tmpScoreSum);
         break;
     }
   }
-  console.log(result1);
-  console.log(result2);
-  console.log(result3);
-  return res.redirect('back');
+  return res.render('question_candidate_list', {
+    title: 'LMS DB PJ', 
+    user:req.user, 
+    id: req.params.id, 
+    questions: result1, 
+    diff: diff, 
+    tot: tot, 
+    questions1: result2, 
+    diff1: diff1, 
+    tot1: tot1,
+    questions2: result3,  
+    diff2: diff2, 
+    tot2: tot2
+  });
 })
 
 router.get('/make/:id1/:id2', isLoggedIn, async(req, res, next)=>{

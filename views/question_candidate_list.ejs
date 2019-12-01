@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title><%= title %></title>
+    <style>
+        .modal-content {
+          padding-bottom: 40px;
+          border:none;}
+        .ans {
+        padding-bottom: 20px;
+        border:none;
+        }
+        .modal-footer{
+          padding-bottom: 0px;
+        }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+      <div class="container">
+          <a class="navbar-brand" href="/"><%= title %></a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="/subjects">전체 과목</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/subjects/my">나의 과목</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/tests">나의 시험</a>
+              </li>
+              <% if(user) { %>
+              <li class="nav-item">
+                <a class="nav-link" href="/banks">문제 은행</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <%=user.name%> 님
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="/users/mypage">나의 정보</a>
+                  <a class="dropdown-item" href="#">계정설정</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="/users/sign_out">로그아웃</a>
+                </div>
+              </li>
+              <% } else { %>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  로그인/가입
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="/users/sign_in">로그인</a>
+                  <a class="dropdown-item" href="/users/sign_up">가입</a>
+                </div>
+              </li>
+              <% } %>
+            </ul>
+          </div>
+      </div>
+    </nav>
+
+    <div class="container">
+        <div class="jumbotron jumbotron-fluid" style="background-color: white;">
+            <div class="container">
+                <h1 class="display-6">세트 리스트입니다</h1>
+                <p class="lead">다음 세트 중에 선택하여 강의에 문제를 추가하세요</p>
+                <button type="button" onClick="window.location.reload();" class="btn btn-outline-info btn-lg btn-block">다시 불러오기</button>
+                <hr>
+                    
+        <!-- 첫번째 후보 리스트 --> 
+        <p class="lead">세트 1
+          <form action="/questions/make/banks/add" enctype="application/json" method="post">
+            <input type="hidden" class="form-control" value="<%for(let i = 0; i < questions.length; i++) {%><%=questions[i].dataValues.bank_question_id%>,<%}%>" name="bankQuestionIDs">
+            <input type="hidden" class="form-control" value="<%=id%>" name="lectureID">
+            <button type="submit" class="btn btn-outline-info btn-lg btn-block">해당 세트 선택</button>
+          </form>
+        </p>
+        <div class="alert alert-info" role="alert">
+          평균 실제 난이도: <%=diff%>, 총점: <%=tot%>
+        </div>
+        <p></p>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">번호</th>
+              <th scope="col">문항 유형</th>
+              <th scope="col">문항 제목</th>
+              <th scope="col">실제 난이도</th>
+              <th scope="col">문항 확인</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for(let i = 0; i < questions.length ; i++) {%>
+            <tr>
+              <th scope="row"><%=(i+1)%></th>
+              <% if (questions[i].dataValues.type == 1) {%>
+                <td>객관식</td>
+              <% } else if (questions[i].dataValues.type == 2) {%>
+                <td>단답형(파라미터)</td>
+              <%} else {%>
+                <td>단답형</td>
+              <%}%>
+              <td><%=questions[i].dataValues.title%></td>
+              <td><%=questions[i].dataValues.real_difficulty%></td>
+              <td><button type="button" class="btn btn-sm btn-outline-primary btn-block" data-toggle="modal" data-target="#exampleModal<%=i%>">
+                  확인
+                </button>
+              </td>
+            </tr>
+            <%}%>
+          </tbody>
+        </table>
+        <hr>
+
+        <!-- 두번째 후보 리스트 -->
+        <p class="lead">세트 2
+          <form action="/questions/make/banks/add" enctype="application/json" method="post">
+            <input type="hidden" class="form-control" value="<%for(let i = 0; i < questions1.length; i++) {%><%=questions1[i].dataValues.bank_question_id%>,<%}%>" name="bankQuestionIDs">
+            <input type="hidden" class="form-control" value="<%=id%>" name="lectureID">
+            <button type="submit" class="btn btn-outline-info btn-lg btn-block">해당 세트 선택</button>
+          </form>
+        </p>
+        <div class="alert alert-info" role="alert">
+          평균 실제 난이도: <%=diff1%>, 총점: <%=tot1%>
+        </div>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">번호</th>
+              <th scope="col">문항 유형</th>
+              <th scope="col">문항 제목</th>
+              <th scope="col">실제 난이도</th>
+              <th scope="col">문항 확인</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for(let i = 0; i < questions1.length ; i++) {%>
+            <tr>
+              <th scope="row"><%=(i+1)%></th>
+              <% if (questions1[i].dataValues.type == 1) {%>
+                <td>객관식</td>
+              <% } else if (questions1[i].dataValues.type == 2) {%>
+                <td>단답형(파라미터)</td>
+              <%} else {%>
+                <td>단답형</td>
+              <%}%>
+              <td><%=questions1[i].dataValues.title%></td>
+              <td><%=questions1[i].dataValues.real_difficulty%></td>
+              <td><button type="button" class="btn btn-sm btn-outline-primary btn-block" data-toggle="modal" data-target="#example1Modal<%=i%>">
+                  확인
+                </button>
+              </td>
+            </tr>
+            <%}%>
+          </tbody>
+        </table>
+        <hr>
+      <!-- 세번째 후보 리스트 --> 
+      <p class="lead">세트 3
+        <form action="/questions/make/banks/add" enctype="application/json" method="post">
+          <input type="hidden" class="form-control" value="<%for(let i = 0; i < questions2.length; i++) {%><%=questions2[i].dataValues.bank_question_id%>,<%}%>" name="bankQuestionIDs">
+          <input type="hidden" class="form-control" value="<%=id%>" name="lectureID">
+          <button type="submit" class="btn btn-outline-info btn-lg btn-block">해당 세트 선택</button>
+        </form>
+      </p>
+      <div class="alert alert-info" role="alert">
+        평균 실제 난이도: <%=diff2%>, 총점: <%=tot2%>
+      </div>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">번호</th>
+            <th scope="col">문항 유형</th>
+            <th scope="col">문항 제목</th>
+            <th scope="col">실제 난이도</th>
+            <th scope="col">문항 확인</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for(let i = 0; i < questions2.length ; i++) {%>
+          <tr>
+            <th scope="row"><%=(i+1)%></th>
+            <% if (questions2[i].dataValues.type == 1) {%>
+              <td>객관식</td>
+            <% } else if (questions2[i].dataValues.type == 2) {%>
+              <td>단답형(파라미터)</td>
+            <%} else {%>
+              <td>단답형</td>
+            <%}%>
+            <td><%=questions2[i].dataValues.title%></td>
+            <td><%=questions2[i].dataValues.real_difficulty%></td>
+            <td><button type="button" class="btn btn-sm btn-outline-primary btn-block" data-toggle="modal" data-target="#example2Modal<%=i%>">
+                확인
+              </button>
+            </td>
+          </tr>
+          <%}%>
+        </tbody>
+      </table>
+            </div>
+        
+        </div>
+    </div>
+
+    <!-- Modal 확인은 팝업창으로 가능-->
+    <% for(let j = 0; j < questions.length ; j++) {%>
+      <div class="modal fade" id="exampleModal<%=j%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"><%=questions[j].dataValues.title%></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+              <div class = "modal-content"><%=questions[j].dataValues.question%></div>
+              <% if (questions[j].dataValues.type == 0) {%>
+              <div class="ans">정답: <%=questions[j].dataValues.answer%></div>
+              <% } else if (questions[j].dataValues.type == 2) {%>
+                <div class="ans">정답: <%=questions[j].dataValues.answer%></div>  
+              <%} else {%>
+               <div class="ans">
+                  1. <%=questions[j].dataValues.bogi1%>
+               </div>  
+               <div class="ans">
+                  2. <%=questions[j].dataValues.bogi2%>
+               </div> 
+               <div class="ans">
+                  3. <%=questions[j].dataValues.bogi3%>
+               </div> 
+               <div class="ans">
+                  4. <%=questions[j].dataValues.bogi4%>
+               </div> 
+               <div class="ans">
+                  5. <%=questions[j].dataValues.bogi5%>
+               </div> 
+               <div class="ans"><br>정답: <%=questions[j].dataValues.answer%></div>  
+              <%}%>
+            </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      <!--Modal End-->
+      <%}%>
+
+      <!-- 두번째 후보 모달-->
+      <!-- Modal 확인은 팝업창으로 가능-->
+    <% for(let j = 0; j < questions1.length ; j++) {%>
+      <div class="modal fade" id="example1Modal<%=j%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"><%=questions1[j].dataValues.title%></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+              <div class = "modal-content"><%=questions1[j].dataValues.question%></div>
+              <% if (questions1[j].dataValues.type == 0) {%>
+              <div class="ans">정답: <%=questions1[j].dataValues.answer%></div>
+              <% } else if (questions1[j].dataValues.type == 2) {%>
+                <div class="ans">정답: <%=questions1[j].dataValues.answer%></div>  
+              <%} else {%>
+               <div class="ans">
+                  1. <%=questions1[j].dataValues.bogi1%>
+               </div>  
+               <div class="ans">
+                  2. <%=questions1[j].dataValues.bogi2%>
+               </div> 
+               <div class="ans">
+                  3. <%=questions1[j].dataValues.bogi3%>
+               </div> 
+               <div class="ans">
+                  4. <%=questions1[j].dataValues.bogi4%>
+               </div> 
+               <div class="ans">
+                  5. <%=questions1[j].dataValues.bogi5%>
+               </div> 
+               <div class="ans"><br>정답: <%=questions1[j].dataValues.answer%></div>  
+              <%}%>
+            </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      <!--Modal End-->
+      <%}%>
+
+      <!-- 세번째 후보 모달-->
+      <!-- Modal 확인은 팝업창으로 가능-->
+    <% for(let j = 0; j < questions2.length ; j++) {%>
+      <div class="modal fade" id="example2Modal<%=j%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"><%=questions2[j].dataValues.title%></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+              <div class = "modal-content"><%=questions2[j].dataValues.question%></div>
+              <% if (questions2[j].dataValues.type == 0) {%>
+              <div class="ans">정답: <%=questions2[j].dataValues.answer%></div>
+              <% } else if (questions2[j].dataValues.type == 2) {%>
+                <div class="ans">정답: <%=questions2[j].dataValues.answer%></div>  
+              <%} else {%>
+               <div class="ans">
+                  1. <%=questions2[j].dataValues.bogi1%>
+               </div>  
+               <div class="ans">
+                  2. <%=questions2[j].dataValues.bogi2%>
+               </div> 
+               <div class="ans">
+                  3. <%=questions2[j].dataValues.bogi3%>
+               </div> 
+               <div class="ans">
+                  4. <%=questions2[j].dataValues.bogi4%>
+               </div> 
+               <div class="ans">
+                  5. <%=questions2[j].dataValues.bogi5%>
+               </div> 
+               <div class="ans"><br>정답: <%=questions2[j].dataValues.answer%></div>  
+              <%}%>
+            </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      <!--Modal End-->
+      <%}%>
+    
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
+</html>
