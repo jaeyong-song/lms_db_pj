@@ -117,11 +117,11 @@
                       <textarea class="form-control" name="q_content" id="q_content" placeholder="문제를 입력하세요" required></textarea>
                     </div>
                     <!--보기 시작-->
-                    <div class="form-group required">
+                    <div class="form-group options">
                       <label for="contentInput">정답</label>
                       <div class="form-row" id="bogiSet1">
                           <div class="form-check">
-                              <input class="form-check-input" type="checkbox" name="gridCheck1" id="gridCheck1">
+                              <input class="form-check-input" type="checkbox" name="gridCheck1" id="gridCheck1" required>
                               <label class="form-check-label" for="gridCheck1">
                                 1번    
                               </label>
@@ -132,7 +132,7 @@
                        </div>
                        <div class="form-row" id="bogiSet2">
                           <div class="form-check">
-                              <input class="form-check-input" type="checkbox" name="gridCheck2" id="gridCheck2">
+                              <input class="form-check-input" type="checkbox" name="gridCheck2" id="gridCheck2" required>
                               <label class="form-check-label" for="gridCheck2">
                                 2번    
                               </label>
@@ -143,7 +143,7 @@
                        </div>
                        <div class="form-row" id="bogiSet3">
                           <div class="form-check">
-                              <input class="form-check-input" type="checkbox" name="gridCheck3" id="gridCheck3">
+                              <input class="form-check-input" type="checkbox" name="gridCheck3" id="gridCheck3" required>
                               <label class="form-check-label" for="gridCheck3">
                                 3번    
                               </label>
@@ -154,7 +154,7 @@
                        </div>
                        <div class="form-row" id="bogiSet4">
                           <div class="form-check">
-                              <input class="form-check-input" type="checkbox" name="gridCheck4" id="gridCheck4">
+                              <input class="form-check-input" type="checkbox" name="gridCheck4" id="gridCheck4" required>
                               <label class="form-check-label" for="gridCheck4">
                                 4번    
                               </label>
@@ -165,7 +165,7 @@
                        </div>
                        <div class="form-row" id="bogiSet5">
                           <div class="form-check">
-                              <input class="form-check-input" type="checkbox" name="gridCheck5" id="gridCheck5">
+                              <input class="form-check-input" type="checkbox" name="gridCheck5" id="gridCheck5" required>
                               <label class="form-check-label" for="gridCheck5">
                                 5번    
                               </label>
@@ -182,7 +182,7 @@
                           <table class="table table-borderless" id="dynamic_field">
                             <tr>
                               <td><select name="contents[0][keyword]" id="contents[0][keyword]" class="form-control" required>
-                                <option selected>키워드 선택</option>
+                                <!-- <option selected>키워드 선택</option> -->
                                 <%for (let i = 0; i < lecture_keywords.length; i++) {%>
                                   <option value="<%=lecture_keywords[i].dataValues.lecture_keyword%>"><%=lecture_keywords[i].dataValues.lecture_keyword%></option>
                                 <%}%>
@@ -197,7 +197,7 @@
                       <div class="form-group" id="difficultySet">
                           <label for="difficulty">난이도</label>
                           <div class="form-inline">
-                            <input type="number" name="difficulty" class="form-control" id="difficulty" placeholder="0~10" required>
+                            <input type="number" step="0.01" min="0" max="10" name="difficulty" class="form-control" id="difficulty" placeholder="0~10" required>
                           </div>  
                       </div>
                       <div class="form-group" id="timelimitSet">
@@ -224,7 +224,7 @@
                           <table class="table table-borderless" id="dynamic_field">
                             <tr>
                               <td><select name="contents[0][keyword]" id="contents[0][keyword]" class="form-control" required>
-                                <option selected>키워드 선택</option>
+                                <!-- <option selected>키워드 선택</option> -->
                                 <%for (let i = 0; i < lecture_keywords.length; i++) {%>
                                   <option value="<%=lecture_keywords[i].dataValues.lecture_keyword%>"><%=lecture_keywords[i].dataValues.lecture_keyword%></option>
                                 <%}%>
@@ -239,7 +239,7 @@
                         <div class="form-group" id="difficultySet">
                           <label for="difficulty">난이도</label>
                           <div class="form-inline">
-                            <input type="number" name="difficulty" class="form-control" id="difficulty" placeholder="0~10" required>
+                            <input type="number" step="0.01" min="0" max="10" name="difficulty" class="form-control" id="difficulty" placeholder="0~10" required>
                           </div>  
                         </div>
                         <div class="form-group" id="timelimitSet">
@@ -276,7 +276,7 @@
                         <table class="table table-borderless" id="dynamic_field">
                           <tr>
                             <td><select name="contents[0][keyword]" id="contents[0][keyword]" class="form-control" required>
-                              <option selected>키워드 선택</option>
+                              <!-- <option selected>키워드 선택</option> -->
                               <%for (let i = 0; i < lecture_keywords.length; i++) {%>
                                 <option value="<%=lecture_keywords[i].dataValues.lecture_keyword%>"><%=lecture_keywords[i].dataValues.lecture_keyword%></option>
                               <%}%>
@@ -291,7 +291,7 @@
                       <div class="form-group" id="difficultySet">
                         <label for="difficulty">난이도</label>
                         <div class="form-inline">
-                          <input type="number" name="difficulty" class="form-control" id="difficulty" placeholder="0~10" required>
+                          <input type="number" step="0.01" min="0" max="10" name="difficulty" class="form-control" id="difficulty" placeholder="0~10" required>
                         </div>  
                       </div>
                       <div class="form-group" id="timelimitSet">
@@ -312,6 +312,19 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <!--checkbox 입력 최소한 1개 조건-->
+    <script>
+    $(function(){
+      var requiredCheckboxes = $('.options :checkbox[required]');
+      requiredCheckboxes.change(function(){
+        if(requiredCheckboxes.is(':checked')) {
+            requiredCheckboxes.removeAttr('required');
+        } else {
+            requiredCheckboxes.attr('required', 'required');
+        }
+        });
+      });
+    </script>
     <!--키워드 추가 입력 기능-->
     <script>
         var i = 1;
@@ -319,7 +332,7 @@
           $('#dynamic_field').on('click', '#add_more', function(){
             if (i<4){
               i++;
-              $('#dynamic_field').append('<tr><td><select name="contents['+i+'][keyword]" id="contents['+i+'][keyword]" class="form-control"><option selected>키워드 선택</option><%for (let j = 0; j < lecture_keywords.length; j++) {%><option value="<%=lecture_keywords[j].dataValues.lecture_keyword%>"><%=lecture_keywords[j].dataValues.lecture_keyword%></option><%}%></select></td><td><input type="number" name="contents['+i+'][score]" class="form-control" id="contents['+i+'][score]" placeholder="배점 입력"></td><td><button type="button" name="add_more" class="btn btn-danger btn_remove" id="add_more">Remove</button></td></tr>');
+              $('#dynamic_field').append('<tr><td><select name="contents['+i+'][keyword]" id="contents['+i+'][keyword]" class="form-control"><%for (let j = 0; j < lecture_keywords.length; j++) {%><option value="<%=lecture_keywords[j].dataValues.lecture_keyword%>"><%=lecture_keywords[j].dataValues.lecture_keyword%></option><%}%></select></td><td><input type="number" name="contents['+i+'][score]" class="form-control" id="contents['+i+'][score]" placeholder="배점 입력"></td><td><button type="button" name="add_more" class="btn btn-danger btn_remove" id="add_more">Remove</button></td></tr>');
               $(document).on('click', '.btn_remove', function(){
               var button_id = $(this).attr("id");
               $('#row'+button_id+'').remove();

@@ -3,8 +3,7 @@ const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 var router = express.Router();
 const {user, teacher, subject, lecture, lecture_keyword, question, question_keyword, student, studentSubject} = require('../models');
 
-/* GET users listing. */
-
+//전체 과목 페이지
 router.get('/', isLoggedIn, async(req, res, next) => {
   try {
     const sub = await subject.findAll();
@@ -15,7 +14,7 @@ router.get('/', isLoggedIn, async(req, res, next) => {
   }
 });
 
-
+//내 과목 페이지
 router.get('/my', isLoggedIn, async(req, res, next)=>{
   if(req.user.type == 1) {
     const tea = await teacher.findOne({where: {userID: req.user.userID}})
@@ -28,11 +27,12 @@ router.get('/my', isLoggedIn, async(req, res, next)=>{
   }
 });
 
+//과목 만들기 페이지
 router.get('/make', isLoggedIn, function(req, res, next) {
   res.render('subject_make', { title: 'LMS DB PJ', user: req.user });
 });
 
-
+//과목 만들기 페이지에서 생성 버튼 누르면 과목 생성 
 router.post('/make', isLoggedIn, async(req, res, next)=>{
   const {name, limit} = req.body;
   try {
@@ -52,7 +52,7 @@ router.post('/make', isLoggedIn, async(req, res, next)=>{
   }
 });
 
-//과목 subjectID를 :id로 받음, 데이터베이스에서 해당 과목, 강의, 강의키워드 삭제
+//과목 subjectID를 :id로 받음, 데이터베이스에서 해당 과목, 연결된 유저, 강의, 강의키워드 삭제
 router.post('/delete/', isLoggedIn, async(req,res,next)=>{
   try {
     const subID = req.body.delete;
@@ -65,6 +65,7 @@ router.post('/delete/', isLoggedIn, async(req,res,next)=>{
       await lecture_keyword.destroy({where:{lectureID: lecID}})
     }
     await lecture.destroy({where: {subjectID: subID }})
+    await user.destroy({where:{subjectID:subID}})
     await subject.destroy({where:{subjectID:subID}})
     return res.redirect('/subjects');
   } catch (error) {
@@ -73,6 +74,7 @@ router.post('/delete/', isLoggedIn, async(req,res,next)=>{
   }
 });
 
+//강의 선택시 강의 페이지로 연결
 router.get('/:id', async(req, res, next)=>{
  try{
   const sub = await subject.findOne({where: {subjectID: req.params.id}});

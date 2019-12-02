@@ -3,12 +3,13 @@ const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 var router = express.Router();
 const {question, bank, teacher, bank_question, bank_question_keyword, bank_parameter} = require('../models');
 
+//bank전체페이지
 router.get('/', isLoggedIn, async(req, res, next) => {
     try {
         if(req.user.type == 1) {
             const tch = await teacher.findOne({where:{userID: req.user.userID}});
             const questions = await bank_question.findAll({where:{tchID: tch.tchID}});
-            const candidates = await question.findAll();
+            const candidates = await question.findAll({where:{userID: req.user.userID}});
             return res.render('bank_list', {title: 'LMS DB PJ', user: req.user, questions: questions, candidates: candidates});
         } else {
             return res.redirect('/');
@@ -19,6 +20,7 @@ router.get('/', isLoggedIn, async(req, res, next) => {
     }
 })
 
+//문제 선택 후 수정 버튼 누른 경우 
 router.post('/make', isLoggedIn, async(req, res, next) => {
     try {
         if(req.user.type == 1) {

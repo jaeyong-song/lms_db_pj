@@ -3,14 +3,7 @@ const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 var router = express.Router();
 const {user, teacher, student, subject, lecture, lecture_keyword, question, question_keyword} = require('../models');
 
-/* GET users listing. */
-// router.get('/', function(req, res, next) {
-//     // 이부분도 파라미터 받아오도록 수정 필요
-//     res.render('lecture_list', { title: 'LMS DB PJ' });
-// });
-// subjects router에서 처리하도록 이동
-
-
+//강의 만들기
 router.get('/make', function(req, res, next) {
     res.render('lecture_make', {title: 'LMS DB PJ', user:req.user});
 });
@@ -20,37 +13,17 @@ router.get('/make/:id', isLoggedIn, function(req,res,next){
     res.render('lecture_make', {title: 'LMS DB PJ', user:req.user, id:req.params.id});
 });
 
-//강의 lectureID를 :id로 받음, 강의와 키워드를 데이터베이스에서 삭제
-router.post('/delete/', isLoggedIn, function(req,res,next){
+//강의 삭제. 강의 lectureID를 :id로 받음, 강의와 키워드를 데이터베이스에서 삭제
+router.post('/delete/', isLoggedIn, async(req,res,next)=>{
     try {
         const lecID = req.body.delete;
         const subID = req.body.backSubjectID;
-        question_keyword.destroy({
-          where:{
-            lectureID: lecID
-          }
-        }).then(()=>{
-          question.destroy({
-            where:{
-              lectureID: lecID
-            }
-          })
-        }).then(()=>{
-          lecture_keyword.destroy({
-            where:{
-              lectureID: lecID
-            }
-          })
-        }).then(()=>{
-          lecture.destroy({
-            where: {
-              lectureID: lecID
-            }
-          })
-        }).then(()=>{
+        await question_keyword.destroy({ where:{lectureID: lecID}});
+        await question.destroy({ where:{lectureID: lecID}})
+        await lecture_keyword.destroy({where:{lectureID: lecID}})
+        await lecture.destroy({where: {lectureID: lecID}})
         var link = '/subjects/'+ subID;
         return res.redirect(link);
-        })
     } catch (error) {
       console.error(error);
       return next(error);
@@ -93,7 +66,7 @@ router.post('/make/:id', isLoggedIn, function(req, res, next) {
     }
   });
   
-
+//학생의 경우 문제풀기
 router.get('/:id', async(req, res, next) => {
     try {
       const lec = await lecture.findOne({

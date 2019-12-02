@@ -10,18 +10,7 @@ const upload = multer({
 });
 
 
-// /* GET users listing. */
-// router.get('/make', function(req, res, next) {
-//     res.render('question_make', {title: 'LMS DB PJ', user:req.user});
-// });
-
-// /* GET users listing. */
-// router.get('/make/:id', isLoggedIn, function(req, res, next) {
-//     res.render('question_make', {title: 'LMS DB PJ', user:req.user, id:req.params.id});
-// });
-
-/* GET users listing. */
-
+//믄제은행에서 세트 추출하기 설정 페이지
 router.get('/make/banks/:id', isLoggedIn, async(req, res, next) => {
   const lec_keywords = await bank_question_keyword.aggregate('bank_question_keyword', 'DISTINCT', {plain:false})
   console.log(lec_keywords);
@@ -90,7 +79,7 @@ router.post('/make/banks/add', isLoggedIn, async(req, res, next) => {
   return res.redirect('/questions/list/'+lectureID);
 })
 
-//문항 세트 제작해 보여줌
+//문항 세트 설정 입력시 제작해 보여줌
 router.post('/make/banks/:id', isLoggedIn, async(req, res, next) => {
   const {qnum, avgDiff, keywords, totScore} = req.body; // keywords는 배열
   let result1, result2, result3;
@@ -253,6 +242,7 @@ router.post('/make/banks/:id', isLoggedIn, async(req, res, next) => {
   });
 })
 
+//문항 만들기 페이지
 router.get('/make/:id1/:id2', isLoggedIn, async(req, res, next)=>{
   const lec_keywords = await lecture_keyword.findAll({
     where: {
@@ -279,7 +269,6 @@ router.post('/solution', isLoggedIn, async(req,res,next)=>{
   const lec = await lecture.findOne({where:{lectureID:req.body.lecID}});
   const key = await question_keyword.findAll({where:{questionID:req.body.queID}});
   //학생당 가장 마지막에 제출한 정답만 가져옴
-  //const que_subs = await submission.findAll({where:{questionID:req.body.queID}});
   const subsID = await submission.findAll({
     where:{questionID:req.body.queID},
     attributes: [Sequelize.fn("max", Sequelize.col("submission_id"))],
@@ -294,7 +283,6 @@ router.post('/solution', isLoggedIn, async(req,res,next)=>{
     }
   console.log(ID);
   const subs = await submission.findAll({where:{submissionID:{[Sequelize.Op.in]: ID}}, include:[{model:student, attributes:['stuID', 'userID']}]})
-  //const subs = await submission.findAll({where:{questionID:req.body.queID}, include:[{model:student, attributes:['stuID', 'userID']}]});
   
   let avg = 0;
   let totScore = 0;
