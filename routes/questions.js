@@ -81,12 +81,15 @@ router.post('/make/banks/add', isLoggedIn, async(req, res, next) => {
 
 //문항 세트 설정 입력시 제작해 보여줌
 router.post('/make/banks/:id', isLoggedIn, async(req, res, next) => {
-  const {qnum, avgDiff, keywords, totScore} = req.body; // keywords는 배열
+  const {qnum, avgDiff, avgRealDiff, keywords, totScore} = req.body; // keywords는 배열
   let result1, result2, result3;
   let diff, diff1, diff2;
+  let realDiff, realDiff1, realDiff2;
   let tot, tot1, tot2;
   let minDiff = parseInt(avgDiff) - 2;
   let maxDiff = parseInt(avgDiff) + 2;
+  let minRealDiff = parseInt(avgRealDiff) - 2;
+  let maxRealDiff = parseInt(avgRealDiff) + 2;
   let minScore = parseInt(totScore) - 10;
   let maxScore = parseInt(totScore) + 10;
   for(let i = 0; i < 30; i++) {
@@ -104,35 +107,38 @@ router.post('/make/banks/:id', isLoggedIn, async(req, res, next) => {
     
     let diffSum = 0;
     let tmpScoreSum = 0;
+    let realDiffSum = 0;
     for(let j = 0; j < ex.length; j++) {
       let exKey = await bank_question_keyword.findAll({
         attributes: [[Sequelize.fn('sum', Sequelize.col('score')), 'sum']],
         where:{bankQuestionID: ex[j].dataValues.bank_question_id}
       });
       tmpScoreSum += exKey[0].dataValues.sum;
-      diffSum += ex[j].dataValues.real_difficulty;
+      diffSum += ex[j].dataValues.difficulty;
+      realDiffSum += ex[j].dataValues.real_difficulty;
     }
     // 첫번째에는 무조건 한번 저장해야 null 문제 발생하지 않음
     if(i == 0) {
       result1 = ex;
       diff = diffSum/ex.length;
+      realDiff = realDiffSum/ex.length;
       tot = tmpScoreSum;
     }
     if( ((minDiff < diffSum/ex.length) && (diffSum/ex.length < maxDiff))
-        || ((minScore < tmpScoreSum) && (tmpScoreSum < maxScore)) ) {
+        || ((minScore < tmpScoreSum) && (tmpScoreSum < maxScore)) 
+        || ((minRealDiff < realDiffSum/ex.length) && (realDiffSum/ex.length < maxRealDiff))) {
         result1 = ex;
         diff = diffSum/ex.length;
         tot = tmpScoreSum;
-        console.log("avgDiff: " + diffSum/ex.length);
-        console.log("totalScore: " + tmpScoreSum);
+        realDiff = realDiffSum/ex.length;
     }
     if( ((minDiff < diffSum/ex.length) && (diffSum/ex.length < maxDiff))
-        && ((minScore < tmpScoreSum) && (tmpScoreSum < maxScore)) ) {
+        && ((minScore < tmpScoreSum) && (tmpScoreSum < maxScore)) 
+        && ((minRealDiff < realDiffSum/ex.length) && (realDiffSum/ex.length < maxRealDiff))) {
         result1 = ex;
         diff = diffSum/ex.length;
         tot = tmpScoreSum;
-        console.log("avgDiff: " + diffSum/ex.length);
-        console.log("totalScore: " + tmpScoreSum);
+        realDiff = realDiffSum/ex.length;
         break;
     }
   }
@@ -150,34 +156,37 @@ router.post('/make/banks/:id', isLoggedIn, async(req, res, next) => {
     });
     let diffSum = 0;
     let tmpScoreSum = 0;
+    let realDiffSum = 0;
     for(let j = 0; j < ex.length; j++) {
       let exKey = await bank_question_keyword.findAll({
         attributes: [[Sequelize.fn('sum', Sequelize.col('score')), 'sum']],
         where:{bankQuestionID: ex[j].dataValues.bank_question_id}
       });
       tmpScoreSum += exKey[0].dataValues.sum;
-      diffSum += ex[j].dataValues.real_difficulty;
+      diffSum += ex[j].dataValues.difficulty;
+      realDiffSum += ex[j].dataValues.real_difficulty;
     }
     if(i==0) {
       result2 = ex;
       diff1 = diffSum/ex.length;
       tot1 = tmpScoreSum;
+      realDiff1 = realDiffSum/ex.length;
     }
     if( ((minDiff < diffSum/ex.length) && (diffSum/ex.length < maxDiff))
-        || ((minScore < tmpScoreSum) && (tmpScoreSum < maxScore)) ) {
+        || ((minScore < tmpScoreSum) && (tmpScoreSum < maxScore)) 
+        || ((minRealDiff < realDiffSum/ex.length) && (realDiffSum/ex.length < maxRealDiff))) {
         result2 = ex;
         diff1 = diffSum/ex.length;
         tot1 = tmpScoreSum;
-        console.log("avgDiff: " + diffSum/ex.length);
-        console.log("totalScore: " + tmpScoreSum);
+        realDiff1 = realDiffSum/ex.length;
     }
     if( ((minDiff < diffSum/ex.length) && (diffSum/ex.length < maxDiff))
-        && ((minScore < tmpScoreSum) && (tmpScoreSum < maxScore)) ) {
+        && ((minScore < tmpScoreSum) && (tmpScoreSum < maxScore)) 
+        && ((minRealDiff < realDiffSum/ex.length) && (realDiffSum/ex.length < maxRealDiff))) {
         result2 = ex;
         diff1 = diffSum/ex.length;
         tot1 = tmpScoreSum;
-        console.log("avgDiff: " + diffSum/ex.length);
-        console.log("totalScore: " + tmpScoreSum);
+        realDiff1 = realDiffSum/ex.length;
         break;
     }
   }
@@ -195,34 +204,37 @@ router.post('/make/banks/:id', isLoggedIn, async(req, res, next) => {
     });
     let diffSum = 0;
     let tmpScoreSum = 0;
+    let realDiffSum = 0;
     for(let j = 0; j < ex.length; j++) {
       let exKey = await bank_question_keyword.findAll({
         attributes: [[Sequelize.fn('sum', Sequelize.col('score')), 'sum']],
         where:{bankQuestionID: ex[j].dataValues.bank_question_id}
       });
       tmpScoreSum += exKey[0].dataValues.sum;
-      diffSum += ex[j].dataValues.real_difficulty;
+      diffSum += ex[j].dataValues.difficulty;
+      realDiffSum += ex[j].dataValues.real_difficulty;
     }
     if(i==0) {
       result3 = ex;
       diff2 = diffSum/ex.length;
       tot2 = tmpScoreSum;
+      realDiff2 = realDiffSum/ex.length;
     }
     if( ((minDiff < diffSum/ex.length) && (diffSum/ex.length < maxDiff))
-        || ((minScore < tmpScoreSum) && (tmpScoreSum < maxScore)) ) {
+        || ((minScore < tmpScoreSum) && (tmpScoreSum < maxScore)) 
+        || ((minRealDiff < realDiffSum/ex.length) && (realDiffSum/ex.length < maxRealDiff))) {
         result3 = ex;
         diff2 = diffSum/ex.length;
         tot2 = tmpScoreSum;
-        console.log("avgDiff: " + diffSum/ex.length);
-        console.log("totalScore: " + tmpScoreSum);
+        realDiff2 = realDiffSum/ex.length;
     }
     if( ((minDiff < diffSum/ex.length) && (diffSum/ex.length < maxDiff))
-        && ((minScore < tmpScoreSum) && (tmpScoreSum < maxScore)) ) {
+        && ((minScore < tmpScoreSum) && (tmpScoreSum < maxScore)) 
+        && ((minRealDiff < realDiffSum/ex.length) && (realDiffSum/ex.length < maxRealDiff))) {
         result3 = ex;
         diff2 = diffSum/ex.length;
         tot2 = tmpScoreSum;
-        console.log("avgDiff: " + diffSum/ex.length);
-        console.log("totalScore: " + tmpScoreSum);
+        realDiff2 = realDiffSum/ex.length;
         break;
     }
   }
@@ -231,13 +243,16 @@ router.post('/make/banks/:id', isLoggedIn, async(req, res, next) => {
     user:req.user, 
     id: req.params.id, 
     questions: result1, 
-    diff: diff, 
+    diff: diff,
+    realDiff: realDiff,
     tot: tot, 
     questions1: result2, 
-    diff1: diff1, 
+    diff1: diff1,
+    realDiff1: realDiff1,
     tot1: tot1,
     questions2: result3,  
     diff2: diff2, 
+    realDiff2: realDiff2,
     tot2: tot2
   });
 })
@@ -311,10 +326,11 @@ router.post('/solution', isLoggedIn, async(req,res,next)=>{
     );
   } else { //학생이 푼 기록이 없는 경우
     avg = 0;
-    await question.update(
-      {realDifficulty: null},
-      {where:{questionID:req.body.queID}}
-    );
+    // await question.update(
+    //   {realDifficulty: null},
+    //   {where:{questionID:req.body.queID}}
+    // );
+    // [TODO] logic 주의!
   }
   const que = await question.findOne({where:{questionID:req.body.queID}});
   res.render('question_solution', {title: 'LMS DB PJ', user:req.user, lecture: lec, question: que, total_score: totScore, average: avg, submissions:subs, paras: paras});
@@ -338,7 +354,7 @@ router.post('/make/:id1/:id2', upload.single('params'), isLoggedIn, function(req
           question: q_content,
           answer: answer,
           difficulty: difficulty,
-          realDifficulty: null,
+          realDifficulty: difficulty,
           timeLimit: timelimit,
           bogi1: null,
           bogi2: null,
@@ -398,7 +414,7 @@ router.post('/make/:id1/:id2', upload.single('params'), isLoggedIn, function(req
           question: q_content,
           answer: answerN,
           difficulty: difficulty,
-          realDifficulty: null,
+          realDifficulty: difficulty,
           timeLimit: timelimit,
           bogi1: b.bogi1,
           bogi2: b.bogi2,
@@ -426,7 +442,7 @@ router.post('/make/:id1/:id2', upload.single('params'), isLoggedIn, function(req
           question: q_content,
           answer: answer,
           difficulty: difficulty,
-          realDifficulty: null,
+          realDifficulty: difficulty,
           timeLimit: timelimit,
           bogi1: null,
           bogi2: null,
