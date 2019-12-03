@@ -27,7 +27,8 @@ module.exports = function(sequelize, DataTypes) {
     });
     bank_question_keyword.associate = function(models) {
         bank_question_keyword.belongsTo(models.bank_question, {
-            foreignKey: "bank_question_id"
+            foreignKey: "bank_question_id",
+            onDelete: 'cascade'
         })
     }
     return bank_question_keyword;

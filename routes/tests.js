@@ -1,4 +1,5 @@
 var express = require('express');
+const Sequelize = require('sequelize');
 const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 var router = express.Router();
 const {question, lecture, submission, student} = require('../models');
@@ -75,8 +76,6 @@ router.post('/:id', isLoggedIn, async(req, res, next) => {
             let percentile = (2*match - actualInputLength)/answerLength;
             percentile = percentile >= 0 ? percentile : 0;
             // 배점에 곱할 상수로 percentile 계산
-            // [TODO]이부분에서 배점을 구해야함
-            // 우선은 10점으로 배점 가정하고 구현
             let totScore = 0;
             const key = await que.getQuestion_keywords();
             for(let i = 0; i < key.length; i++) {
@@ -97,7 +96,6 @@ router.post('/:id', isLoggedIn, async(req, res, next) => {
         } else if(type == 0) {
             let standardizedAns = que.dataValues.answer.toLowerCase();
             let userAns = req.body.answer.toLowerCase();
-            // [TODO] 배점 계산
             let totScore = 0;
             const key = await que.getQuestion_keywords();
             for(let i = 0; i < key.length; i++) {
@@ -122,7 +120,6 @@ router.post('/:id', isLoggedIn, async(req, res, next) => {
             let para = await que.getParameters({where:{ parameterID: req.body.parameterID}});
             let standardizedAns = para[0].dataValues.answer.toLowerCase();
             let userAns = req.body.answer.toLowerCase();
-            // [TODO] 배점 계산
             let totScore = 0;
             const key = await que.getQuestion_keywords();
             for(let i = 0; i < key.length; i++) {
@@ -147,6 +144,43 @@ router.post('/:id', isLoggedIn, async(req, res, next) => {
         }
         // 문제 유형에 따라서 별도로 처리해야하고,
         // 제출과 동시에 채점이 이루어져야함
+
+        // 마지막으로 문제의 실제 난이도 업데이트 필요
+        const key = await que.getQuestion_keywords();
+        const subsID = await submission.findAll({
+            where:{questionID: que.questionID},
+            attributes: [Sequelize.fn("max", Sequelize.col("submission_id"))],
+            group: ["stu_id"],
+            raw:true
+        });
+        var ID = [];
+        for(var a in subsID) {
+            var val = Object.values(subsID[a]);
+            ID.push(val);
+        }
+        const subs = await submission.findAll({where:{submissionID:{[Sequelize.Op.in]: ID}}, include:[{model:student, attributes:['stuID', 'userID']}]})
+        let avg = 0;
+        let totScore = 0;
+        //해당 문제의 총점
+        for(let i = 0; i < key.length; i++) {
+          totScore += key[i].dataValues.score;
+        }
+        //학생이 푼 기록이 있는 경우
+        if (subs.length != 0){ 
+            let sum = 0;
+            for (let i=0;i < subs.length; i++){
+            sum=sum+subs[i].dataValues.score;
+            }
+            avg = sum/(subs.length);
+            //실질난이도(10점 만점) 계산: (1-평균점수/전체점수)*10 
+            let real_dif = (1-(avg/totScore))*10;
+            //실질 난이도 업데이트
+            await question.update(
+            {realDifficulty: real_dif},
+            {where:{questionID: que.questionID}}
+            );
+        }
+
         return res.redirect('/lectures/'+lec.dataValues.lectureID);
     } catch (err) {
         console.log(err);

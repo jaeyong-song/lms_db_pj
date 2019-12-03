@@ -94,7 +94,7 @@ router.get("/join/:id", isLoggedIn, async(req, res, next) => {
     const arr = await sub.getStudents();
     // 수강인원 조건
     if(arr.length >= sub.limit) {
-      return res.status(403).send('수강인원을 초과하였습니다');
+      return res.status(403).send('수강인원을 초과하였습니다 <a href=\"/\">메인으로 가기:D</a>');
     }
     await sub.addStudents(stu.stuID);
     return res.redirect('../my');

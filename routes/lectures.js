@@ -16,14 +16,22 @@ router.get('/make/:id', isLoggedIn, function(req,res,next){
 //강의 삭제. 강의 lectureID를 :id로 받음, 강의와 키워드를 데이터베이스에서 삭제
 router.post('/delete/', isLoggedIn, async(req,res,next)=>{
     try {
+        const tch = await teacher.findOne({where: {userID: req.user.userID}});
         const lecID = req.body.delete;
-        const subID = req.body.backSubjectID;
-        await question_keyword.destroy({ where:{lectureID: lecID}});
-        await question.destroy({ where:{lectureID: lecID}})
-        await lecture_keyword.destroy({where:{lectureID: lecID}})
-        await lecture.destroy({where: {lectureID: lecID}})
-        var link = '/subjects/'+ subID;
-        return res.redirect(link);
+        let lec = await lecture.findByPk(lecID);
+        // 자신의 강의만 삭제 가능
+        if(lec.dataValues.tchID == tch.dataValues.tchID) {
+          const subID = req.body.backSubjectID;
+          await question_keyword.destroy({ where:{lectureID: lecID}});
+          await question.destroy({ where:{lectureID: lecID}})
+          await lecture_keyword.destroy({where:{lectureID: lecID}})
+          await lecture.destroy({where: {lectureID: lecID}})
+          var link = '/subjects/'+ subID;
+          return res.redirect(link);
+        } else {
+          return res.redirect('back');
+        }
+
     } catch (error) {
       console.error(error);
       return next(error);

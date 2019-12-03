@@ -96,7 +96,8 @@ module.exports = function(sequelize, DataTypes) {
     });
     question.associate = function(models) {
         question.belongsTo(models.lecture, {
-            foreignKey: "lecture_id"
+            foreignKey: "lecture_id",
+            onDelete: 'cascade'
         })
         question.belongsTo(models.user, {
             foreignKey: "user_id"

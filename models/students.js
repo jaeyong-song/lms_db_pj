@@ -23,10 +23,6 @@ module.exports = function(sequelize, DataTypes) {
             through: "student_subject",
             foreignKey: "stu_id"
         })
-        student.belongsToMany(models.set, {
-            through: "student_set",
-            foreignKey: "stu_id"
-        })
         student.hasMany(models.submission, {
             foreignKey: "stu_id"
         })
