@@ -283,6 +283,11 @@ router.post('/solution', isLoggedIn, async(req,res,next)=>{
     }
   console.log(ID);
   const subs = await submission.findAll({where:{submissionID:{[Sequelize.Op.in]: ID}}, include:[{model:student, attributes:['stuID', 'userID']}]})
+  let parameterIDs = [];
+  subs.forEach((sub) => {
+    parameterIDs.push(sub.dataValues.parameterID);
+  })
+  const paras = await parameter.findAll({where:{parameterID: {[Sequelize.Op.in]: parameterIDs}}});
   
   let avg = 0;
   let totScore = 0;
@@ -312,7 +317,7 @@ router.post('/solution', isLoggedIn, async(req,res,next)=>{
     );
   }
   const que = await question.findOne({where:{questionID:req.body.queID}});
-  res.render('question_solution', {title: 'LMS DB PJ', user:req.user, lecture: lec, question: que, total_score: totScore, average: avg, submissions:subs});
+  res.render('question_solution', {title: 'LMS DB PJ', user:req.user, lecture: lec, question: que, total_score: totScore, average: avg, submissions:subs, paras: paras});
 });
 
 

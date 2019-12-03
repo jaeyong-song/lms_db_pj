@@ -139,6 +139,7 @@ router.post('/:id', isLoggedIn, async(req, res, next) => {
                 stuID: stu.stuID,
                 subAnswer: userAns,
                 score: score,
+                parameterID: req.body.parameterID,
                 createdAt: now,
                 updatedAt: now
             });
