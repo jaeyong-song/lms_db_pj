@@ -3,13 +3,12 @@ const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 var router = express.Router();
 const {question, lecture, submission, student} = require('../models');
 
-/* GET users listing. */
+
 router.get('/', function(req, res, next) {
     res.render('test', { title: 'LMS DB PJ', user: req.user });
 });
-router.get('/make', function(req, res, next) {
-    res.render('subject_make', {title: 'LMS DB PJ'});
-})
+
+//문항별 테스트 화면, id는 문항ID 
 router.get('/free/:id', isLoggedIn, async(req, res, next) => {
     try{
         const que = await question.findByPk(req.params.id);

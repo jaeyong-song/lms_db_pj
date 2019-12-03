@@ -66,7 +66,7 @@
           <!-- 단답형 문제용 템플릿 -->
           <% if(question.type == 0) { %>
           <div class="card">
-            <h5 class="card-header">문제 #1</h5>
+            <h5 class="card-header">문제</h5>
             <div class="card-body">
               <h5 class="card-title"> <%= question.title %></h5>
               <p class="card-text"><%= question.question %></p>
@@ -83,7 +83,7 @@
           <% } else if(question.type == 1) { %>
           <!-- 객관식 문제용 템플릿 -->
           <div class="card">
-            <h5 class="card-header">문제 #1</h5>
+            <h5 class="card-header">문제</h5>
             <div class="card-body">
               <h5 class="card-title"><%= question.title %></h5>
               <p class="card-text"><%= question.question %></p>
@@ -129,7 +129,7 @@
           </div>
           <% } else if(question.type == 2) { %>
             <div class="card">
-              <h5 class="card-header">문제 #1</h5>
+              <h5 class="card-header">문제</h5>
               <div class="card-body">
                 <h5 class="card-title"> <%= question.title %></h5>
                 <p class="card-text" id="question_template"><%= question.question %></p>

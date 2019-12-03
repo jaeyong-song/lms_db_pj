@@ -297,7 +297,7 @@ router.post('/solution', isLoggedIn, async(req,res,next)=>{
       sum=sum+subs[i].dataValues.score;
     }
     avg = sum/(subs.length);
-    //실질난이도(10점 만점) 계산: (평균점수/전체점수)*10 
+    //실질난이도(10점 만점) 계산: (1-평균점수/전체점수)*10 
     let real_dif = (1-(avg/totScore))*10;
     //실질 난이도 업데이트
     await question.update(
