@@ -40,9 +40,6 @@
                   <%=user.name%> 님
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="/users/mypage">나의 정보</a>
-                  <a class="dropdown-item" href="#">계정설정</a>
-                  <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="/users/sign_out">로그아웃</a>
                 </div>
               </li>
@@ -85,7 +82,7 @@
                   <small class="text-muted"><%= subjects[i].dataValues.updatedAt %></small>
                 </div>
                 <p class="mb-1">과목에 대한 설명입니다.</p>
-                <small class="text-muted">총 수강 인원 --명 / 정원 <%=subjects[i].dataValues.limit%> 명</small>
+                <small class="text-muted">총 수강 인원 <%=subject_student[i].student_number%>명 / 정원 <%=subjects[i].dataValues.limit%> 명</small>
               </a>
               <div class="btn-group d-flex justify-content-between" role="group">
                   <!--사용자가 강사가 아니라면 삭제, 문항 보기 불가능-->

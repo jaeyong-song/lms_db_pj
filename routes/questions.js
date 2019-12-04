@@ -317,20 +317,11 @@ router.post('/solution', isLoggedIn, async(req,res,next)=>{
       sum=sum+subs[i].dataValues.score;
     }
     avg = sum/(subs.length);
-    //실질난이도(10점 만점) 계산: (1-평균점수/전체점수)*10 
-    let real_dif = (1-(avg/totScore))*10;
-    //실질 난이도 업데이트
-    await question.update(
-      {realDifficulty: real_dif},
-      {where:{questionID:req.body.queID}}
-    );
+    // 실질난이도(10점 만점) 계산: (1-평균점수/전체점수)*10 
+    // 실질난이도는 tests.js에 학생이 답을 제출한 경우 question테이블에 realDifficulty로 업데이트됨.
   } else { //학생이 푼 기록이 없는 경우
     avg = 0;
-    // await question.update(
-    //   {realDifficulty: null},
-    //   {where:{questionID:req.body.queID}}
-    // );
-    // [TODO] logic 주의!
+ 
   }
   const que = await question.findOne({where:{questionID:req.body.queID}});
   res.render('question_solution', {title: 'LMS DB PJ', user:req.user, lecture: lec, question: que, total_score: totScore, average: avg, submissions:subs, paras: paras});

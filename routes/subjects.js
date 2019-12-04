@@ -1,13 +1,21 @@
 var express = require('express');
+const Sequelize = require('sequelize');
 const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 var router = express.Router();
-const {user, teacher, subject, lecture, lecture_keyword, question, question_keyword, student, studentSubject} = require('../models');
+const {user, teacher, subject, lecture, lecture_keyword, question, question_keyword, student, student_subject} = require('../models');
 
 //전체 과목 페이지
 router.get('/', isLoggedIn, async(req, res, next) => {
   try {
     const sub = await subject.findAll();
-    return res.render('subject', { title: 'LMS DB PJ', user: req.user, subjects: sub });
+    var substu = [];
+    for (let i=0; i< sub.length; i++){
+      var stus = await sub[i].getStudents();
+      var num = stus.length;
+      substu[i] = { "subjectID": "1", "student_number": num };
+    }
+    console.log(substu);
+    return res.render('subject', { title: 'LMS DB PJ', user: req.user, subjects: sub, subject_student: substu});
   } catch(err) {
     console.log(err);
     return next(err);
@@ -19,11 +27,25 @@ router.get('/my', isLoggedIn, async(req, res, next)=>{
   if(req.user.type == 1) {
     const tea = await teacher.findOne({where: {userID: req.user.userID}})
     const subs = await subject.findAll({where: {tchID: tea.dataValues.tchID}})
-    res.render('my_subject', { title: 'LMS DB PJ', user: req.user, subjects: subs });
+    var substu = [];
+    for (let i=0; i< subs.length; i++){
+      var stus = await subs[i].getStudents();
+      var num = stus.length;
+      substu[i] = { "subjectID": "1", "student_number": num };
+    }
+    console.log(substu);
+    res.render('my_subject', { title: 'LMS DB PJ', user: req.user, subjects: subs, subject_student: substu});
   } else {
     const stu = await student.findOne({where: {userID: req.user.userID}})
     const subs = await stu.getSubjects();
-    res.render('my_subject', { title: 'LMS DB PJ', user: req.user, subjects: subs });
+    var substu = [];
+    for (let i=0; i< subs.length; i++){
+      var stus = await subs[i].getStudents();
+      var num = stus.length;
+      substu[i] = { "subjectID": "1", "student_number": num };
+    }
+    console.log(substu);
+    res.render('my_subject', { title: 'LMS DB PJ', user: req.user, subjects: subs, subject_student: substu});
   }
 });
 

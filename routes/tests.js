@@ -145,7 +145,7 @@ router.post('/:id', isLoggedIn, async(req, res, next) => {
         // 문제 유형에 따라서 별도로 처리해야하고,
         // 제출과 동시에 채점이 이루어져야함
 
-        // 마지막으로 문제의 실제 난이도 업데이트 필요
+        // 마지막으로 문제의 실제 난이도 업데이트
         const key = await que.getQuestion_keywords();
         const subsID = await submission.findAll({
             where:{questionID: que.questionID},

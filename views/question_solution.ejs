@@ -43,9 +43,6 @@
                   <%=user.name%> 님
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="/users/mypage">나의 정보</a>
-                  <a class="dropdown-item" href="#">계정설정</a>
-                  <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="/users/sign_out">로그아웃</a>
                 </div>
               </li>
@@ -115,7 +112,7 @@
             <div>평균: <p class="text-primary"><%=average%>점/<%=total_score%>점</p>
                 실질 난이도 (0일수록 쉽고, 10일수록 어려움): 
                 <p class="text-danger">
-                    <%if (question.dataValues.realDifficulty != null){%> 
+                    <%if (submissions.length != 0){%> 
                         <%=question.dataValues.realDifficulty%>/10
                     <%}else{%> 결과가 없습니다 <%}%>
                 </p></div>
