@@ -64,7 +64,7 @@ router.post('/make', isLoggedIn, async(req, res, next) => {
                     question: que.question,
                     answer: que.answer,
                     difficulty: que.difficulty,
-                    realDifficulty: que.difficulty,
+                    realDifficulty: que.realDifficulty,
                     timeLimit: que.timeLimit,
                     bogi1: que.bogi1,
                     bogi2: que.bogi2,

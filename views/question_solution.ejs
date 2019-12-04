@@ -113,7 +113,7 @@
                 실질 난이도 (0일수록 쉽고, 10일수록 어려움): 
                 <p class="text-danger">
                     <%if (submissions.length != 0){%> 
-                        <%=question.dataValues.realDifficulty%>/10
+                        <%=(question.dataValues.realDifficulty).toFixed(2)%>/10
                     <%}else{%> 결과가 없습니다 <%}%>
                 </p></div>
         </div>

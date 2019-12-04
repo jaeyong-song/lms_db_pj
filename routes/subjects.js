@@ -87,7 +87,6 @@ router.post('/delete/', isLoggedIn, async(req,res,next)=>{
       await lecture_keyword.destroy({where:{lectureID: lecID}})
     }
     await lecture.destroy({where: {subjectID: subID }})
-    await user.destroy({where:{subjectID:subID}})
     await subject.destroy({where:{subjectID:subID}})
     return res.redirect('/subjects');
   } catch (error) {
