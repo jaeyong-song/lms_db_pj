@@ -35,9 +35,9 @@ module.exports = function(sequelize, DataTypes) {
         }
     });
     user.associate = function(models) {
-        user.hasOne(models.users_subjects, {
-            foreignKey: "user_id"
-        });
+        // user.hasOne(models.users_subjects, {
+        //     foreignKey: "user_id"
+        // });
         user.hasOne(models.question, {
             foreignKey: "user_id"
         });

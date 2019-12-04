@@ -329,14 +329,17 @@
           $('#dynamic_field').on('click', '#add_more', function(){
             if (i<4){
               i++;
-              $('#dynamic_field').append('<tr><td><select name="contents['+i+'][keyword]" id="contents['+i+'][keyword]" class="form-control"><%for (let j = 0; j < lecture_keywords.length; j++) {%><option value="<%=lecture_keywords[j].dataValues.lecture_keyword%>"><%=lecture_keywords[j].dataValues.lecture_keyword%></option><%}%></select></td><td><input type="number" name="contents['+i+'][score]" class="form-control" id="contents['+i+'][score]" placeholder="배점 입력"></td><td><button type="button" name="add_more" class="btn btn-danger btn_remove" id="add_more">Remove</button></td></tr>');
-              $(document).on('click', '.btn_remove', function(){
-              var button_id = $(this).attr("id");
-              $('#row'+button_id+'').remove();
-            });
+              $('#dynamic_field').append('<tr id="row'+i+'"><td><select name="contents['+i+'][keyword]" id="contents['+i+'][keyword]" class="form-control"><%for (let j = 0; j < lecture_keywords.length; j++) {%><option value="<%=lecture_keywords[j].dataValues.lecture_keyword%>"><%=lecture_keywords[j].dataValues.lecture_keyword%></option><%}%></select></td><td><input type="number" name="contents['+i+'][score]" class="form-control" id="contents['+i+'][score]" placeholder="배점 입력"></td><td><button type="button" name="remove" class="btn btn-danger btn_remove" id="'+i+'">Remove</button></td></tr>');
             }
+          });
+          $(document).on('click', '.btn_remove', function(){
+                var button_id = $(this).attr("id");
+                $('#row'+button_id+'').remove();
+                if (i>1){
+                  i--;
+                }
+          });
         });
-      });
       </script>
       <!--파일 업로드 한 경우 이름 보여주기-->
       <script>
