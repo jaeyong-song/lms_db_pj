@@ -18,7 +18,7 @@
 
 **A. 테이블 구조 및 attribute**
 
- ![img](.\markdown_img\clip_image001.png)
+ ![img](./markdown_img/clip_image001.png)
 
  
 
@@ -532,9 +532,7 @@ onDelete의 경우 subjects 테이블 예시를 통해 설명하겠습니다.
 
 ![img](./markdown_img/clip_image049.jpg)
 
-![img](file:///C:/Users/작은선비/AppData/Local/Temp/msohtmlclip1/01/clip_image051.jpg)
-
- 
+![img](./markdown_img/clip_image051.jpg)
 
 ***문항 채점 결과 로딩 화면\***
 
